@@ -1,0 +1,44 @@
+#usda 1.0
+(
+    """ This file describes an example schema for code generation using
+        usdGenSchema.
+    """
+    subLayers = [
+        # To refer to schema types defined in schema.usda files from other
+        # libraries, simply add comma-separated lines of the form
+        # @<library name>/schema.usda@. In this example, we're referring
+        # to schema types from 'usd'. If you were adding sub-classes of
+        # UsdGeom schema types, you would use usdGeom/schema.usda instead.
+        @usd/schema.usda@
+    ]
+)
+
+over "GLOBAL" (
+    customData = {
+        string libraryName       = "g4schema"
+        string libraryPath       = "./"
+        string libraryPrefix     = "g4schema"
+    }
+) {
+}
+
+class "G4VSolid" (
+    inherits = </Typed>
+    customData = {
+        string className = "G4VSolid"
+    }
+)  {
+    string name = "name"
+}    
+
+class G4Box "G4Box" (
+    inherits = </G4VSolid>
+    
+    customData = {
+        string className = "G4Box"
+    }
+)  {
+    double x = 0
+    double y = 0
+    double z = 0 
+}
