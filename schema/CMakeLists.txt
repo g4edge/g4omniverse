@@ -5,6 +5,7 @@ pxr_plugin(${PXR_PACKAGE}
         tf
         sdf
         usd
+	usdGeom
         vt
 
     INCLUDE_DIRS

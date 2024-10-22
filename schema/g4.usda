@@ -9,7 +9,8 @@
         # @<library name>/schema.usda@. In this example, we're referring
         # to schema types from 'usd'. If you were adding sub-classes of
         # UsdGeom schema types, you would use usdGeom/schema.usda instead.
-        @usd/schema.usda@
+        @usd/schema.usda@,
+	@usdGeom/schema.usda@
     ]
 )
 
@@ -53,7 +54,7 @@ class Box "Box" (
 }
 
 class Logical "Logical" (
-    inherits = </Named>
+    inherits = </Mesh>
 
     customData = {
          string className = "Logical"
