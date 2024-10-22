@@ -17,6 +17,8 @@ pxr_plugin(${PXR_PACKAGE}
     PUBLIC_CLASSES
 	vSolid
 	box
+	named
+	logical
         tokens
 
     PYTHON_CPPFILES
@@ -29,6 +31,8 @@ pxr_plugin(${PXR_PACKAGE}
         module.cpp
         wrapVSolid.cpp	
         wrapBox.cpp
+	wrapNamed.cpp
+	wrapLogical.cpp
         wrapTokens.cpp        
 
     RESOURCE_FILES

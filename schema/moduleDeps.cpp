@@ -16,7 +16,7 @@ TF_REGISTRY_FUNCTION(TfScriptModuleLoader) {
         TfToken("vt")
     };
     TfScriptModuleLoader::GetInstance().
-        RegisterLibrary(TfToken("g4"), TfToken("pxr.g4"), reqs);
+        RegisterLibrary(TfToken("G4"), TfToken("pxr.G4"), reqs);
 }
 
 PXR_NAMESPACE_CLOSE_SCOPE
