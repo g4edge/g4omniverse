@@ -15,27 +15,27 @@
 
 over "GLOBAL" (
     customData = {
-        string libraryName       = "g4schema"
+        string libraryName       = "G4"
         string libraryPath       = "./"
-        string libraryPrefix     = "g4schema"
+        string libraryPrefix     = "G4"
     }
 ) {
 }
 
-class "G4VSolid" (
+class "VSolid" (
     inherits = </Typed>
     customData = {
-        string className = "G4VSolid"
+        string className = "VSolid"
     }
 )  {
     string name = "name"
 }    
 
-class G4Box "G4Box" (
-    inherits = </G4VSolid>
+class Box "Box" (
+    inherits = </VSolid>
     
     customData = {
-        string className = "G4Box"
+        string className = "Box"
     }
 )  {
     double x = 0
