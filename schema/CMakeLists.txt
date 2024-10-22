@@ -1,3 +1,5 @@
+set(PXR_PACKAGE g4)
+
 pxr_plugin(${PXR_PACKAGE}
     LIBRARIES
         tf
@@ -13,8 +15,8 @@ pxr_plugin(${PXR_PACKAGE}
         api.h
 
     PUBLIC_CLASSES
-	g4Vsolid
-	g4Box
+	vSolid
+	box
         tokens
 
     PYTHON_CPPFILES
@@ -25,12 +27,12 @@ pxr_plugin(${PXR_PACKAGE}
 
     PYMODULE_CPPFILES
         module.cpp
-        wrapg4VSolid.cpp	
-        wrapg4Box.cpp
+        wrapVSolid.cpp	
+        wrapBox.cpp
         wrapTokens.cpp        
 
     RESOURCE_FILES
         generatedSchema.usda
         plugInfo.json
-        schema.usda:schema/g4schema.usda
+        g4.usda:g4/schema.usda
 )
