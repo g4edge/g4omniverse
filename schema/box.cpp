@@ -214,16 +214,22 @@ void pxr::G4Box::Update() {
   auto vc = GetPrim().GetAttribute(TfToken("faceVertexCounts"));
   auto vi = GetPrim().GetAttribute(TfToken("faceVertexIndices"));
 
-  std::cout << x << " " << y << " " << z << std::endl;
-  VtArray<GfVec3f> vecArray = {GfVec3f((float)x, 0.0f, 0.0f),
-                               GfVec3f(0.0f, 1.0f, 0.0f),
-                               GfVec3f(0.0f, 0.0f, 1.0f),
-                               GfVec3f(1.0f, 1.0f, 0.0f),
-                               GfVec3f(1.0f, 0.0f, 1.0f),
-                               GfVec3f(0.0f, 1.0f, 1.0f),
-                               GfVec3f(1.0f, 1.0f, 1.0f),
-                               GfVec3f(0.0f, 0.0f, 0.0f)};
-  p.Set(vecArray);
+  VtArray<GfVec3f> pArray = {GfVec3f(0.0f, 0.0f, 0.0f),
+                             GfVec3f(0.0f, 1.0f, 0.0f),
+                             GfVec3f(0.0f, 0.0f, 1.0f),
+                             GfVec3f(1.0f, 1.0f, 0.0f),
+                             GfVec3f(1.0f, 0.0f, 1.0f),
+                             GfVec3f(0.0f, 1.0f, 1.0f),
+                             GfVec3f(1.0f, 1.0f, 1.0f),
+                             GfVec3f(0.0f, 0.0f, 0.0f)};
+
+  VtIntArray vcArray = {3,3,3,3,3,3,3,3,3,3,3,3};
+  VtIntArray viArray = {0,1,2,4,5,6};
+
+  p.Set(pArray);
+  vc.Set(vcArray);
+  vi.Set(viArray);
+
 }
 
 void pxr::G4Box::InstallUpdateListener() {
