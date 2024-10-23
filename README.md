@@ -5,13 +5,16 @@
 
 
 ### Notes
-* Logical -> some collection or container
-  * Needs a solid
-* Assembly -> some collection or container 
-* Placement -> XForm
-* Solid -> Mesh
-* PhysicalMaterial ->
-
+* Logical -> Xform (solid, material, field) 
+* Assembly -> Xform (no solid)
+* Placement -> Xform (with instance)
+* Replica -> Xform (Xform(solid), Xform(solid), Xform(solid)...)
+* Division -> Xform (Xform(solid1), Xform(sold2), Xform(solid2)...)
+* Parametrised -> Xform (Xform(variant(solid)), Xform(variant(solid)), Xform(variant(solid)) ...)
+* Solid -> Mesh 
+* Boolean -> Xform (solid1, Xform(solid2), string type)
+* MultiUnion -> Xform (Xform(solid1), Xform(solid2), Xform(solid3)... )
+* PhysicalMaterial -> Custom type 
 
 ### Quick build instructions
 
