@@ -193,6 +193,7 @@ public:
 
   void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
     std::cout << "updated" << " " << std::endl;
+    _box.Update();
   }
 
 private:
@@ -200,26 +201,32 @@ private:
 };
 
 void pxr::G4Box::Update() {
-    auto x = GetXAttr();
-    auto y = GetYAttr();
-    auto z = GetZAttr();
+  std::cout << "pxr::G4Box::Update()" << std::endl;
 
-    auto p = GetPrim().GetAttribute(TfToken("points"));
-    auto vc = GetPrim().GetAttribute(TfToken("faceVertexCounts"));
-    auto vi = GetPrim().GetAttribute(TfToken("faceVertexIndices"));
+  double x;
+  double y;
+  double z;
+  GetXAttr().Get(&x);
+  GetYAttr().Get(&y);
+  GetZAttr().Get(&z);
 
-    VtArray<GfVec3f> vecArray = {GfVec3f(1.0f, 0.0f, 0.0f),
-                                 GfVec3f(0.0f, 1.0f, 0.0f),
-                                 GfVec3f(0.0f, 0.0f, 1.0f),
-                                 GfVec3f(1.0f, 1.0f, 0.0f),
-                                 GfVec3f(1.0f, 0.0f, 1.0f),
-                                 GfVec3f(0.0f, 1.0f, 1.0f),
-                                 GfVec3f(1.0f, 1.0f, 1.0f),
-                                 GfVec3f(0.0f, 0.0f, 0.0f)};
-    p.Set(vecArray);
+  auto p = GetPrim().GetAttribute(TfToken("points"));
+  auto vc = GetPrim().GetAttribute(TfToken("faceVertexCounts"));
+  auto vi = GetPrim().GetAttribute(TfToken("faceVertexIndices"));
+
+  std::cout << x << " " << y << " " << z << std::endl;
+  VtArray<GfVec3f> vecArray = {GfVec3f((float)x, 0.0f, 0.0f),
+                               GfVec3f(0.0f, 1.0f, 0.0f),
+                               GfVec3f(0.0f, 0.0f, 1.0f),
+                               GfVec3f(1.0f, 1.0f, 0.0f),
+                               GfVec3f(1.0f, 0.0f, 1.0f),
+                               GfVec3f(0.0f, 1.0f, 1.0f),
+                               GfVec3f(1.0f, 1.0f, 1.0f),
+                               GfVec3f(0.0f, 0.0f, 0.0f)};
+  p.Set(vecArray);
 }
 
 void pxr::G4Box::InstallUpdateListener() {
-    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<BoxChangeListener>(new BoxChangeListener(*this)),
-                            &BoxChangeListener::Update);
+  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<BoxChangeListener>(new BoxChangeListener(*this)),
+                          &BoxChangeListener::Update);
 }
