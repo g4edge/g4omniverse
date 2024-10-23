@@ -145,7 +145,8 @@ namespace {
 
 WRAP_CUSTOM {
   _class
-    .def("Mesh",&G4Box::Mesh);
+    .def("Mesh",&G4Box::Update)
+    .def("InstallUpdateListener",&G4Box::InstallUpdateListener);
 }
 
 }
