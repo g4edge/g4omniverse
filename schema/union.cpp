@@ -110,3 +110,43 @@ PXR_NAMESPACE_CLOSE_SCOPE
 // 'PXR_NAMESPACE_OPEN_SCOPE', 'PXR_NAMESPACE_CLOSE_SCOPE'.
 // ===================================================================== //
 // --(BEGIN CUSTOM CODE)--
+
+#include <iostream>
+#include "pxr/usd/usd/notice.h"
+
+class UnionChangeListener : public pxr::TfWeakBase {
+public:
+  UnionChangeListener(pxr::G4Union un1on) : _union(un1on) {
+    // Register the listener for object changes
+    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<UnionChangeListener>(this),
+                            &UnionChangeListener::Update);
+  }
+
+  void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
+    std::cout << "updated" << " " << std::endl;
+    _union.Update();
+  }
+
+private:
+  pxr::G4Union _union;
+};
+
+void pxr::G4Union::Update() {
+  std::cout << "pxr::G4Union::Update()" << std::endl;
+
+  // get children (solid1 and solid2)
+
+  // convert mesh to cgal meshes
+
+  // execute transformation on second mesh
+
+  // perform union
+
+  // convert mesh back to usd mesh
+
+}
+
+void pxr::G4Union::InstallUpdateListener() {
+  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<UnionChangeListener>(new UnionChangeListener(*this)),
+                          &UnionChangeListener::Update);
+}
