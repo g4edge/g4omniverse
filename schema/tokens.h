@@ -65,6 +65,10 @@ struct G4TokensType {
     /// 
     /// Schema identifer and family for G4Box
     const TfToken Box;
+    /// \brief "Intersection"
+    /// 
+    /// Schema identifer and family for G4Intersection
+    const TfToken Intersection;
     /// \brief "Logical"
     /// 
     /// Schema identifer and family for G4Logical
@@ -77,6 +81,10 @@ struct G4TokensType {
     /// 
     /// Schema identifer and family for G4Subtraction
     const TfToken Subtraction;
+    /// \brief "Union"
+    /// 
+    /// Schema identifer and family for G4Union
+    const TfToken Union;
     /// \brief "VSolid"
     /// 
     /// Schema identifer and family for G4VSolid

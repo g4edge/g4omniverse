@@ -19,6 +19,9 @@ pxr_plugin(${PXR_PACKAGE}
 	vSolid
 	box
 	named
+	subtraction
+	union
+	intersection
 	logical
         tokens
 
@@ -32,6 +35,9 @@ pxr_plugin(${PXR_PACKAGE}
         module.cpp
         wrapVSolid.cpp	
         wrapBox.cpp
+	wrapIntersection.cpp
+	wrapUnion.cpp
+	wrapSubtraction.cpp
 	wrapNamed.cpp
 	wrapLogical.cpp
         wrapTokens.cpp        

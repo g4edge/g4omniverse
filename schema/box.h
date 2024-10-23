@@ -207,6 +207,7 @@ public:
     //  - Close the include guard with #endif
     // ===================================================================== //
     // --(BEGIN CUSTOM CODE)--
+  void Mesh();
 };
 
 PXR_NAMESPACE_CLOSE_SCOPE

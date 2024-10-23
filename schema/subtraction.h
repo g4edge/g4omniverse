@@ -11,7 +11,7 @@
 
 #include "pxr/pxr.h"
 #include ".//api.h"
-#include "pxr/usd/usdGeom/mesh.h"
+#include "pxr/usd/usdGeom/xform.h"
 #include "pxr/usd/usd/prim.h"
 #include "pxr/usd/usd/stage.h"
 
@@ -35,7 +35,7 @@ class SdfAssetPath;
 /// \class G4Subtraction
 ///
 ///
-class G4Subtraction : public UsdGeomMesh
+class G4Subtraction : public UsdGeomXform
 {
 public:
     /// Compile time constant representing what kind of schema this class is.
@@ -48,7 +48,7 @@ public:
     /// for a \em valid \p prim, but will not immediately throw an error for
     /// an invalid \p prim
     explicit G4Subtraction(const UsdPrim& prim=UsdPrim())
-        : UsdGeomMesh(prim)
+        : UsdGeomXform(prim)
     {
     }
 
@@ -56,7 +56,7 @@ public:
     /// Should be preferred over G4Subtraction(schemaObj.GetPrim()),
     /// as it preserves SchemaBase state.
     explicit G4Subtraction(const UsdSchemaBase& schemaObj)
-        : UsdGeomMesh(schemaObj)
+        : UsdGeomXform(schemaObj)
     {
     }
 

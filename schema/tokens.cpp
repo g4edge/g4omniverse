@@ -14,9 +14,11 @@ G4TokensType::G4TokensType() :
     y("y", TfToken::Immortal),
     z("z", TfToken::Immortal),
     Box("Box", TfToken::Immortal),
+    Intersection("Intersection", TfToken::Immortal),
     Logical("Logical", TfToken::Immortal),
     Named("Named", TfToken::Immortal),
     Subtraction("Subtraction", TfToken::Immortal),
+    Union("Union", TfToken::Immortal),
     VSolid("VSolid", TfToken::Immortal),
     allTokens({
         name,
@@ -24,9 +26,11 @@ G4TokensType::G4TokensType() :
         y,
         z,
         Box,
+        Intersection,
         Logical,
         Named,
         Subtraction,
+        Union,
         VSolid
     })
 {

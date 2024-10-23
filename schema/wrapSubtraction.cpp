@@ -47,7 +47,7 @@ void wrapG4Subtraction()
 {
     typedef G4Subtraction This;
 
-    class_<This, bases<UsdGeomMesh> >
+    class_<This, bases<UsdGeomXform> >
         cls("Subtraction");
 
     cls

@@ -53,6 +53,33 @@ class Box "Box" (
     double z = 0 
 }
 
+class Subtraction "Subtraction" (
+  inherits = </Xform>
+
+  customData = {
+    string className = "Subtraction" 
+  }
+) {
+}
+
+class Union "Union" (
+  inherits = </Xform>
+
+  customData = {
+    string className = "Union" 
+  }
+) {
+}
+
+class Intersection "Intersection" (
+  inherits = </Xform>
+
+  customData = {
+    string className = "Intersection" 
+  }
+) {
+}
+
 class Logical "Logical" (
     inherits = </Mesh>
 
@@ -62,11 +89,3 @@ class Logical "Logical" (
 ) {
 }
 
-class Subtraction "Subtraction" (
-  inherits = </Mesh>
-
-  customData = {
-    string className = "Subtraction" 
-  }
-) {
-}

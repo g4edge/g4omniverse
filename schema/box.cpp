@@ -180,6 +180,26 @@ PXR_NAMESPACE_CLOSE_SCOPE
 // ===================================================================== //
 // --(BEGIN CUSTOM CODE)--
 
+void pxr::G4Box::Mesh() {
+    auto x = GetXAttr();
+    auto y = GetYAttr();
+    auto z = GetZAttr();
+
+    auto p = GetPrim().GetAttribute(TfToken("points"));
+    auto vc = GetPrim().GetAttribute(TfToken("faceVertexCounts"));
+    auto vi = GetPrim().GetAttribute(TfToken("faceVertexIndices"));
+
+    VtArray<GfVec3f> vecArray = {GfVec3f(1.0f, 0.0f, 0.0f),
+                                 GfVec3f(0.0f, 1.0f, 0.0f),
+                                 GfVec3f(0.0f, 0.0f, 1.0f),
+                                 GfVec3f(1.0f, 1.0f, 0.0f),
+                                 GfVec3f(1.0f, 0.0f, 1.0f),
+                                 GfVec3f(0.0f, 1.0f, 1.0f),
+                                 GfVec3f(1.0f, 1.0f, 1.0f),
+                                 GfVec3f(0.0f, 0.0f, 0.0f)};
+    p.Set(vecArray);
+}
+
 
 #include <iostream>
 #include "pxr/usd/usd/notice.h"

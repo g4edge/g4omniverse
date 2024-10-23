@@ -17,7 +17,7 @@ PXR_NAMESPACE_OPEN_SCOPE
 TF_REGISTRY_FUNCTION(TfType)
 {
     TfType::Define<G4Subtraction,
-        TfType::Bases< UsdGeomMesh > >();
+        TfType::Bases< UsdGeomXform > >();
     
     // Register the usd prim typename as an alias under UsdSchemaBase. This
     // enables one to call
@@ -92,7 +92,7 @@ G4Subtraction::GetSchemaAttributeNames(bool includeInherited)
 {
     static TfTokenVector localNames;
     static TfTokenVector allNames =
-        UsdGeomMesh::GetSchemaAttributeNames(true);
+        UsdGeomXform::GetSchemaAttributeNames(true);
 
     if (includeInherited)
         return allNames;

@@ -144,6 +144,8 @@ void wrapG4Box()
 namespace {
 
 WRAP_CUSTOM {
+  _class
+    .def("Mesh",&G4Box::Mesh);
 }
 
 }
