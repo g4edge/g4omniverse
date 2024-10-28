@@ -7,6 +7,7 @@ pxr_plugin(${PXR_PACKAGE}
         usd
 	usdGeom
         vt
+	usdImaging
 
     INCLUDE_DIRS
         ${Boost_INCLUDE_DIRS}
@@ -24,6 +25,7 @@ pxr_plugin(${PXR_PACKAGE}
 	intersection
 	logical
         tokens
+	boxAdapter
 
     PYTHON_CPPFILES
         moduleDeps.cpp    

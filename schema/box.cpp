@@ -210,25 +210,29 @@ void pxr::G4Box::Update() {
   GetYAttr().Get(&y);
   GetZAttr().Get(&z);
 
+  float xf = (float)x;
+  float yf = (float)y;
+  float zf = (float)z;
+
   auto p = GetPrim().GetAttribute(TfToken("points"));
   auto vc = GetPrim().GetAttribute(TfToken("faceVertexCounts"));
   auto vi = GetPrim().GetAttribute(TfToken("faceVertexIndices"));
 
-  VtArray<GfVec3f> pArray = {GfVec3f(0.0f, 0.0f, 0.0f),
-                             GfVec3f(0.0f, 1.0f, 0.0f),
-                             GfVec3f(0.0f, 0.0f, 1.0f),
-                             GfVec3f(1.0f, 1.0f, 0.0f),
-                             GfVec3f(1.0f, 0.0f, 1.0f),
-                             GfVec3f(0.0f, 1.0f, 1.0f),
-                             GfVec3f(1.0f, 1.0f, 1.0f),
-                             GfVec3f(0.0f, 0.0f, 0.0f)};
+  VtArray<GfVec3f> pArray = {GfVec3f(-xf, -yf, -zf),
+                             GfVec3f(-xf,  yf, -zf),
+                             GfVec3f( xf,  yf, -zf)};
 
-  VtIntArray vcArray = {3,3,3,3,3,3,3,3,3,3,3,3};
-  VtIntArray viArray = {0,1,2,4,5,6};
+  //VtIntArray vcArray = {3,3,3,3,3,3,3,3,3,3,3,3};
+  VtIntArray vcArray = {3};
+  VtIntArray viArray = {0,1,2};
 
   p.Set(pArray);
   vc.Set(vcArray);
   vi.Set(viArray);
+
+  // update parents
+
+
 
 }
 
@@ -236,3 +240,17 @@ void pxr::G4Box::InstallUpdateListener() {
   pxr::TfNotice::Register(pxr::TfCreateWeakPtr<BoxChangeListener>(new BoxChangeListener(*this)),
                           &BoxChangeListener::Update);
 }
+
+#include "pxr/usdImaging/usdImaging/adapterRegistry.h"
+#include "pxr/usdImaging/usdImaging/meshAdapter.h"
+
+//PXR_NAMESPACE_OPEN_SCOPE
+//TF_REGISTRY_FUNCTION(TfType) {
+  //typedef UsdImagingMeshAdapter Adapter;
+  //TfType t = TfType::Define<Adapter, TfType::Bases<Adapter::BaseAdapter> >();
+  //t.SetFactory< UsdImagingPrimAdapterFactory<Adapter> >();
+  //TfType t = TfType::Define<Adapter, TfType::Bases<Adapter::BaseAdapter> >();
+  //t.SetFactory< UsdImagingPrimAdapterFactory<Adapter> >();
+  //UsdImagingAdapterRegistry::RegisterAdapter<MyCustomImagingAdapter>(TfType::Find<G4Box>());
+//}
+//PXR_NAMESPACE_CLOSE_SCOPE

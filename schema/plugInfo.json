@@ -74,7 +74,14 @@
                         "bases": [
                             "UsdTyped"
                         ], 
-                        "schemaKind": "abstractTyped"
+                        "schemaKind": "abstractTyped"		     
+                    }, 
+                    "boxAdapter": {
+                        "bases": [
+                            "UsdImagingGprimAdapter"
+                        ], 
+                        "isInternal": true, 
+                        "primTypeName": "Box"
                     }
                 }
             }, 

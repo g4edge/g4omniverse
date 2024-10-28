@@ -144,6 +144,9 @@ void pxr::G4Union::Update() {
 
   // convert mesh back to usd mesh
 
+  // update parents
+
+
 }
 
 void pxr::G4Union::InstallUpdateListener() {
