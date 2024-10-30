@@ -17,7 +17,7 @@ PXR_NAMESPACE_OPEN_SCOPE
 TF_REGISTRY_FUNCTION(TfType)
 {
     TfType::Define<G4VSolid,
-        TfType::Bases< UsdTyped > >();
+        TfType::Bases< UsdGeomMesh > >();
     
 }
 
@@ -84,6 +84,23 @@ G4VSolid::CreateNameAttr(VtValue const &defaultValue, bool writeSparsely) const
                        writeSparsely);
 }
 
+UsdAttribute
+G4VSolid::GetG4typeAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->g4type);
+}
+
+UsdAttribute
+G4VSolid::CreateG4typeAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->g4type,
+                       SdfValueTypeNames->String,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
 namespace {
 static inline TfTokenVector
 _ConcatenateAttributeNames(const TfTokenVector& left,const TfTokenVector& right)
@@ -102,10 +119,11 @@ G4VSolid::GetSchemaAttributeNames(bool includeInherited)
 {
     static TfTokenVector localNames = {
         G4Tokens->name,
+        G4Tokens->g4type,
     };
     static TfTokenVector allNames =
         _ConcatenateAttributeNames(
-            UsdTyped::GetSchemaAttributeNames(true),
+            UsdGeomMesh::GetSchemaAttributeNames(true),
             localNames);
 
     if (includeInherited)

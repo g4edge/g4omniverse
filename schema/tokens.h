@@ -41,10 +41,14 @@ PXR_NAMESPACE_OPEN_SCOPE
 /// Use G4Tokens like so:
 ///
 /// \code
-///     gprim.GetMyTokenValuedAttr().Set(G4Tokens->name);
+///     gprim.GetMyTokenValuedAttr().Set(G4Tokens->g4type);
 /// \endcode
 struct G4TokensType {
     G4_API G4TokensType();
+    /// \brief "g4type"
+    /// 
+    /// G4VSolid, G4Box, G4Tubs, G4Subtraction, G4Union, G4Intersection, G4Logical
+    const TfToken g4type;
     /// \brief "name"
     /// 
     /// G4VSolid

@@ -31,6 +31,13 @@ namespace {
 // fwd decl.
 WRAP_CUSTOM;
 
+        
+static UsdAttribute
+_CreateG4typeAttr(G4Intersection &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateG4typeAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
+}
 
 static std::string
 _Repr(const G4Intersection &self)
@@ -73,6 +80,13 @@ void wrapG4Intersection()
 
         .def(!self)
 
+        
+        .def("GetG4typeAttr",
+             &This::GetG4typeAttr)
+        .def("CreateG4typeAttr",
+             &_CreateG4typeAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
 
         .def("__repr__", ::_Repr)
     ;

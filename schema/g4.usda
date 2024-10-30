@@ -30,6 +30,7 @@ class "VSolid" (
     }
 )  {
     string name = "name"
+    string g4type = "VSolid"
 }    
 
 class Box "Box" (
@@ -39,18 +40,20 @@ class Box "Box" (
         string className = "Box"
     }
 )  {
+    string g4type = "Box"
     double x = 0
     double y = 0
     double z = 0 
 }
 
 class Tubs "Tubs" (
-    inherits = </Mesh>
+    inherits = </VSolid>
     
     customData = {
         string className = "Tubs"
     }
 )  {
+    string g4type = "Tubs"
     double r1 = 0
     double r2 = 0
     double z = 0 
@@ -63,6 +66,7 @@ class Subtraction "Subtraction" (
     string className = "Subtraction" 
   }
 ) {
+    string g4type = "Subtraction"
 }
 
 class Union "Union" (
@@ -72,6 +76,7 @@ class Union "Union" (
     string className = "Union" 
   }
 ) {
+    string g4type = "Union"
 }
 
 class Intersection "Intersection" (
@@ -81,6 +86,8 @@ class Intersection "Intersection" (
     string className = "Intersection" 
   }
 ) {
+    string g4type = "Intersection"
+
 }
 
 class Logical "Logical" (
@@ -90,5 +97,6 @@ class Logical "Logical" (
          string className = "Logical"
     }
 ) {
+    string g4type = "Logical"
 }
 

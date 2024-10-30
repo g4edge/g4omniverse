@@ -17,7 +17,7 @@ PXR_NAMESPACE_OPEN_SCOPE
 TF_REGISTRY_FUNCTION(TfType)
 {
     TfType::Define<G4Tubs,
-        TfType::Bases< UsdGeomMesh > >();
+        TfType::Bases< G4VSolid > >();
     
     // Register the usd prim typename as an alias under UsdSchemaBase. This
     // enables one to call
@@ -84,6 +84,23 @@ const TfType &
 G4Tubs::_GetTfType() const
 {
     return _GetStaticTfType();
+}
+
+UsdAttribute
+G4Tubs::GetG4typeAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->g4type);
+}
+
+UsdAttribute
+G4Tubs::CreateG4typeAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->g4type,
+                       SdfValueTypeNames->String,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
 }
 
 UsdAttribute
@@ -154,13 +171,14 @@ const TfTokenVector&
 G4Tubs::GetSchemaAttributeNames(bool includeInherited)
 {
     static TfTokenVector localNames = {
+        G4Tokens->g4type,
         G4Tokens->r1,
         G4Tokens->r2,
         G4Tokens->z,
     };
     static TfTokenVector allNames =
         _ConcatenateAttributeNames(
-            UsdGeomMesh::GetSchemaAttributeNames(true),
+            G4VSolid::GetSchemaAttributeNames(true),
             localNames);
 
     if (includeInherited)

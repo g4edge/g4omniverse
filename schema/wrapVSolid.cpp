@@ -38,6 +38,13 @@ _CreateNameAttr(G4VSolid &self,
     return self.CreateNameAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
 }
+        
+static UsdAttribute
+_CreateG4typeAttr(G4VSolid &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateG4typeAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
+}
 
 static std::string
 _Repr(const G4VSolid &self)
@@ -54,7 +61,7 @@ void wrapG4VSolid()
 {
     typedef G4VSolid This;
 
-    class_<This, bases<UsdTyped> >
+    class_<This, bases<UsdGeomMesh> >
         cls("VSolid");
 
     cls
@@ -82,6 +89,13 @@ void wrapG4VSolid()
              &This::GetNameAttr)
         .def("CreateNameAttr",
              &_CreateNameAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetG4typeAttr",
+             &This::GetG4typeAttr)
+        .def("CreateG4typeAttr",
+             &_CreateG4typeAttr,
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
 

@@ -11,7 +11,7 @@
 
 #include "pxr/pxr.h"
 #include ".//api.h"
-#include "pxr/usd/usd/typed.h"
+#include "pxr/usd/usdGeom/mesh.h"
 #include "pxr/usd/usd/prim.h"
 #include "pxr/usd/usd/stage.h"
 #include ".//tokens.h"
@@ -36,7 +36,7 @@ class SdfAssetPath;
 /// \class G4VSolid
 ///
 ///
-class G4VSolid : public UsdTyped
+class G4VSolid : public UsdGeomMesh
 {
 public:
     /// Compile time constant representing what kind of schema this class is.
@@ -49,7 +49,7 @@ public:
     /// for a \em valid \p prim, but will not immediately throw an error for
     /// an invalid \p prim
     explicit G4VSolid(const UsdPrim& prim=UsdPrim())
-        : UsdTyped(prim)
+        : UsdGeomMesh(prim)
     {
     }
 
@@ -57,7 +57,7 @@ public:
     /// Should be preferred over G4VSolid(schemaObj.GetPrim()),
     /// as it preserves SchemaBase state.
     explicit G4VSolid(const UsdSchemaBase& schemaObj)
-        : UsdTyped(schemaObj)
+        : UsdGeomMesh(schemaObj)
     {
     }
 
@@ -126,6 +126,28 @@ public:
     /// the default for \p writeSparsely is \c false.
     G4_API
     UsdAttribute CreateNameAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+
+public:
+    // --------------------------------------------------------------------- //
+    // G4TYPE 
+    // --------------------------------------------------------------------- //
+    /// 
+    ///
+    /// | ||
+    /// | -- | -- |
+    /// | Declaration | `string g4type = "VSolid"` |
+    /// | C++ Type | std::string |
+    /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->String |
+    G4_API
+    UsdAttribute GetG4typeAttr() const;
+
+    /// See GetG4typeAttr(), and also 
+    /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
+    /// If specified, author \p defaultValue as the attribute's default,
+    /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
+    /// the default for \p writeSparsely is \c false.
+    G4_API
+    UsdAttribute CreateG4typeAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
 
 public:
     // ===================================================================== //

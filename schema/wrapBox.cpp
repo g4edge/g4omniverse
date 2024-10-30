@@ -33,6 +33,13 @@ WRAP_CUSTOM;
 
         
 static UsdAttribute
+_CreateG4typeAttr(G4Box &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateG4typeAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
+}
+        
+static UsdAttribute
 _CreateXAttr(G4Box &self,
                                       object defaultVal, bool writeSparsely) {
     return self.CreateXAttr(
@@ -68,7 +75,7 @@ void wrapG4Box()
 {
     typedef G4Box This;
 
-    class_<This, bases<UsdGeomMesh> >
+    class_<This, bases<G4VSolid> >
         cls("Box");
 
     cls
@@ -94,6 +101,13 @@ void wrapG4Box()
 
         .def(!self)
 
+        
+        .def("GetG4typeAttr",
+             &This::GetG4typeAttr)
+        .def("CreateG4typeAttr",
+             &_CreateG4typeAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
         
         .def("GetXAttr",
              &This::GetXAttr)

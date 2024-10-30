@@ -86,13 +86,46 @@ G4Intersection::_GetTfType() const
     return _GetStaticTfType();
 }
 
+UsdAttribute
+G4Intersection::GetG4typeAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->g4type);
+}
+
+UsdAttribute
+G4Intersection::CreateG4typeAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->g4type,
+                       SdfValueTypeNames->String,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
+namespace {
+static inline TfTokenVector
+_ConcatenateAttributeNames(const TfTokenVector& left,const TfTokenVector& right)
+{
+    TfTokenVector result;
+    result.reserve(left.size() + right.size());
+    result.insert(result.end(), left.begin(), left.end());
+    result.insert(result.end(), right.begin(), right.end());
+    return result;
+}
+}
+
 /*static*/
 const TfTokenVector&
 G4Intersection::GetSchemaAttributeNames(bool includeInherited)
 {
-    static TfTokenVector localNames;
+    static TfTokenVector localNames = {
+        G4Tokens->g4type,
+    };
     static TfTokenVector allNames =
-        UsdGeomXform::GetSchemaAttributeNames(true);
+        _ConcatenateAttributeNames(
+            UsdGeomXform::GetSchemaAttributeNames(true),
+            localNames);
 
     if (includeInherited)
         return allNames;

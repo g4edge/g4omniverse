@@ -33,6 +33,13 @@ WRAP_CUSTOM;
 
         
 static UsdAttribute
+_CreateG4typeAttr(G4Tubs &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateG4typeAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
+}
+        
+static UsdAttribute
 _CreateR1Attr(G4Tubs &self,
                                       object defaultVal, bool writeSparsely) {
     return self.CreateR1Attr(
@@ -68,7 +75,7 @@ void wrapG4Tubs()
 {
     typedef G4Tubs This;
 
-    class_<This, bases<UsdGeomMesh> >
+    class_<This, bases<G4VSolid> >
         cls("Tubs");
 
     cls
@@ -94,6 +101,13 @@ void wrapG4Tubs()
 
         .def(!self)
 
+        
+        .def("GetG4typeAttr",
+             &This::GetG4typeAttr)
+        .def("CreateG4typeAttr",
+             &_CreateG4typeAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
         
         .def("GetR1Attr",
              &This::GetR1Attr)

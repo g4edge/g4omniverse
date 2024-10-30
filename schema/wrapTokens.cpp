@@ -47,6 +47,7 @@ void wrapG4Tokens()
 {
     boost::python::class_<G4TokensType, boost::noncopyable>
         cls("Tokens", boost::python::no_init);
+    _AddToken(cls, "g4type", G4Tokens->g4type);
     _AddToken(cls, "name", G4Tokens->name);
     _AddToken(cls, "r1", G4Tokens->r1);
     _AddToken(cls, "r2", G4Tokens->r2);

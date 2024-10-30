@@ -9,6 +9,7 @@
 PXR_NAMESPACE_OPEN_SCOPE
 
 G4TokensType::G4TokensType() :
+    g4type("g4type", TfToken::Immortal),
     name("name", TfToken::Immortal),
     r1("r1", TfToken::Immortal),
     r2("r2", TfToken::Immortal),
@@ -23,6 +24,7 @@ G4TokensType::G4TokensType() :
     Union("Union", TfToken::Immortal),
     VSolid("VSolid", TfToken::Immortal),
     allTokens({
+        g4type,
         name,
         r1,
         r2,
