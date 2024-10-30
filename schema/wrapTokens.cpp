@@ -48,14 +48,16 @@ void wrapG4Tokens()
     boost::python::class_<G4TokensType, boost::noncopyable>
         cls("Tokens", boost::python::no_init);
     _AddToken(cls, "name", G4Tokens->name);
+    _AddToken(cls, "r1", G4Tokens->r1);
+    _AddToken(cls, "r2", G4Tokens->r2);
     _AddToken(cls, "x", G4Tokens->x);
     _AddToken(cls, "y", G4Tokens->y);
     _AddToken(cls, "z", G4Tokens->z);
     _AddToken(cls, "Box", G4Tokens->Box);
     _AddToken(cls, "Intersection", G4Tokens->Intersection);
     _AddToken(cls, "Logical", G4Tokens->Logical);
-    _AddToken(cls, "Named", G4Tokens->Named);
     _AddToken(cls, "Subtraction", G4Tokens->Subtraction);
+    _AddToken(cls, "Tubs", G4Tokens->Tubs);
     _AddToken(cls, "Union", G4Tokens->Union);
     _AddToken(cls, "VSolid", G4Tokens->VSolid);
 }

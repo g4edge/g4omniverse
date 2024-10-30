@@ -8,6 +8,7 @@ TF_WRAP_MODULE
 {
     TF_WRAP(G4VSolid);  
     TF_WRAP(G4Box);
+    TF_WRAP(G4Tubs);
     TF_WRAP(G4Named);
     TF_WRAP(G4Logical);
     

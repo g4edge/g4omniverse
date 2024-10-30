@@ -241,10 +241,9 @@ void pxr::G4Box::InstallUpdateListener() {
                           &BoxChangeListener::Update);
 }
 
-#include "pxr/usdImaging/usdImaging/adapterRegistry.h"
-#include "pxr/usdImaging/usdImaging/meshAdapter.h"
+//#include "pxr/usdImaging/usdImaging/adapterRegistry.h"
+//#include "pxr/usdImaging/usdImaging/meshAdapter.h"
 
-//PXR_NAMESPACE_OPEN_SCOPE
 //TF_REGISTRY_FUNCTION(TfType) {
   //typedef UsdImagingMeshAdapter Adapter;
   //TfType t = TfType::Define<Adapter, TfType::Bases<Adapter::BaseAdapter> >();

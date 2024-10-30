@@ -10,26 +10,30 @@ PXR_NAMESPACE_OPEN_SCOPE
 
 G4TokensType::G4TokensType() :
     name("name", TfToken::Immortal),
+    r1("r1", TfToken::Immortal),
+    r2("r2", TfToken::Immortal),
     x("x", TfToken::Immortal),
     y("y", TfToken::Immortal),
     z("z", TfToken::Immortal),
     Box("Box", TfToken::Immortal),
     Intersection("Intersection", TfToken::Immortal),
     Logical("Logical", TfToken::Immortal),
-    Named("Named", TfToken::Immortal),
     Subtraction("Subtraction", TfToken::Immortal),
+    Tubs("Tubs", TfToken::Immortal),
     Union("Union", TfToken::Immortal),
     VSolid("VSolid", TfToken::Immortal),
     allTokens({
         name,
+        r1,
+        r2,
         x,
         y,
         z,
         Box,
         Intersection,
         Logical,
-        Named,
         Subtraction,
+        Tubs,
         Union,
         VSolid
     })

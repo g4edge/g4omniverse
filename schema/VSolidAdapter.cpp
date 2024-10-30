@@ -4,7 +4,7 @@
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#include "boxAdapter.h"
+#include "VSolidAdapter.h"
 
 #include "pxr/usdImaging/usdImaging/dataSourceMesh.h"
 #include "pxr/usdImaging/usdImaging/debugCodes.h"
@@ -32,23 +32,23 @@ PXR_NAMESPACE_OPEN_SCOPE
 
 TF_REGISTRY_FUNCTION(TfType)
 {
-    typedef boxAdapter Adapter;
+    typedef VSolidAdapter Adapter;
     TfType t = TfType::Define<Adapter, TfType::Bases<Adapter::BaseAdapter> >();
     t.SetFactory< UsdImagingPrimAdapterFactory<Adapter> >();
 }
 
-boxAdapter::~boxAdapter()
+VSolidAdapter::~VSolidAdapter()
 {
 }
 
 TfTokenVector
-boxAdapter::GetImagingSubprims(UsdPrim const& prim)
+VSolidAdapter::GetImagingSubprims(UsdPrim const& prim)
 {
     return { TfToken() };
 }
 
 TfToken
-boxAdapter::GetImagingSubprimType(
+VSolidAdapter::GetImagingSubprimType(
         UsdPrim const& prim,
         TfToken const& subprim)
 {
@@ -59,7 +59,7 @@ boxAdapter::GetImagingSubprimType(
 }
 
 HdContainerDataSourceHandle
-boxAdapter::GetImagingSubprimData(
+VSolidAdapter::GetImagingSubprimData(
         UsdPrim const& prim,
         TfToken const& subprim,
         const UsdImagingDataSourceStageGlobals &stageGlobals)
@@ -74,7 +74,7 @@ boxAdapter::GetImagingSubprimData(
 }
 
 HdDataSourceLocatorSet
-boxAdapter::InvalidateImagingSubprim(
+VSolidAdapter::InvalidateImagingSubprim(
         UsdPrim const& prim,
         TfToken const& subprim,
         TfTokenVector const& properties,
@@ -85,13 +85,13 @@ boxAdapter::InvalidateImagingSubprim(
 }
 
 bool
-boxAdapter::IsSupported(UsdImagingIndexProxy const* index) const
+VSolidAdapter::IsSupported(UsdImagingIndexProxy const* index) const
 {
     return index->IsRprimTypeSupported(HdPrimTypeTokens->mesh);
 }
 
 SdfPath
-boxAdapter::Populate(UsdPrim const& prim,
+VSolidAdapter::Populate(UsdPrim const& prim,
                             UsdImagingIndexProxy* index,
                             UsdImagingInstancerContext const* instancerContext)
 {
@@ -131,7 +131,7 @@ boxAdapter::Populate(UsdPrim const& prim,
 
 
 void
-boxAdapter::TrackVariability(UsdPrim const& prim,
+VSolidAdapter::TrackVariability(UsdPrim const& prim,
                                         SdfPath const& cachePath,
                                         HdDirtyBits* timeVaryingBits,
                                         UsdImagingInstancerContext const* 
@@ -253,14 +253,14 @@ boxAdapter::TrackVariability(UsdPrim const& prim,
 }
 
 bool
-boxAdapter::_IsBuiltinPrimvar(TfToken const& primvarName) const
+VSolidAdapter::_IsBuiltinPrimvar(TfToken const& primvarName) const
 {
     return (primvarName == HdTokens->normals) ||
         UsdImagingGprimAdapter::_IsBuiltinPrimvar(primvarName);
 }
 
 void
-boxAdapter::UpdateForTime(UsdPrim const& prim,
+VSolidAdapter::UpdateForTime(UsdPrim const& prim,
                                      SdfPath const& cachePath,
                                      UsdTimeCode time,
                                      HdDirtyBits requestedBits,
@@ -310,7 +310,7 @@ boxAdapter::UpdateForTime(UsdPrim const& prim,
 }
 
 HdDirtyBits
-boxAdapter::ProcessPropertyChange(UsdPrim const& prim,
+VSolidAdapter::ProcessPropertyChange(UsdPrim const& prim,
                                              SdfPath const& cachePath,
                                              TfToken const& propertyName)
 {
@@ -381,7 +381,7 @@ boxAdapter::ProcessPropertyChange(UsdPrim const& prim,
 
 /*virtual*/ 
 VtValue
-boxAdapter::GetTopology(UsdPrim const& prim,
+VSolidAdapter::GetTopology(UsdPrim const& prim,
                                    SdfPath const& cachePath,
                                    UsdTimeCode time) const
 {
@@ -424,7 +424,7 @@ boxAdapter::GetTopology(UsdPrim const& prim,
 }
 
 PxOsdSubdivTags
-boxAdapter::GetSubdivTags(UsdPrim const& prim,
+VSolidAdapter::GetSubdivTags(UsdPrim const& prim,
                                      SdfPath const& cachePath,
                                      UsdTimeCode time) const
 {
@@ -488,7 +488,7 @@ boxAdapter::GetSubdivTags(UsdPrim const& prim,
 
 /*virtual*/
 VtValue
-boxAdapter::Get(UsdPrim const& prim,
+VSolidAdapter::Get(UsdPrim const& prim,
                            SdfPath const& cachePath,
                            TfToken const &key,
                            UsdTimeCode time,

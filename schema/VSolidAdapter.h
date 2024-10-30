@@ -4,8 +4,8 @@
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#ifndef PXR_USD_IMAGING_USD_IMAGING_BOX_ADAPTER_H
-#define PXR_USD_IMAGING_USD_IMAGING_BOX_ADAPTER_H
+#ifndef PXR_USD_IMAGING_USD_IMAGING_VSOLID_ADAPTER_H
+#define PXR_USD_IMAGING_USD_IMAGING_VSOLID_ADAPTER_H
 
 /// \file usdImaging/meshAdapter.h
 
@@ -23,17 +23,17 @@ class PxOsdSubdivTags;
 /// \class UsdImagingMeshAdapter
 ///
 /// Delegate support for UsdGeomMesh.
-///
-class boxAdapter : public UsdImagingGprimAdapter 
+///%
+class VSolidAdapter : public UsdImagingGprimAdapter
 {
 public:
     using BaseAdapter = UsdImagingGprimAdapter;
 
-    boxAdapter()
+    VSolidAdapter()
         : UsdImagingGprimAdapter()
     {}
     USDIMAGING_API
-    ~boxAdapter() override;
+    ~VSolidAdapter() override;
 
     // ---------------------------------------------------------------------- //
     /// \name Scene Index Support

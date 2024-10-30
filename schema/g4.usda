@@ -23,17 +23,8 @@ over "GLOBAL" (
 ) {
 }
 
-class "Named" (
-    inherits = </Typed>
-    customData = {
-        string className = "Named"
-    }
-)  {
-   string name = "name"
-}   
-
 class "VSolid" (
-    inherits = </Typed>
+    inherits = </Mesh>
     customData = {
         string className = "VSolid"
     }
@@ -42,7 +33,7 @@ class "VSolid" (
 }    
 
 class Box "Box" (
-    inherits = </Mesh>
+    inherits = </VSolid>
     
     customData = {
         string className = "Box"
@@ -50,6 +41,18 @@ class Box "Box" (
 )  {
     double x = 0
     double y = 0
+    double z = 0 
+}
+
+class Tubs "Tubs" (
+    inherits = </Mesh>
+    
+    customData = {
+        string className = "Tubs"
+    }
+)  {
+    double r1 = 0
+    double r2 = 0
     double z = 0 
 }
 
