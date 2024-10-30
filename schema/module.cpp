@@ -9,5 +9,9 @@ TF_WRAP_MODULE
     TF_WRAP(G4VSolid);  
     TF_WRAP(G4Box);
     TF_WRAP(G4Tubs);
+    TF_WRAP(G4Union);
+    TF_WRAP(G4Intersection);
+    TF_WRAP(G4Subtraction);
     TF_WRAP(G4Logical);
+    TF_WRAP(G4Physical);
 }

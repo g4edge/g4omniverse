@@ -57,6 +57,7 @@ void wrapG4Tokens()
     _AddToken(cls, "Box", G4Tokens->Box);
     _AddToken(cls, "Intersection", G4Tokens->Intersection);
     _AddToken(cls, "Logical", G4Tokens->Logical);
+    _AddToken(cls, "Physical", G4Tokens->Physical);
     _AddToken(cls, "Subtraction", G4Tokens->Subtraction);
     _AddToken(cls, "Tubs", G4Tokens->Tubs);
     _AddToken(cls, "Union", G4Tokens->Union);

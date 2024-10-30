@@ -100,3 +100,12 @@ class Logical "Logical" (
     string g4type = "Logical"
 }
 
+class Physical "Physical" (
+    inherits = </Xform>
+
+    customData = {
+         string className = "Physical"
+    }
+) {
+    string g4type = "Physical"
+}
