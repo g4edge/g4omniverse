@@ -249,7 +249,8 @@ void pxr::G4Box::Update() {
   vi.Set(viArray);
 
   // update parents
-
+  auto parent = GetPrim().GetParent();
+  std::cout << "parent path=" << " " << parent.GetPath() << " type='" << parent.GetTypeName() << "'" << std::endl;
 
 
 }
