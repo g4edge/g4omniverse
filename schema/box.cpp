@@ -258,16 +258,3 @@ void pxr::G4Box::InstallUpdateListener() {
   pxr::TfNotice::Register(pxr::TfCreateWeakPtr<BoxChangeListener>(new BoxChangeListener(*this)),
                           &BoxChangeListener::Update);
 }
-
-//#include "pxr/usdImaging/usdImaging/adapterRegistry.h"
-//#include "pxr/usdImaging/usdImaging/meshAdapter.h"
-
-//TF_REGISTRY_FUNCTION(TfType) {
-  //typedef UsdImagingMeshAdapter Adapter;
-  //TfType t = TfType::Define<Adapter, TfType::Bases<Adapter::BaseAdapter> >();
-  //t.SetFactory< UsdImagingPrimAdapterFactory<Adapter> >();
-  //TfType t = TfType::Define<Adapter, TfType::Bases<Adapter::BaseAdapter> >();
-  //t.SetFactory< UsdImagingPrimAdapterFactory<Adapter> >();
-  //UsdImagingAdapterRegistry::RegisterAdapter<MyCustomImagingAdapter>(TfType::Find<G4Box>());
-//}
-//PXR_NAMESPACE_CLOSE_SCOPE
