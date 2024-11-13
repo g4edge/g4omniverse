@@ -238,11 +238,27 @@ void pxr::G4Box::Update() {
 
   VtArray<GfVec3f> pArray = {GfVec3f(-xf, -yf, -zf),
                              GfVec3f(-xf,  yf, -zf),
-                             GfVec3f( xf,  yf, -zf)};
+                             GfVec3f( xf,  yf, -zf),
+                             GfVec3f( xf, -yf, -zf),
+                             GfVec3f(-xf, -yf,  zf),
+                             GfVec3f(-xf,  yf,  zf),
+                             GfVec3f( xf,  yf,  zf),
+                             GfVec3f( xf, -yf,  zf)};
 
-  //VtIntArray vcArray = {3,3,3,3,3,3,3,3,3,3,3,3};
-  VtIntArray vcArray = {3};
-  VtIntArray viArray = {0,1,2};
+  VtIntArray vcArray = {3,3,3,3,3,3,3,3,3,3,3,3};
+  VtIntArray viArray = {0,1,2,
+                        0,2,3,
+                        0,4,5,
+                        0,5,1,
+                        1,5,6,
+                        1,6,2,
+                        3,6,7,
+                        3,2,6,
+                        0,3,7,
+                        0,7,4,
+                        4,6,5,
+                        4,7,6
+                        };
 
   p.Set(pArray);
   vc.Set(vcArray);
