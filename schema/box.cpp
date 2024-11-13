@@ -210,7 +210,7 @@ public:
   }
 
   void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
-    std::cout << "updated" << " " << std::endl;
+    // std::cout << "updated" << " " << std::endl;
     _box.Update();
   }
 
@@ -219,7 +219,7 @@ private:
 };
 
 void pxr::G4Box::Update() {
-  std::cout << "pxr::G4Box::Update()" << std::endl;
+  // std::cout << "pxr::G4Box::Update()" << std::endl;
 
   double x;
   double y;
@@ -250,7 +250,7 @@ void pxr::G4Box::Update() {
 
   // update parents
   auto parent = GetPrim().GetParent();
-  std::cout << "parent path=" << " " << parent.GetPath() << " type='" << parent.GetTypeName() << "'" << std::endl;
+  // std::cout << "parent path=" << " " << parent.GetPath() << " type='" << parent.GetTypeName() << "'" << std::endl;
 
 
 }

@@ -4,14 +4,14 @@
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#ifndef G4_GENERATED_SUBTRACTION_H
-#define G4_GENERATED_SUBTRACTION_H
+#ifndef G4_GENERATED_BOOLEANSOLID_H
+#define G4_GENERATED_BOOLEANSOLID_H
 
-/// \file G4/subtraction.h
+/// \file G4/booleanSolid.h
 
 #include "pxr/pxr.h"
 #include ".//api.h"
-#include ".//booleanSolid.h"
+#include "pxr/usd/usdGeom/xform.h"
 #include "pxr/usd/usd/prim.h"
 #include "pxr/usd/usd/stage.h"
 #include ".//tokens.h"
@@ -30,13 +30,13 @@ PXR_NAMESPACE_OPEN_SCOPE
 class SdfAssetPath;
 
 // -------------------------------------------------------------------------- //
-// SUBTRACTION                                                                //
+// BOOLEANSOLID                                                               //
 // -------------------------------------------------------------------------- //
 
-/// \class G4Subtraction
+/// \class G4BooleanSolid
 ///
 ///
-class G4Subtraction : public G4BooleanSolid
+class G4BooleanSolid : public UsdGeomXform
 {
 public:
     /// Compile time constant representing what kind of schema this class is.
@@ -44,26 +44,26 @@ public:
     /// \sa UsdSchemaKind
     static const UsdSchemaKind schemaKind = UsdSchemaKind::ConcreteTyped;
 
-    /// Construct a G4Subtraction on UsdPrim \p prim .
-    /// Equivalent to G4Subtraction::Get(prim.GetStage(), prim.GetPath())
+    /// Construct a G4BooleanSolid on UsdPrim \p prim .
+    /// Equivalent to G4BooleanSolid::Get(prim.GetStage(), prim.GetPath())
     /// for a \em valid \p prim, but will not immediately throw an error for
     /// an invalid \p prim
-    explicit G4Subtraction(const UsdPrim& prim=UsdPrim())
-        : G4BooleanSolid(prim)
+    explicit G4BooleanSolid(const UsdPrim& prim=UsdPrim())
+        : UsdGeomXform(prim)
     {
     }
 
-    /// Construct a G4Subtraction on the prim held by \p schemaObj .
-    /// Should be preferred over G4Subtraction(schemaObj.GetPrim()),
+    /// Construct a G4BooleanSolid on the prim held by \p schemaObj .
+    /// Should be preferred over G4BooleanSolid(schemaObj.GetPrim()),
     /// as it preserves SchemaBase state.
-    explicit G4Subtraction(const UsdSchemaBase& schemaObj)
-        : G4BooleanSolid(schemaObj)
+    explicit G4BooleanSolid(const UsdSchemaBase& schemaObj)
+        : UsdGeomXform(schemaObj)
     {
     }
 
     /// Destructor.
     G4_API
-    virtual ~G4Subtraction();
+    virtual ~G4BooleanSolid();
 
     /// Return a vector of names of all pre-declared attributes for this schema
     /// class and all its ancestor classes.  Does not include attributes that
@@ -72,17 +72,17 @@ public:
     static const TfTokenVector &
     GetSchemaAttributeNames(bool includeInherited=true);
 
-    /// Return a G4Subtraction holding the prim adhering to this
+    /// Return a G4BooleanSolid holding the prim adhering to this
     /// schema at \p path on \p stage.  If no prim exists at \p path on
     /// \p stage, or if the prim at that path does not adhere to this schema,
     /// return an invalid schema object.  This is shorthand for the following:
     ///
     /// \code
-    /// G4Subtraction(stage->GetPrimAtPath(path));
+    /// G4BooleanSolid(stage->GetPrimAtPath(path));
     /// \endcode
     ///
     G4_API
-    static G4Subtraction
+    static G4BooleanSolid
     Get(const UsdStagePtr &stage, const SdfPath &path);
 
     /// Attempt to ensure a \a UsdPrim adhering to this schema at \p path
@@ -108,7 +108,7 @@ public:
     /// the opinion at the current EditTarget.
     ///
     G4_API
-    static G4Subtraction
+    static G4BooleanSolid
     Define(const UsdStagePtr &stage, const SdfPath &path);
 
 protected:
@@ -138,7 +138,7 @@ public:
     ///
     /// | ||
     /// | -- | -- |
-    /// | Declaration | `string g4type = "Subtraction"` |
+    /// | Declaration | `string g4type = "BooleanSolid"` |
     /// | C++ Type | std::string |
     /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->String |
     G4_API
@@ -151,6 +151,50 @@ public:
     /// the default for \p writeSparsely is \c false.
     G4_API
     UsdAttribute CreateG4typeAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+
+public:
+    // --------------------------------------------------------------------- //
+    // SOLID1PRIM 
+    // --------------------------------------------------------------------- //
+    /// 
+    ///
+    /// | ||
+    /// | -- | -- |
+    /// | Declaration | `string solid1prim = "none"` |
+    /// | C++ Type | std::string |
+    /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->String |
+    G4_API
+    UsdAttribute GetSolid1primAttr() const;
+
+    /// See GetSolid1primAttr(), and also 
+    /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
+    /// If specified, author \p defaultValue as the attribute's default,
+    /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
+    /// the default for \p writeSparsely is \c false.
+    G4_API
+    UsdAttribute CreateSolid1primAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+
+public:
+    // --------------------------------------------------------------------- //
+    // SOLID2PRIM 
+    // --------------------------------------------------------------------- //
+    /// 
+    ///
+    /// | ||
+    /// | -- | -- |
+    /// | Declaration | `string solid2prim = "none"` |
+    /// | C++ Type | std::string |
+    /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->String |
+    G4_API
+    UsdAttribute GetSolid2primAttr() const;
+
+    /// See GetSolid2primAttr(), and also 
+    /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
+    /// If specified, author \p defaultValue as the attribute's default,
+    /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
+    /// the default for \p writeSparsely is \c false.
+    G4_API
+    UsdAttribute CreateSolid2primAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
 
 public:
     // ===================================================================== //

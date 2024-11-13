@@ -4,7 +4,7 @@
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#include ".//subtraction.h"
+#include ".//booleanSolid.h"
 #include "pxr/usd/usd/schemaRegistry.h"
 #include "pxr/usd/usd/typed.h"
 
@@ -16,64 +16,64 @@ PXR_NAMESPACE_OPEN_SCOPE
 // Register the schema with the TfType system.
 TF_REGISTRY_FUNCTION(TfType)
 {
-    TfType::Define<G4Subtraction,
-        TfType::Bases< G4BooleanSolid > >();
+    TfType::Define<G4BooleanSolid,
+        TfType::Bases< UsdGeomXform > >();
     
     // Register the usd prim typename as an alias under UsdSchemaBase. This
     // enables one to call
-    // TfType::Find<UsdSchemaBase>().FindDerivedByName("Subtraction")
-    // to find TfType<G4Subtraction>, which is how IsA queries are
+    // TfType::Find<UsdSchemaBase>().FindDerivedByName("BooleanSolid")
+    // to find TfType<G4BooleanSolid>, which is how IsA queries are
     // answered.
-    TfType::AddAlias<UsdSchemaBase, G4Subtraction>("Subtraction");
+    TfType::AddAlias<UsdSchemaBase, G4BooleanSolid>("BooleanSolid");
 }
 
 /* virtual */
-G4Subtraction::~G4Subtraction()
+G4BooleanSolid::~G4BooleanSolid()
 {
 }
 
 /* static */
-G4Subtraction
-G4Subtraction::Get(const UsdStagePtr &stage, const SdfPath &path)
+G4BooleanSolid
+G4BooleanSolid::Get(const UsdStagePtr &stage, const SdfPath &path)
 {
     if (!stage) {
         TF_CODING_ERROR("Invalid stage");
-        return G4Subtraction();
+        return G4BooleanSolid();
     }
-    return G4Subtraction(stage->GetPrimAtPath(path));
+    return G4BooleanSolid(stage->GetPrimAtPath(path));
 }
 
 /* static */
-G4Subtraction
-G4Subtraction::Define(
+G4BooleanSolid
+G4BooleanSolid::Define(
     const UsdStagePtr &stage, const SdfPath &path)
 {
-    static TfToken usdPrimTypeName("Subtraction");
+    static TfToken usdPrimTypeName("BooleanSolid");
     if (!stage) {
         TF_CODING_ERROR("Invalid stage");
-        return G4Subtraction();
+        return G4BooleanSolid();
     }
-    return G4Subtraction(
+    return G4BooleanSolid(
         stage->DefinePrim(path, usdPrimTypeName));
 }
 
 /* virtual */
-UsdSchemaKind G4Subtraction::_GetSchemaKind() const
+UsdSchemaKind G4BooleanSolid::_GetSchemaKind() const
 {
-    return G4Subtraction::schemaKind;
+    return G4BooleanSolid::schemaKind;
 }
 
 /* static */
 const TfType &
-G4Subtraction::_GetStaticTfType()
+G4BooleanSolid::_GetStaticTfType()
 {
-    static TfType tfType = TfType::Find<G4Subtraction>();
+    static TfType tfType = TfType::Find<G4BooleanSolid>();
     return tfType;
 }
 
 /* static */
 bool 
-G4Subtraction::_IsTypedSchema()
+G4BooleanSolid::_IsTypedSchema()
 {
     static bool isTyped = _GetStaticTfType().IsA<UsdTyped>();
     return isTyped;
@@ -81,21 +81,55 @@ G4Subtraction::_IsTypedSchema()
 
 /* virtual */
 const TfType &
-G4Subtraction::_GetTfType() const
+G4BooleanSolid::_GetTfType() const
 {
     return _GetStaticTfType();
 }
 
 UsdAttribute
-G4Subtraction::GetG4typeAttr() const
+G4BooleanSolid::GetG4typeAttr() const
 {
     return GetPrim().GetAttribute(G4Tokens->g4type);
 }
 
 UsdAttribute
-G4Subtraction::CreateG4typeAttr(VtValue const &defaultValue, bool writeSparsely) const
+G4BooleanSolid::CreateG4typeAttr(VtValue const &defaultValue, bool writeSparsely) const
 {
     return UsdSchemaBase::_CreateAttr(G4Tokens->g4type,
+                       SdfValueTypeNames->String,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
+UsdAttribute
+G4BooleanSolid::GetSolid1primAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->solid1prim);
+}
+
+UsdAttribute
+G4BooleanSolid::CreateSolid1primAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->solid1prim,
+                       SdfValueTypeNames->String,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
+UsdAttribute
+G4BooleanSolid::GetSolid2primAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->solid2prim);
+}
+
+UsdAttribute
+G4BooleanSolid::CreateSolid2primAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->solid2prim,
                        SdfValueTypeNames->String,
                        /* custom = */ false,
                        SdfVariabilityVarying,
@@ -117,14 +151,16 @@ _ConcatenateAttributeNames(const TfTokenVector& left,const TfTokenVector& right)
 
 /*static*/
 const TfTokenVector&
-G4Subtraction::GetSchemaAttributeNames(bool includeInherited)
+G4BooleanSolid::GetSchemaAttributeNames(bool includeInherited)
 {
     static TfTokenVector localNames = {
         G4Tokens->g4type,
+        G4Tokens->solid1prim,
+        G4Tokens->solid2prim,
     };
     static TfTokenVector allNames =
         _ConcatenateAttributeNames(
-            G4BooleanSolid::GetSchemaAttributeNames(true),
+            UsdGeomXform::GetSchemaAttributeNames(true),
             localNames);
 
     if (includeInherited)

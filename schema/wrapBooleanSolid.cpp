@@ -4,7 +4,7 @@
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#include ".//subtraction.h"
+#include ".//booleanSolid.h"
 #include "pxr/usd/usd/schemaBase.h"
 
 #include "pxr/usd/sdf/primSpec.h"
@@ -33,29 +33,43 @@ WRAP_CUSTOM;
 
         
 static UsdAttribute
-_CreateG4typeAttr(G4Subtraction &self,
+_CreateG4typeAttr(G4BooleanSolid &self,
                                       object defaultVal, bool writeSparsely) {
     return self.CreateG4typeAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
 }
+        
+static UsdAttribute
+_CreateSolid1primAttr(G4BooleanSolid &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateSolid1primAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
+}
+        
+static UsdAttribute
+_CreateSolid2primAttr(G4BooleanSolid &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateSolid2primAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
+}
 
 static std::string
-_Repr(const G4Subtraction &self)
+_Repr(const G4BooleanSolid &self)
 {
     std::string primRepr = TfPyRepr(self.GetPrim());
     return TfStringPrintf(
-        "G4.Subtraction(%s)",
+        "G4.BooleanSolid(%s)",
         primRepr.c_str());
 }
 
 } // anonymous namespace
 
-void wrapG4Subtraction()
+void wrapG4BooleanSolid()
 {
-    typedef G4Subtraction This;
+    typedef G4BooleanSolid This;
 
-    class_<This, bases<G4BooleanSolid> >
-        cls("Subtraction");
+    class_<This, bases<UsdGeomXform> >
+        cls("BooleanSolid");
 
     cls
         .def(init<UsdPrim>(arg("prim")))
@@ -85,6 +99,20 @@ void wrapG4Subtraction()
              &This::GetG4typeAttr)
         .def("CreateG4typeAttr",
              &_CreateG4typeAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetSolid1primAttr",
+             &This::GetSolid1primAttr)
+        .def("CreateSolid1primAttr",
+             &_CreateSolid1primAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetSolid2primAttr",
+             &This::GetSolid2primAttr)
+        .def("CreateSolid2primAttr",
+             &_CreateSolid2primAttr,
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
 

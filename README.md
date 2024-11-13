@@ -14,7 +14,11 @@
 * Solid -> Mesh 
 * Boolean -> Xform (solid1, Xform(solid2), string type)
 * MultiUnion -> Xform (Xform(solid1), Xform(solid2), Xform(solid3)... )
+* ScaledSolid -> Custom type (derived from VSolid)
 * PhysicalMaterial -> Custom type 
+
+* Sensitive detector -> Custom type
+
 
 ### Quick build instructions
 
@@ -23,4 +27,7 @@
 * `python build_scripts/build_usd.py ../openusd-build/`
 * `python> from pxr import G4`
 
+### Regenerate schema
+
+* `usdGenSchema g4.schema .`
 

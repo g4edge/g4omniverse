@@ -43,7 +43,7 @@ class Box "Box" (
     string g4type = "Box"
     double x = 0
     double y = 0
-    double z = 0 
+    double z = 0
 }
 
 class Tubs "Tubs" (
@@ -59,8 +59,20 @@ class Tubs "Tubs" (
     double z = 0 
 }
 
-class Subtraction "Subtraction" (
+class BooleanSolid "BooleanSolid" (
   inherits = </Xform>
+
+  customData = {
+    string className = "BooleanSolid"
+  }
+) {
+    string g4type = "BooleanSolid"
+    string solid1prim = "none"
+    string solid2prim = "none"
+}
+
+class Subtraction "Subtraction" (
+  inherits = </BooleanSolid>
 
   customData = {
     string className = "Subtraction" 

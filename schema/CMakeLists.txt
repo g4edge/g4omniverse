@@ -17,15 +17,18 @@ pxr_plugin(${PXR_PACKAGE}
         api.h
 
     PUBLIC_CLASSES
-		vSolid
-		box
-		tubs
-		subtraction
-		union
-		intersection
-		logical
-        tokens
-		VSolidAdapter
+	vSolid
+	box
+	tubs
+	booleanSolid
+	subtraction
+	union
+	intersection
+	subtraction
+	logical
+	physical
+    tokens
+	VSolidAdapter
 
     PYTHON_CPPFILES
         moduleDeps.cpp    
@@ -37,11 +40,13 @@ pxr_plugin(${PXR_PACKAGE}
         module.cpp
         wrapVSolid.cpp	
         wrapBox.cpp
-		wrapTubs.cpp
-		wrapIntersection.cpp
-		wrapUnion.cpp
-		wrapSubtraction.cpp
-		wrapLogical.cpp
+	wrapTubs.cpp
+		wrapBooleanSolid.cpp
+	wrapIntersection.cpp
+	wrapUnion.cpp
+	wrapSubtraction.cpp
+	wrapLogical.cpp
+	wrapPhysical.cpp
         wrapTokens.cpp        
 
     RESOURCE_FILES
