@@ -158,5 +158,14 @@ void pxr::G4Subtraction::Update() {
   auto solid1 = this->GetPrim().GetChild(pxr::TfToken(solid1Name));
   auto solid2 = this->GetPrim().GetChild(pxr::TfToken(solid2Name));
 
-  usdmesh_to_cgal();
+  VtArray<GfVec3f> points;
+  VtArray<int> vc;
+  VtArray<int> vi;
+  solid1.GetAttribute(pxr::TfToken("points")).Get(&points);
+  solid1.GetAttribute(pxr::TfToken("faceVertexCounts")).Get(&vc);
+  solid1.GetAttribute(pxr::TfToken("faceVertexIndices")).Get(&vi);
+
+  //usdmesh_to_cgal(,,);
+
+
 }

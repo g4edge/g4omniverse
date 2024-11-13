@@ -36,8 +36,11 @@ typedef Aff_transformation_3_EPECK Aff_transformation_3;
 typedef Point_3_EPECK Point_3;
 typedef boost::graph_traits<Surface_mesh_3>::vertex_descriptor vertex_descriptor;
 
+#include "pxr/base/vt/array.h"
 
-void usdmesh_to_cgal();
+void usdmesh_to_cgal(pxr::VtVec3fArray &points,
+                     pxr::VtIntArray &faceVertexCounts,
+                     pxr::VtIntArray &faceVertexIndices);
 void cgal_to_usdmesh();
 void cgal_subtraction();
 void cgal_union();
