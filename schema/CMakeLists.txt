@@ -1,5 +1,7 @@
 set(PXR_PACKAGE g4)
 
+find_package(CGAL)
+
 pxr_plugin(${PXR_PACKAGE}
     LIBRARIES
         tf
@@ -8,6 +10,7 @@ pxr_plugin(${PXR_PACKAGE}
 	usdGeom
         vt
 	usdImaging
+		CGAL::CGAL
 
     INCLUDE_DIRS
         ${Boost_INCLUDE_DIRS}
@@ -29,6 +32,7 @@ pxr_plugin(${PXR_PACKAGE}
 	physical
     tokens
 	VSolidAdapter
+	cgal_boolean
 
     PYTHON_CPPFILES
         moduleDeps.cpp    

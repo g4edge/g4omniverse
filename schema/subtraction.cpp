@@ -143,3 +143,14 @@ PXR_NAMESPACE_CLOSE_SCOPE
 // 'PXR_NAMESPACE_OPEN_SCOPE', 'PXR_NAMESPACE_CLOSE_SCOPE'.
 // ===================================================================== //
 // --(BEGIN CUSTOM CODE)--
+
+#include "cgal_boolean.h"
+
+void pxr::G4Subtraction::Update() {
+  // get solid1
+  //auto prim1 = this->Getsolid1prim
+
+  // get solid2
+
+  usdmesh_to_cgal();
+}
