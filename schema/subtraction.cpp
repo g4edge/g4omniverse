@@ -147,10 +147,16 @@ PXR_NAMESPACE_CLOSE_SCOPE
 #include "cgal_boolean.h"
 
 void pxr::G4Subtraction::Update() {
-  // get solid1
-  //auto prim1 = this->Getsolid1prim
 
-  // get solid2
+  // get solid names
+  std::string solid1Name;
+  std::string solid2Name;
+  this->GetSolid1primAttr().Get(&solid1Name);
+  this->GetSolid2primAttr().Get(&solid2Name);
+
+  // get solid prims
+  auto solid1 = this->GetPrim().GetChild(pxr::TfToken(solid1Name));
+  auto solid2 = this->GetPrim().GetChild(pxr::TfToken(solid2Name));
 
   usdmesh_to_cgal();
 }

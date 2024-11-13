@@ -39,6 +39,9 @@ typedef boost::graph_traits<Surface_mesh_3>::vertex_descriptor vertex_descriptor
 
 void usdmesh_to_cgal();
 void cgal_to_usdmesh();
+void cgal_subtraction();
+void cgal_union();
+void cgal_intersection();
 
 
 #endif //GEANT4OMNIVERSE_CGAL_BOOLEAN_H
