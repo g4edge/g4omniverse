@@ -165,7 +165,29 @@ void pxr::G4Subtraction::Update() {
   solid1.GetAttribute(pxr::TfToken("faceVertexCounts")).Get(&vc);
   solid1.GetAttribute(pxr::TfToken("faceVertexIndices")).Get(&vi);
 
-  //usdmesh_to_cgal(,,);
+  usdmesh_to_cgal(points,vc,vi);
+}
 
+#include "pxr/usd/usd/notice.h"
 
+class SubtractionChangeListener : public pxr::TfWeakBase {
+public:
+  SubtractionChangeListener(pxr::G4Subtraction sub) : _sub(sub) {
+    // Register the listener for object changes
+    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<SubtractionChangeListener>(this),
+                            &SubtractionChangeListener::Update);
+  }
+
+  void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
+    // std::cout << "updated" << " " << std::endl;
+    _sub.Update();
+  }
+
+private:
+  pxr::G4Subtraction _sub;
+};
+
+void pxr::G4Subtraction::InstallUpdateListener() {
+  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<SubtractionChangeListener>(new SubtractionChangeListener(*this)),
+                          &SubtractionChangeListener::Update);
 }

@@ -29,7 +29,11 @@ def test_subtraction(stage = None) :
     setXform(b2.GetPrim(), [5, 5, 5], [45, 0, 0])
     s.GetSolid1primAttr().Set("b1")
     s.GetSolid2primAttr().Set("solid2")
-    stage.Save()
+
+    #s.Update()
+    #s.InstallUpdateListener()
+
+    # stage.Save()
 
     return s
 
