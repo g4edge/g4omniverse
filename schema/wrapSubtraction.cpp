@@ -116,6 +116,9 @@ void wrapG4Subtraction()
 namespace {
 
 WRAP_CUSTOM {
+  _class
+      .def("Update",&G4Subtraction::Update)
+      .def("InstallUpdateListener",&G4Subtraction::InstallUpdateListener);
 }
 
 }
