@@ -67,11 +67,9 @@ void cgal_to_usdmesh(pxr::VtVec3fArray &points,
 
 Surface_mesh_3* cgal_subtraction(Surface_mesh_3 *sm1, Surface_mesh_3 *sm2) {
 
-  std::cout << "cgal_subtraction(" << sm1 << "," << sm2 << ")" << std::endl;
   // create CGAL surface mesh
   Surface_mesh_3 *sm = new Surface_mesh_3();
   CGAL::Polygon_mesh_processing::corefine_and_compute_difference(*sm1, *sm2, *sm);
-  std::cout << "cgal_subtraction(" << sm1 << "," << sm2 << ") done" << std::endl;
 
   return sm;
 }
