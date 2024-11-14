@@ -165,7 +165,7 @@ void pxr::G4Subtraction::Update() {
   solid1.GetAttribute(pxr::TfToken("faceVertexCounts")).Get(&vc);
   solid1.GetAttribute(pxr::TfToken("faceVertexIndices")).Get(&vi);
 
-  usdmesh_to_cgal(points,vc,vi);
+  auto sm1 = usdmesh_to_cgal(points,vc,vi);
 }
 
 #include "pxr/usd/usd/notice.h"

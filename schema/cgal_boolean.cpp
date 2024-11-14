@@ -36,6 +36,14 @@ Surface_mesh_3* usdmesh_to_cgal(pxr::VtVec3fArray &points,
 }
 
 void cgal_to_usdmesh() {}
-void cgal_subtraction() {}
+
+Surface_mesh_3* cgal_subtraction(Surface_mesh_3 *sm1, Surface_mesh_3 *sm2) {
+
+  // create CGAL surface mesh
+  Surface_mesh_3 *sm = new Surface_mesh_3();
+  CGAL::Polygon_mesh_processing::corefine_and_compute_difference(*sm, *sm1, *sm2);
+  return sm;
+}
+
 void cgal_union() {}
 void cgal_intersection() {}
