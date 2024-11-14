@@ -145,27 +145,72 @@ PXR_NAMESPACE_CLOSE_SCOPE
 // --(BEGIN CUSTOM CODE)--
 
 #include "cgal_boolean.h"
+#include "pxr/usd/usdGeom/xformable.h"
+#include "pxr/base/gf/matrix4d.h"
 
 void pxr::G4Subtraction::Update() {
+
+  std::cout << "pxr::G4Subtraction::Update()" << std::endl;
 
   // get solid names
   std::string solid1Name;
   std::string solid2Name;
+  std::string solid3Name;
   this->GetSolid1primAttr().Get(&solid1Name);
   this->GetSolid2primAttr().Get(&solid2Name);
+  this->GetSolid3primAttr().Get(&solid3Name);
 
   // get solid prims
   auto solid1 = this->GetPrim().GetChild(pxr::TfToken(solid1Name));
   auto solid2 = this->GetPrim().GetChild(pxr::TfToken(solid2Name));
+  auto solid3 = this->GetPrim().GetChild(pxr::TfToken(solid3Name));
 
   VtArray<GfVec3f> points;
   VtArray<int> vc;
   VtArray<int> vi;
+
   solid1.GetAttribute(pxr::TfToken("points")).Get(&points);
   solid1.GetAttribute(pxr::TfToken("faceVertexCounts")).Get(&vc);
   solid1.GetAttribute(pxr::TfToken("faceVertexIndices")).Get(&vi);
-
   auto sm1 = usdmesh_to_cgal(points,vc,vi);
+
+  solid2.GetChildren().begin()->GetAttribute(pxr::TfToken("points")).Get(&points);
+  solid2.GetChildren().begin()->GetAttribute(pxr::TfToken("faceVertexCounts")).Get(&vc);
+  solid2.GetChildren().begin()->GetAttribute(pxr::TfToken("faceVertexIndices")).Get(&vi);
+  auto sm2 = usdmesh_to_cgal(points,vc,vi);
+
+  // Transform sm2
+  pxr::UsdGeomXformable xformable(solid2);
+  GfMatrix4d trans;
+  bool resetsXformStack = false;
+  xformable.GetLocalTransformation(&trans, &resetsXformStack);
+
+  auto rotn = Aff_transformation_3(trans[0][0],trans[0][1],trans[0][2],
+                                   trans[1][0],trans[1][1],trans[1][2],
+                                   trans[2][0],trans[2][1],trans[2][2],1);
+  CGAL::Polygon_mesh_processing::transform(rotn,*sm2);
+
+
+  auto tr3 = Vector_3(trans[3][0],trans[3][1],trans[3][2]);
+  auto at3 = Aff_transformation_3(CGAL::TRANSLATION, tr3);
+  CGAL::Polygon_mesh_processing::transform(at3,*sm2);
+
+  // Compute subtraction
+  auto sm3 = cgal_subtraction(sm1,sm2);
+
+  // Convert CGAL mesh back to pxr mesh
+  points.clear();
+  vc.clear();
+  vi.clear();
+  cgal_to_usdmesh(points,vc,vi,sm3);
+
+  solid3.GetAttribute(pxr::TfToken("points")).Set(points);
+  solid3.GetAttribute(pxr::TfToken("faceVertexCounts")).Set(vc);
+  solid3.GetAttribute(pxr::TfToken("faceVertexIndices")).Set(vi);
+
+  delete sm1;
+  delete sm2;
+  delete sm3;
 }
 
 #include "pxr/usd/usd/notice.h"

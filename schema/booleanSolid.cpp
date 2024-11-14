@@ -137,6 +137,23 @@ G4BooleanSolid::CreateSolid2primAttr(VtValue const &defaultValue, bool writeSpar
                        writeSparsely);
 }
 
+UsdAttribute
+G4BooleanSolid::GetSolid3primAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->solid3prim);
+}
+
+UsdAttribute
+G4BooleanSolid::CreateSolid3primAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->solid3prim,
+                       SdfValueTypeNames->String,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
 namespace {
 static inline TfTokenVector
 _ConcatenateAttributeNames(const TfTokenVector& left,const TfTokenVector& right)
@@ -157,6 +174,7 @@ G4BooleanSolid::GetSchemaAttributeNames(bool includeInherited)
         G4Tokens->g4type,
         G4Tokens->solid1prim,
         G4Tokens->solid2prim,
+        G4Tokens->solid3prim,
     };
     static TfTokenVector allNames =
         _ConcatenateAttributeNames(

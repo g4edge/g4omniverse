@@ -69,6 +69,10 @@ struct G4TokensType {
     /// 
     /// G4BooleanSolid
     const TfToken solid2prim;
+    /// \brief "solid3prim"
+    /// 
+    /// G4BooleanSolid
+    const TfToken solid3prim;
     /// \brief "x"
     /// 
     /// G4Box

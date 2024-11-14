@@ -870,6 +870,7 @@ class BooleanSolid "BooleanSolid"
     )
     string solid1prim = "none"
     string solid2prim = "none"
+    string solid3prim = "none"
     token visibility = "inherited" (
         allowedTokens = ["inherited", "invisible"]
         doc = '''Visibility is meant to be the simplest form of "pruning" 
@@ -928,6 +929,7 @@ class Subtraction "Subtraction"
     )
     string solid1prim = "none"
     string solid2prim = "none"
+    string solid3prim = "none"
     token visibility = "inherited" (
         allowedTokens = ["inherited", "invisible"]
         doc = '''Visibility is meant to be the simplest form of "pruning" 

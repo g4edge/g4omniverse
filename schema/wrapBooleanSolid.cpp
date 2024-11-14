@@ -52,6 +52,13 @@ _CreateSolid2primAttr(G4BooleanSolid &self,
     return self.CreateSolid2primAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
 }
+        
+static UsdAttribute
+_CreateSolid3primAttr(G4BooleanSolid &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateSolid3primAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
+}
 
 static std::string
 _Repr(const G4BooleanSolid &self)
@@ -113,6 +120,13 @@ void wrapG4BooleanSolid()
              &This::GetSolid2primAttr)
         .def("CreateSolid2primAttr",
              &_CreateSolid2primAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetSolid3primAttr",
+             &This::GetSolid3primAttr)
+        .def("CreateSolid3primAttr",
+             &_CreateSolid3primAttr,
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
 

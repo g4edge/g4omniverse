@@ -41,7 +41,10 @@ typedef boost::graph_traits<Surface_mesh_3>::vertex_descriptor vertex_descriptor
 Surface_mesh_3* usdmesh_to_cgal(pxr::VtVec3fArray &points,
                                 pxr::VtIntArray &faceVertexCounts,
                                 pxr::VtIntArray &faceVertexIndices);
-void cgal_to_usdmesh();
+void cgal_to_usdmesh(pxr::VtVec3fArray &points,
+                     pxr::VtIntArray &faceVertexCounts,
+                     pxr::VtIntArray &faceVertexIndices,
+                     Surface_mesh_3 *sm);
 Surface_mesh_3* cgal_subtraction(Surface_mesh_3 *sm1, Surface_mesh_3 *sm2 );
 void cgal_union();
 void cgal_intersection();

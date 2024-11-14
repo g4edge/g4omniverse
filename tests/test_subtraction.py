@@ -1,10 +1,16 @@
-from pxr import Usd, UsdGeom, Gf,Sdf, G4
+from pxr import Usd, UsdGeom, Gf, Sdf, G4
 
 def setDefaultBox(box) :
     box.InstallUpdateListener()
     box.GetXAttr().Set(5)
     box.GetYAttr().Set(5)
     box.GetZAttr().Set(5)
+
+def setDefaultBox2(box) :
+    box.InstallUpdateListener()
+    box.GetXAttr().Set(2)
+    box.GetYAttr().Set(2)
+    box.GetZAttr().Set(2)
 
 def setXform(prim, pos = [0,0,0], rot = [0,0,0]) :
     # Transformation
@@ -14,6 +20,8 @@ def setXform(prim, pos = [0,0,0], rot = [0,0,0]) :
     # Rotate
     xform.AddRotateZYXOp().Set(Gf.Vec3d(*rot))
 
+
+
 def test_subtraction(stage = None) :
     # make subtraction
     if not stage :
@@ -22,13 +30,16 @@ def test_subtraction(stage = None) :
     s = G4.Subtraction.Define(stage, "/s1")
 
     b1 = G4.Box.Define(stage, "/s1/b1")
+    b1m = UsdGeom.Mesh.Define(stage,"/s1/s1result")
+
     setDefaultBox(b1)
     x = UsdGeom.Xform.Define(stage, "/s1/solid2")
     b2 = G4.Box.Define(stage, "/s1/solid2/b2")
-    setDefaultBox(b2)
-    setXform(b2.GetPrim(), [5, 5, 5], [45, 0, 0])
+    setDefaultBox2(b2)
+    setXform(x.GetPrim(), [5, 5, 5], [45, 0, 0])
     s.GetSolid1primAttr().Set("b1")
     s.GetSolid2primAttr().Set("solid2")
+    s.GetSolid3primAttr().Set("s1result")
 
     #s.Update()
     #s.InstallUpdateListener()
