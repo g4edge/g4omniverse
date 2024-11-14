@@ -185,9 +185,9 @@ void pxr::G4Subtraction::Update() {
   bool resetsXformStack = false;
   xformable.GetLocalTransformation(&trans, &resetsXformStack);
 
-  auto rotn = Aff_transformation_3(trans[0][0],trans[0][1],trans[0][2],
-                                   trans[1][0],trans[1][1],trans[1][2],
-                                   trans[2][0],trans[2][1],trans[2][2],1);
+  auto rotn = Aff_transformation_3(trans[0][0],trans[1][0],trans[2][0],
+                                   trans[0][1],trans[1][1],trans[2][1],
+                                   trans[0][2],trans[1][2],trans[2][2],1);
   CGAL::Polygon_mesh_processing::transform(rotn,*sm2);
 
 
