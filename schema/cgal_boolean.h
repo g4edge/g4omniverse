@@ -38,9 +38,9 @@ typedef boost::graph_traits<Surface_mesh_3>::vertex_descriptor vertex_descriptor
 
 #include "pxr/base/vt/array.h"
 
-void usdmesh_to_cgal(pxr::VtVec3fArray &points,
-                     pxr::VtIntArray &faceVertexCounts,
-                     pxr::VtIntArray &faceVertexIndices);
+Surface_mesh_3* usdmesh_to_cgal(pxr::VtVec3fArray &points,
+                                pxr::VtIntArray &faceVertexCounts,
+                                pxr::VtIntArray &faceVertexIndices);
 void cgal_to_usdmesh();
 void cgal_subtraction();
 void cgal_union();
