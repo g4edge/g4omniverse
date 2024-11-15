@@ -116,6 +116,9 @@ void wrapG4Intersection()
 namespace {
 
 WRAP_CUSTOM {
+  _class
+      .def("Update",&G4Intersection::Update)
+      .def("InstallUpdateListener",&G4Intersection::InstallUpdateListener);
 }
 
 }

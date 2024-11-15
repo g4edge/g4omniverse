@@ -116,6 +116,9 @@ void wrapG4Union()
 namespace {
 
 WRAP_CUSTOM {
+  _class
+      .def("Update",&G4Union::Update)
+      .def("InstallUpdateListener",&G4Union::InstallUpdateListener);
 }
 
 }

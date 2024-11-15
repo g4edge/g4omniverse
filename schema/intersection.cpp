@@ -143,3 +143,31 @@ PXR_NAMESPACE_CLOSE_SCOPE
 // 'PXR_NAMESPACE_OPEN_SCOPE', 'PXR_NAMESPACE_CLOSE_SCOPE'.
 // ===================================================================== //
 // --(BEGIN CUSTOM CODE)--
+#include <iostream>
+#include "pxr/usd/usd/notice.h"
+
+class IntersectionChangeListener : public pxr::TfWeakBase {
+public:
+  IntersectionChangeListener(pxr::G4Intersection intersection) : _intersection(intersection) {
+    // Register the listener for object changes
+    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<IntersectionChangeListener>(this),
+                            &IntersectionChangeListener::Update);
+  }
+
+  void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
+    std::cout << "updated" << " " << std::endl;
+    _intersection.Update();
+  }
+
+private:
+  pxr::G4Intersection _intersection;
+};
+
+void pxr::G4Intersection::Update() {
+  std::cout << "pxr::G4Intersection::Update()" << std::endl;
+}
+
+void pxr::G4Intersection::InstallUpdateListener() {
+  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<IntersectionChangeListener>(new IntersectionChangeListener(*this)),
+                          &IntersectionChangeListener::Update);
+}

@@ -166,20 +166,6 @@ private:
 
 void pxr::G4Union::Update() {
   std::cout << "pxr::G4Union::Update()" << std::endl;
-
-  // get children (solid1 and solid2)
-
-  // convert mesh to cgal meshes
-
-  // execute transformation on second mesh
-
-  // perform union
-
-  // convert mesh back to usd mesh
-
-  // update parents
-
-
 }
 
 void pxr::G4Union::InstallUpdateListener() {
