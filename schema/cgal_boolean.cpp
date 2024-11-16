@@ -91,6 +91,11 @@ void g4prim_to_meshdata(UsdPrim const& prim,
     prim.GetChildren().begin()->GetAttribute(TfToken("faceVertexCounts")).Get(&faceVertexCounts);
     prim.GetChildren().begin()->GetAttribute(TfToken("faceVertexIndices")).Get(&faceVertexIndices);
   }
+  else {
+    prim.GetAttribute(TfToken("points")).Get(&points);
+    prim.GetAttribute(TfToken("faceVertexCounts")).Get(&faceVertexCounts);
+    prim.GetAttribute(TfToken("faceVertexIndices")).Get(&faceVertexIndices);
+  }
 }
 
 void g4usdboolean(UsdPrim const& prim, g4usdbooleanOperation op) {
