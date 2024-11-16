@@ -72,6 +72,16 @@ class BooleanSolid "BooleanSolid" (
     string solid3prim = "none"
 }
 
+class DisplacedSolid "DisplacedSolid" (
+   inherits = </Xform>
+
+   customData = {
+     string className = "DisplacedSolid"
+   }
+) {
+    string g4type = "DisplacedSolid"
+}
+
 class Subtraction "Subtraction" (
   inherits = </BooleanSolid>
 

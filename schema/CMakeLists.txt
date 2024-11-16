@@ -20,41 +20,43 @@ pxr_plugin(${PXR_PACKAGE}
         api.h
 
     PUBLIC_CLASSES
-	vSolid
-	box
-	tubs
-	booleanSolid
-	subtraction
-	union
-	intersection
-	subtraction
-	logical
-	physical
-    tokens
-	VSolidAdapter
-	cgal_boolean
+		vSolid
+		box
+		tubs
+		booleanSolid
+		subtraction
+		displacedSolid
+		union
+		intersection
+		subtraction
+		logical
+		physical
+		tokens
+		VSolidAdapter
+		cgal_boolean
 
     PYTHON_CPPFILES
-        moduleDeps.cpp    
+		moduleDeps.cpp
 
     PYMODULE_FILES
-        __init__.py
+		__init__.py
 
     PYMODULE_CPPFILES
-        module.cpp
-        wrapVSolid.cpp	
-        wrapBox.cpp
-	wrapTubs.cpp
+		module.cpp
+		wrapVSolid.cpp
+		wrapBox.cpp
+		wrapTubs.cpp
 		wrapBooleanSolid.cpp
-	wrapIntersection.cpp
-	wrapUnion.cpp
-	wrapSubtraction.cpp
-	wrapLogical.cpp
-	wrapPhysical.cpp
-        wrapTokens.cpp        
+		wrapDisplacedSolid.cpp
+		wrapIntersection.cpp
+		wrapUnion.cpp
+		wrapSubtraction.cpp
+		wrapLogical.cpp
+		wrapPhysical.cpp
+		wrapTokens.cpp
 
     RESOURCE_FILES
-        generatedSchema.usda
-        plugInfo.json
-        g4.usda:g4/schema.usda
+		generatedSchema.usda
+		plugInfo.json
+		g4.usda:g4/schema.usda
 )

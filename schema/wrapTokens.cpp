@@ -59,6 +59,7 @@ void wrapG4Tokens()
     _AddToken(cls, "z", G4Tokens->z);
     _AddToken(cls, "BooleanSolid", G4Tokens->BooleanSolid);
     _AddToken(cls, "Box", G4Tokens->Box);
+    _AddToken(cls, "DisplacedSolid", G4Tokens->DisplacedSolid);
     _AddToken(cls, "Intersection", G4Tokens->Intersection);
     _AddToken(cls, "Logical", G4Tokens->Logical);
     _AddToken(cls, "Physical", G4Tokens->Physical);

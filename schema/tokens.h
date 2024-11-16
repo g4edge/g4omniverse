@@ -47,7 +47,7 @@ struct G4TokensType {
     G4_API G4TokensType();
     /// \brief "g4type"
     /// 
-    /// G4VSolid, G4Box, G4Tubs, G4BooleanSolid, G4Subtraction, G4Union, G4Intersection, G4Logical, G4Physical
+    /// G4VSolid, G4Box, G4Tubs, G4BooleanSolid, G4DisplacedSolid, G4Subtraction, G4Union, G4Intersection, G4Logical, G4Physical
     const TfToken g4type;
     /// \brief "name"
     /// 
@@ -93,6 +93,10 @@ struct G4TokensType {
     /// 
     /// Schema identifer and family for G4Box
     const TfToken Box;
+    /// \brief "DisplacedSolid"
+    /// 
+    /// Schema identifer and family for G4DisplacedSolid
+    const TfToken DisplacedSolid;
     /// \brief "Intersection"
     /// 
     /// Schema identifer and family for G4Intersection
