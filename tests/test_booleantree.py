@@ -51,11 +51,11 @@ def test_booleantree(stage = None) :
     setXform(s1_solid2.GetPrim(), [0, 0, 0], [90, 0, 0])
 
     s1.GetSolid1primAttr().Set("solid1")
-    s1.GetSolid2primAttr().Set("s2")
+    s1.GetSolid2primAttr().Set("solid2")
     s1.GetSolid3primAttr().Set("result")
 
     s2.Update()
-    # s1.Update()
+    s1.Update()
 
     return s1
 

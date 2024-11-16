@@ -78,8 +78,10 @@ void g4prim_to_meshdata(UsdPrim const& prim,
 
   std::string g4type;
   prim.GetAttribute(TfToken("g4type")).Get(&g4type);
+  std::cout << "g4prim_to_meshdata> " << g4type << std::endl;
 
   if(g4type == "Subtraction" || g4type == "Union" || g4type == "Intersection") {
+    std::cout << "g4prim_to_meshdata> Boolean" << std::endl;
     std::string resultName;
     prim.GetAttribute(pxr::TfToken("solid3prim")).Get(&resultName);
     prim.GetChild(TfToken(resultName)).GetAttribute(TfToken("points")).Get(&points);
@@ -87,11 +89,22 @@ void g4prim_to_meshdata(UsdPrim const& prim,
     prim.GetChild(TfToken(resultName)).GetAttribute(TfToken("faceVertexIndices")).Get(&faceVertexIndices);
   }
   else if(g4type== "DisplacedSolid") {
-    prim.GetChildren().begin()->GetAttribute(TfToken("points")).Get(&points);
-    prim.GetChildren().begin()->GetAttribute(TfToken("faceVertexCounts")).Get(&faceVertexCounts);
-    prim.GetChildren().begin()->GetAttribute(TfToken("faceVertexIndices")).Get(&faceVertexIndices);
+    std::cout << "g4prim_to_meshdata> DisplacedSolid" << std::endl;
+    std::string displaced_g4type;
+    prim.GetChildren().begin()->GetAttribute(TfToken("g4type")).Get(&displaced_g4type);
+    if (displaced_g4type == "Subtraction" ||
+        displaced_g4type == "Union" ||
+        displaced_g4type == "Intersection") {
+      g4prim_to_meshdata(*prim.GetChildren().begin(), points, faceVertexCounts, faceVertexIndices);
+    }
+    else {
+      prim.GetChildren().begin()->GetAttribute(TfToken("points")).Get(&points);
+      prim.GetChildren().begin()->GetAttribute(TfToken("faceVertexCounts")).Get(&faceVertexCounts);
+      prim.GetChildren().begin()->GetAttribute(TfToken("faceVertexIndices")).Get(&faceVertexIndices);
+    }
   }
   else {
+    std::cout << "g4prim_to_meshdata> Geant4 solid" << std::endl;
     prim.GetAttribute(TfToken("points")).Get(&points);
     prim.GetAttribute(TfToken("faceVertexCounts")).Get(&faceVertexCounts);
     prim.GetAttribute(TfToken("faceVertexIndices")).Get(&faceVertexIndices);
@@ -100,43 +113,46 @@ void g4prim_to_meshdata(UsdPrim const& prim,
 
 void g4usdboolean(UsdPrim const& prim, g4usdbooleanOperation op) {
 
-  std::cout << "g4usdboolean" << std::endl;
+  std::cout << "g4usdboolean>" << std::endl;
 
   // get solid names
   std::string solid1Name;
   std::string solid2Name;
   std::string solid3Name;
-  std::cout << "getting solid names" << std::endl;
+  std::cout << "g4usdboolean> getting solid names" << std::endl;
   prim.GetAttribute(pxr::TfToken("solid1prim")).Get(&solid1Name);
   prim.GetAttribute(pxr::TfToken("solid2prim")).Get(&solid2Name);
   prim.GetAttribute(pxr::TfToken("solid3prim")).Get(&solid3Name);
-  std::cout << "got solid names" << " "
+  std::cout << "g4usdboolean> got solid names" << " "
             << solid1Name << " "
             << solid2Name << " "
             << solid3Name << " " << std::endl;
 
   // get solid prims
-  std::cout << "getting solid prims"  << std::endl;
+  std::cout << "g4usdboolean> getting solid prims"  << std::endl;
   auto solid1 = prim.GetChild(pxr::TfToken(solid1Name));
   auto solid2 = prim.GetChild(pxr::TfToken(solid2Name));
   auto solid3 = prim.GetChild(pxr::TfToken(solid3Name));
-  std::cout << "got solid prims"  << std::endl;
+  std::cout << "g4usdboolean> got solid prims"  << std::endl;
 
   VtArray<GfVec3f> points;
   VtArray<int> vc;
   VtArray<int> vi;
 
-  std::cout << "getting solid1 data" << std::endl;
-  solid1.GetAttribute(pxr::TfToken("points")).Get(&points);
-  solid1.GetAttribute(pxr::TfToken("faceVertexCounts")).Get(&vc);
-  solid1.GetAttribute(pxr::TfToken("faceVertexIndices")).Get(&vi);
-  std::cout << "got solid1 data" << std::endl;
+  std::cout << "g4usdboolean> getting solid1 data" << " " << solid1Name << std::endl;
+  //solid1.GetAttribute(pxr::TfToken("points")).Get(&points);
+  //solid1.GetAttribute(pxr::TfToken("faceVertexCounts")).Get(&vc);
+  //solid1.GetAttribute(pxr::TfToken("faceVertexIndices")).Get(&vi);
+  g4prim_to_meshdata(solid1, points, vc, vi );
+  std::cout << "g4usdboolean> got solid1 data" << std::endl;
   auto sm1 = usdmesh_to_cgal(points,vc,vi);
 
-  solid2.GetChildren().begin()->GetAttribute(pxr::TfToken("points")).Get(&points);
-  solid2.GetChildren().begin()->GetAttribute(pxr::TfToken("faceVertexCounts")).Get(&vc);
-  solid2.GetChildren().begin()->GetAttribute(pxr::TfToken("faceVertexIndices")).Get(&vi);
-  std::cout << "got solid2 data" << std::endl;
+  std::cout << "g4usdboolean> getting solid2 data" << " " << solid2Name << std::endl;
+  //solid2.GetChildren().begin()->GetAttribute(pxr::TfToken("points")).Get(&points);
+  //solid2.GetChildren().begin()->GetAttribute(pxr::TfToken("faceVertexCounts")).Get(&vc);
+  //solid2.GetChildren().begin()->GetAttribute(pxr::TfToken("faceVertexIndices")).Get(&vi);
+  g4prim_to_meshdata(solid2, points, vc, vi );
+  std::cout << "g4usdboolean> got solid2 data" << std::endl;
   auto sm2 = usdmesh_to_cgal(points,vc,vi);
 
   // Transform sm2
@@ -178,7 +194,7 @@ void g4usdboolean(UsdPrim const& prim, g4usdbooleanOperation op) {
   solid3.GetAttribute(pxr::TfToken("points")).Set(points);
   solid3.GetAttribute(pxr::TfToken("faceVertexCounts")).Set(vc);
   solid3.GetAttribute(pxr::TfToken("faceVertexIndices")).Set(vi);
-  std::cout << "set solid3 data" << std::endl;
+  std::cout << "g4usdboolean> set solid3 data" << std::endl;
 
   delete sm1;
   delete sm2;
