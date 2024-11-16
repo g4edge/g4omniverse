@@ -71,6 +71,28 @@ void cgal_to_usdmesh(pxr::VtVec3fArray &points,
 }
 
 PXR_NAMESPACE_OPEN_SCOPE
+void g4prim_to_meshdata(UsdPrim const& prim,
+                        VtVec3fArray &points,
+                        VtIntArray &faceVertexCounts,
+                        VtIntArray &faceVertexIndices) {
+
+  std::string g4type;
+  prim.GetAttribute(TfToken("g4type")).Get(&g4type);
+
+  if(g4type == "Subtraction" || g4type == "Union" || g4type == "Intersection") {
+    std::string resultName;
+    prim.GetAttribute(pxr::TfToken("solid3prim")).Get(&resultName);
+    prim.GetChild(TfToken(resultName)).GetAttribute(TfToken("points")).Get(&points);
+    prim.GetChild(TfToken(resultName)).GetAttribute(TfToken("faceVertexCounts")).Get(&faceVertexCounts);
+    prim.GetChild(TfToken(resultName)).GetAttribute(TfToken("faceVertexIndices")).Get(&faceVertexIndices);
+  }
+  else if(g4type== "DisplacedSolid") {
+    prim.GetChildren().begin()->GetAttribute(TfToken("points")).Get(&points);
+    prim.GetChildren().begin()->GetAttribute(TfToken("faceVertexCounts")).Get(&faceVertexCounts);
+    prim.GetChildren().begin()->GetAttribute(TfToken("faceVertexIndices")).Get(&faceVertexIndices);
+  }
+}
+
 void g4usdboolean(UsdPrim const& prim, g4usdbooleanOperation op) {
 
   std::cout << "g4usdboolean" << std::endl;

@@ -50,6 +50,10 @@ void cgal_to_usdmesh(pxr::VtVec3fArray &points,
                      pxr::VtIntArray &faceVertexIndices,
                      Surface_mesh_3 *sm);
 PXR_NAMESPACE_OPEN_SCOPE
+void g4prim_to_meshdata(UsdPrim const& prim,
+                        VtVec3fArray &points,
+                        VtIntArray &faceVertexCounts,
+                        VtIntArray &faceVertexIndices);
 void g4usdboolean(UsdPrim const &p, g4usdbooleanOperation op);
 PXR_NAMESPACE_CLOSE_SCOPE
 
