@@ -11,7 +11,7 @@
 
 #include "pxr/pxr.h"
 #include ".//api.h"
-#include "pxr/usd/usdGeom/xform.h"
+#include ".//booleanSolid.h"
 #include "pxr/usd/usd/prim.h"
 #include "pxr/usd/usd/stage.h"
 #include ".//tokens.h"
@@ -36,7 +36,7 @@ class SdfAssetPath;
 /// \class G4Union
 ///
 ///
-class G4Union : public UsdGeomXform
+class G4Union : public G4BooleanSolid
 {
 public:
     /// Compile time constant representing what kind of schema this class is.
@@ -49,7 +49,7 @@ public:
     /// for a \em valid \p prim, but will not immediately throw an error for
     /// an invalid \p prim
     explicit G4Union(const UsdPrim& prim=UsdPrim())
-        : UsdGeomXform(prim)
+        : G4BooleanSolid(prim)
     {
     }
 
@@ -57,7 +57,7 @@ public:
     /// Should be preferred over G4Union(schemaObj.GetPrim()),
     /// as it preserves SchemaBase state.
     explicit G4Union(const UsdSchemaBase& schemaObj)
-        : UsdGeomXform(schemaObj)
+        : G4BooleanSolid(schemaObj)
     {
     }
 

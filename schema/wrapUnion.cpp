@@ -54,7 +54,7 @@ void wrapG4Union()
 {
     typedef G4Union This;
 
-    class_<This, bases<UsdGeomXform> >
+    class_<This, bases<G4BooleanSolid> >
         cls("Union");
 
     cls

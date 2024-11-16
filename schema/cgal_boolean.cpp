@@ -4,8 +4,13 @@
 
 #include "cgal_boolean.h"
 
+#include "pxr/pxr.h"
+#include "pxr/usd/usd/prim.h"
+#include "pxr/usd/usd/stage.h"
 #include "pxr/base/gf/vec3f.h"
 #include "pxr/base/gf/vec3d.h"
+#include "pxr/usd/usdGeom/xformable.h"
+#include "pxr/base/gf/matrix4d.h"
 
 Surface_mesh_3* usdmesh_to_cgal(pxr::VtVec3fArray &points,
                                 pxr::VtIntArray &faceVertexCounts,
@@ -65,7 +70,94 @@ void cgal_to_usdmesh(pxr::VtVec3fArray &points,
   }
 }
 
+PXR_NAMESPACE_OPEN_SCOPE
+void g4usdboolean(UsdPrim const& prim, g4usdbooleanOperation op) {
 
+  std::cout << "g4usdboolean" << std::endl;
+
+  // get solid names
+  std::string solid1Name;
+  std::string solid2Name;
+  std::string solid3Name;
+  std::cout << "getting solid names" << std::endl;
+  prim.GetAttribute(pxr::TfToken("solid1prim")).Get(&solid1Name);
+  prim.GetAttribute(pxr::TfToken("solid2prim")).Get(&solid2Name);
+  prim.GetAttribute(pxr::TfToken("solid3prim")).Get(&solid3Name);
+  std::cout << "got solid names" << " "
+            << solid1Name << " "
+            << solid2Name << " "
+            << solid3Name << " " << std::endl;
+
+  // get solid prims
+  std::cout << "getting solid prims"  << std::endl;
+  auto solid1 = prim.GetChild(pxr::TfToken(solid1Name));
+  auto solid2 = prim.GetChild(pxr::TfToken(solid2Name));
+  auto solid3 = prim.GetChild(pxr::TfToken(solid3Name));
+  std::cout << "got solid prims"  << std::endl;
+
+  VtArray<GfVec3f> points;
+  VtArray<int> vc;
+  VtArray<int> vi;
+
+  std::cout << "getting solid1 data" << std::endl;
+  solid1.GetAttribute(pxr::TfToken("points")).Get(&points);
+  solid1.GetAttribute(pxr::TfToken("faceVertexCounts")).Get(&vc);
+  solid1.GetAttribute(pxr::TfToken("faceVertexIndices")).Get(&vi);
+  std::cout << "got solid1 data" << std::endl;
+  auto sm1 = usdmesh_to_cgal(points,vc,vi);
+
+  solid2.GetChildren().begin()->GetAttribute(pxr::TfToken("points")).Get(&points);
+  solid2.GetChildren().begin()->GetAttribute(pxr::TfToken("faceVertexCounts")).Get(&vc);
+  solid2.GetChildren().begin()->GetAttribute(pxr::TfToken("faceVertexIndices")).Get(&vi);
+  std::cout << "got solid2 data" << std::endl;
+  auto sm2 = usdmesh_to_cgal(points,vc,vi);
+
+  // Transform sm2
+  pxr::UsdGeomXformable xformable(solid2);
+  GfMatrix4d trans;
+  bool resetsXformStack = false;
+  xformable.GetLocalTransformation(&trans, &resetsXformStack);
+
+  auto rotn = Aff_transformation_3(trans[0][0],trans[1][0],trans[2][0],
+                                   trans[0][1],trans[1][1],trans[2][1],
+                                   trans[0][2],trans[1][2],trans[2][2],1);
+  CGAL::Polygon_mesh_processing::transform(rotn,*sm2);
+
+
+  auto tr3 = Vector_3(trans[3][0],trans[3][1],trans[3][2]);
+  auto at3 = Aff_transformation_3(CGAL::TRANSLATION, tr3);
+
+  CGAL::Polygon_mesh_processing::transform(at3,*sm2);
+
+  // Compute subtraction
+
+  Surface_mesh_3 *sm3;
+  if(op == SUBTRACTION) {
+    sm3 = cgal_subtraction(sm1, sm2);
+  }
+  else if(op == UNION) {
+    sm3 = cgal_union(sm1, sm2);
+  }
+  else if(op == INTERSECTION) {
+    sm3 = cgal_intersection(sm1, sm2);
+  }
+
+  // Convert CGAL mesh back to pxr mesh
+  points.clear();
+  vc.clear();
+  vi.clear();
+  cgal_to_usdmesh(points,vc,vi,sm3);
+
+  solid3.GetAttribute(pxr::TfToken("points")).Set(points);
+  solid3.GetAttribute(pxr::TfToken("faceVertexCounts")).Set(vc);
+  solid3.GetAttribute(pxr::TfToken("faceVertexIndices")).Set(vi);
+  std::cout << "set solid3 data" << std::endl;
+
+  delete sm1;
+  delete sm2;
+  delete sm3;
+}
+PXR_NAMESPACE_CLOSE_SCOPE
 
 Surface_mesh_3* cgal_subtraction(Surface_mesh_3 *sm1, Surface_mesh_3 *sm2) {
 

@@ -17,7 +17,7 @@ PXR_NAMESPACE_OPEN_SCOPE
 TF_REGISTRY_FUNCTION(TfType)
 {
     TfType::Define<G4Intersection,
-        TfType::Bases< UsdGeomXform > >();
+        TfType::Bases< G4BooleanSolid > >();
     
     // Register the usd prim typename as an alias under UsdSchemaBase. This
     // enables one to call
@@ -124,7 +124,7 @@ G4Intersection::GetSchemaAttributeNames(bool includeInherited)
     };
     static TfTokenVector allNames =
         _ConcatenateAttributeNames(
-            UsdGeomXform::GetSchemaAttributeNames(true),
+            G4BooleanSolid::GetSchemaAttributeNames(true),
             localNames);
 
     if (includeInherited)
@@ -144,6 +144,7 @@ PXR_NAMESPACE_CLOSE_SCOPE
 // ===================================================================== //
 // --(BEGIN CUSTOM CODE)--
 #include <iostream>
+#include "cgal_boolean.h"
 #include "pxr/usd/usd/notice.h"
 
 class IntersectionChangeListener : public pxr::TfWeakBase {
@@ -165,6 +166,7 @@ private:
 
 void pxr::G4Intersection::Update() {
   std::cout << "pxr::G4Intersection::Update()" << std::endl;
+  g4usdboolean(this->GetPrim(), INTERSECTION);
 }
 
 void pxr::G4Intersection::InstallUpdateListener() {

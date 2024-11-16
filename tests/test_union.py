@@ -22,28 +22,27 @@ def setXform(prim, pos = [0,0,0], rot = [0,0,0]) :
 
 
 
-def test_subtraction(stage = None) :
+def test_union(stage = None) :
     # make subtraction
     if not stage :
-        stage = Usd.Stage.CreateNew("test_subtraction.usda")
+        stage = Usd.Stage.CreateNew("test_union.usda")
 
-    s = G4.Subtraction.Define(stage, "/s1")
+    s = G4.Union.Define(stage, "/u1")
 
-    b1 = G4.Box.Define(stage, "/s1/b1")
-    b1m = UsdGeom.Mesh.Define(stage,"/s1/s1result")
+    b1 = G4.Box.Define(stage, "/u1/b1")
+    b1m = UsdGeom.Mesh.Define(stage,"/u1/u1result")
 
     setDefaultBox(b1)
-    x = UsdGeom.Xform.Define(stage, "/s1/solid2")
-    b2 = G4.Box.Define(stage, "/s1/solid2/b2")
+    x = UsdGeom.Xform.Define(stage, "/u1/solid2")
+    b2 = G4.Box.Define(stage, "/u1/solid2/b2")
     setDefaultBox2(b2)
     setXform(x.GetPrim(), [5, 5, 5], [45, 0, 0])
     s.GetSolid1primAttr().Set("b1")
     s.GetSolid2primAttr().Set("solid2")
-    s.GetSolid3primAttr().Set("s1result")
+    s.GetSolid3primAttr().Set("u1result")
 
     s.Update()
 
     stage.Save()
 
     return s
-

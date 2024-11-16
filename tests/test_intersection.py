@@ -22,28 +22,27 @@ def setXform(prim, pos = [0,0,0], rot = [0,0,0]) :
 
 
 
-def test_subtraction(stage = None) :
+def test_intersection(stage = None) :
     # make subtraction
     if not stage :
-        stage = Usd.Stage.CreateNew("test_subtraction.usda")
+        stage = Usd.Stage.CreateNew("test_intersection.usda")
 
-    s = G4.Subtraction.Define(stage, "/s1")
+    i = G4.Intersection.Define(stage, "/i1")
 
-    b1 = G4.Box.Define(stage, "/s1/b1")
-    b1m = UsdGeom.Mesh.Define(stage,"/s1/s1result")
+    b1 = G4.Box.Define(stage, "/i1/b1")
+    b1m = UsdGeom.Mesh.Define(stage,"/i1/i1result")
 
     setDefaultBox(b1)
-    x = UsdGeom.Xform.Define(stage, "/s1/solid2")
-    b2 = G4.Box.Define(stage, "/s1/solid2/b2")
+    x = UsdGeom.Xform.Define(stage, "/i1/solid2")
+    b2 = G4.Box.Define(stage, "/i1/solid2/b2")
     setDefaultBox2(b2)
     setXform(x.GetPrim(), [5, 5, 5], [45, 0, 0])
-    s.GetSolid1primAttr().Set("b1")
-    s.GetSolid2primAttr().Set("solid2")
-    s.GetSolid3primAttr().Set("s1result")
+    i.GetSolid1primAttr().Set("b1")
+    i.GetSolid2primAttr().Set("solid2")
+    i.GetSolid3primAttr().Set("i1result")
 
-    s.Update()
+    i.Update()
 
     stage.Save()
 
-    return s
-
+    return i

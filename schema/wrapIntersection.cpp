@@ -54,7 +54,7 @@ void wrapG4Intersection()
 {
     typedef G4Intersection This;
 
-    class_<This, bases<UsdGeomXform> >
+    class_<This, bases<G4BooleanSolid> >
         cls("Intersection");
 
     cls

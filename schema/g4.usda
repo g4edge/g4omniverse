@@ -83,7 +83,7 @@ class Subtraction "Subtraction" (
 }
 
 class Union "Union" (
-  inherits = </Xform>
+  inherits = </BooleanSolid>
 
   customData = {
     string className = "Union" 
@@ -93,7 +93,7 @@ class Union "Union" (
 }
 
 class Intersection "Intersection" (
-  inherits = </Xform>
+  inherits = </BooleanSolid>
 
   customData = {
     string className = "Intersection" 

@@ -36,7 +36,11 @@ typedef Aff_transformation_3_EPECK Aff_transformation_3;
 typedef Point_3_EPECK Point_3;
 typedef boost::graph_traits<Surface_mesh_3>::vertex_descriptor vertex_descriptor;
 
+#include "pxr/usd/usd/prim.h"
+
 #include "pxr/base/vt/array.h"
+
+enum g4usdbooleanOperation {SUBTRACTION, UNION, INTERSECTION};
 
 Surface_mesh_3* usdmesh_to_cgal(pxr::VtVec3fArray &points,
                                 pxr::VtIntArray &faceVertexCounts,
@@ -45,6 +49,10 @@ void cgal_to_usdmesh(pxr::VtVec3fArray &points,
                      pxr::VtIntArray &faceVertexCounts,
                      pxr::VtIntArray &faceVertexIndices,
                      Surface_mesh_3 *sm);
+PXR_NAMESPACE_OPEN_SCOPE
+void g4usdboolean(UsdPrim const &p, g4usdbooleanOperation op);
+PXR_NAMESPACE_CLOSE_SCOPE
+
 Surface_mesh_3* cgal_subtraction(Surface_mesh_3 *sm1, Surface_mesh_3 *sm2);
 Surface_mesh_3* cgal_union(Surface_mesh_3 *sm1, Surface_mesh_3 *sm2 );
 Surface_mesh_3* cgal_intersection(Surface_mesh_3 *sm1, Surface_mesh_3 *sm2 );
