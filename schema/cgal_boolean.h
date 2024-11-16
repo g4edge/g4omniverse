@@ -45,9 +45,9 @@ void cgal_to_usdmesh(pxr::VtVec3fArray &points,
                      pxr::VtIntArray &faceVertexCounts,
                      pxr::VtIntArray &faceVertexIndices,
                      Surface_mesh_3 *sm);
-Surface_mesh_3* cgal_subtraction(Surface_mesh_3 *sm1, Surface_mesh_3 *sm2 );
-void cgal_union();
-void cgal_intersection();
+Surface_mesh_3* cgal_subtraction(Surface_mesh_3 *sm1, Surface_mesh_3 *sm2);
+Surface_mesh_3* cgal_union(Surface_mesh_3 *sm1, Surface_mesh_3 *sm2 );
+Surface_mesh_3* cgal_intersection(Surface_mesh_3 *sm1, Surface_mesh_3 *sm2 );
 
 
 #endif //GEANT4OMNIVERSE_CGAL_BOOLEAN_H
