@@ -33,7 +33,7 @@ def test_union(stage = None) :
     b1m = UsdGeom.Mesh.Define(stage,"/u1/u1result")
 
     setDefaultBox(b1)
-    x = UsdGeom.Xform.Define(stage, "/u1/solid2")
+    x = G4.DisplacedSolid.Define(stage, "/u1/solid2")
     b2 = G4.Box.Define(stage, "/u1/solid2/b2")
     setDefaultBox2(b2)
     setXform(x.GetPrim(), [5, 5, 5], [45, 0, 0])
