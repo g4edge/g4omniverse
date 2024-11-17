@@ -19,6 +19,7 @@ def setXform(prim, pos = [0,0,0], rot = [0,0,0]) :
     xform.AddTranslateOp().Set(Gf.Vec3d(*pos))
     # Rotate
     xform.AddRotateZYXOp().Set(Gf.Vec3d(*rot))
+    
 def test_booleantree(stage = None) :
     # make subtraction
     if not stage :
