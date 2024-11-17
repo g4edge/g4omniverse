@@ -25,11 +25,11 @@ def test_booleantree(stage = None) :
     if not stage :
         stage = Usd.Stage.CreateNew("test_booleantree1.usda")
 
-    sub1 = G4.Subtraction.Define(stage,"/sub1")
-    sub1_solid1 = G4.Subtraction.Define(stage,"/sub1/solid1")
-    sub1_solid2d = G4.DisplacedSolid.Define(stage,"/sub1/solid2")
-    sub1_solid2s = G4.Box.Define(stage,"/sub1/solid2/box")
-    sub1_result = UsdGeom.Mesh.Define(stage,"/sub1/result")
+    sub1 = G4.Subtraction.Define(stage,            "/sub1")
+    sub1_solid1 = G4.Subtraction.Define(stage,     "/sub1/solid1")
+    sub1_solid2d = G4.DisplacedSolid.Define(stage, "/sub1/solid2")
+    sub1_solid2s = G4.Box.Define(stage,            "/sub1/solid2/box")
+    sub1_result = UsdGeom.Mesh.Define(stage,       "/sub1/result")
 
     sub1.GetSolid1primAttr().Set("solid1")
     sub1.GetSolid2primAttr().Set("solid2")
@@ -38,10 +38,10 @@ def test_booleantree(stage = None) :
     setDefaultBox2(sub1_solid2s)
     setXform(sub1_solid2d.GetPrim(), [0, 0, 0], [90, 0, 0])
 
-    sub2_solid1 = G4.Box.Define(stage,"/sub1/solid1/solid1")
+    sub2_solid1 = G4.Box.Define(stage,            "/sub1/solid1/solid1")
     sub2_solid2d = G4.DisplacedSolid.Define(stage,"/sub1/solid1/solid2")
-    sub2_solid2s = G4.Box.Define(stage,"/sub1/solid1/solid2/box")
-    sub2_result = UsdGeom.Mesh.Define(stage,"/sub1/solid1/result")
+    sub2_solid2s = G4.Box.Define(stage,           "/sub1/solid1/solid2/box")
+    sub2_result = UsdGeom.Mesh.Define(stage,      "/sub1/solid1/result")
 
     sub1_solid1.GetSolid1primAttr().Set("solid1")
     sub1_solid1.GetSolid2primAttr().Set("solid2")
