@@ -19,7 +19,7 @@ def setXform(prim, pos = [0,0,0], rot = [0,0,0]) :
     xform.AddTranslateOp().Set(Gf.Vec3d(*pos))
     # Rotate
     xform.AddRotateZYXOp().Set(Gf.Vec3d(*rot))
-    
+
 def test_booleantree(stage = None) :
     # make subtraction
     if not stage :
@@ -49,7 +49,7 @@ def test_booleantree(stage = None) :
 
     setDefaultBox(sub2_solid1)
     setDefaultBox2(sub2_solid2s)
-    setXform(sub2_solid2d.GetPrim(), [1, 0, 0], [0, 0, 0])
+    setXform(sub2_solid2d.GetPrim(), [0, 0, 0], [0, 0, 0])
 
     sub1_solid1.Update()
     sub1.Update()
