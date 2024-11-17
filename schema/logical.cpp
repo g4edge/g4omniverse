@@ -103,6 +103,91 @@ G4Logical::CreateG4typeAttr(VtValue const &defaultValue, bool writeSparsely) con
                        writeSparsely);
 }
 
+UsdAttribute
+G4Logical::GetSolidprimAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->solidprim);
+}
+
+UsdAttribute
+G4Logical::CreateSolidprimAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->solidprim,
+                       SdfValueTypeNames->String,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
+UsdAttribute
+G4Logical::GetMaterialprimAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->materialprim);
+}
+
+UsdAttribute
+G4Logical::CreateMaterialprimAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->materialprim,
+                       SdfValueTypeNames->String,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
+UsdAttribute
+G4Logical::GetFieldprimAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->fieldprim);
+}
+
+UsdAttribute
+G4Logical::CreateFieldprimAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->fieldprim,
+                       SdfValueTypeNames->String,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
+UsdAttribute
+G4Logical::GetSensitiveprimAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->sensitiveprim);
+}
+
+UsdAttribute
+G4Logical::CreateSensitiveprimAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->sensitiveprim,
+                       SdfValueTypeNames->String,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
+UsdAttribute
+G4Logical::GetLimitsprimAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->limitsprim);
+}
+
+UsdAttribute
+G4Logical::CreateLimitsprimAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->limitsprim,
+                       SdfValueTypeNames->String,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
 namespace {
 static inline TfTokenVector
 _ConcatenateAttributeNames(const TfTokenVector& left,const TfTokenVector& right)
@@ -121,6 +206,11 @@ G4Logical::GetSchemaAttributeNames(bool includeInherited)
 {
     static TfTokenVector localNames = {
         G4Tokens->g4type,
+        G4Tokens->solidprim,
+        G4Tokens->materialprim,
+        G4Tokens->fieldprim,
+        G4Tokens->sensitiveprim,
+        G4Tokens->limitsprim,
     };
     static TfTokenVector allNames =
         _ConcatenateAttributeNames(

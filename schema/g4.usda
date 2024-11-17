@@ -121,6 +121,11 @@ class Logical "Logical" (
     }
 ) {
     string g4type = "Logical"
+    string solidprim = "none"
+    string materialprim = "none"
+    string fieldprim = "none"
+    string sensitiveprim = "none"
+    string limitsprim = "none"
 }
 
 class Physical "Physical" (

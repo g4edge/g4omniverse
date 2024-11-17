@@ -41,14 +41,26 @@ PXR_NAMESPACE_OPEN_SCOPE
 /// Use G4Tokens like so:
 ///
 /// \code
-///     gprim.GetMyTokenValuedAttr().Set(G4Tokens->g4type);
+///     gprim.GetMyTokenValuedAttr().Set(G4Tokens->fieldprim);
 /// \endcode
 struct G4TokensType {
     G4_API G4TokensType();
+    /// \brief "fieldprim"
+    /// 
+    /// G4Logical
+    const TfToken fieldprim;
     /// \brief "g4type"
     /// 
     /// G4VSolid, G4Box, G4Tubs, G4BooleanSolid, G4DisplacedSolid, G4Subtraction, G4Union, G4Intersection, G4Logical, G4Physical
     const TfToken g4type;
+    /// \brief "limitsprim"
+    /// 
+    /// G4Logical
+    const TfToken limitsprim;
+    /// \brief "materialprim"
+    /// 
+    /// G4Logical
+    const TfToken materialprim;
     /// \brief "name"
     /// 
     /// G4VSolid
@@ -61,6 +73,10 @@ struct G4TokensType {
     /// 
     /// G4Tubs
     const TfToken r2;
+    /// \brief "sensitiveprim"
+    /// 
+    /// G4Logical
+    const TfToken sensitiveprim;
     /// \brief "solid1prim"
     /// 
     /// G4BooleanSolid
@@ -73,6 +89,10 @@ struct G4TokensType {
     /// 
     /// G4BooleanSolid
     const TfToken solid3prim;
+    /// \brief "solidprim"
+    /// 
+    /// G4Logical
+    const TfToken solidprim;
     /// \brief "x"
     /// 
     /// G4Box

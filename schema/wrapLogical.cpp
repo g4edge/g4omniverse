@@ -38,6 +38,41 @@ _CreateG4typeAttr(G4Logical &self,
     return self.CreateG4typeAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
 }
+        
+static UsdAttribute
+_CreateSolidprimAttr(G4Logical &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateSolidprimAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
+}
+        
+static UsdAttribute
+_CreateMaterialprimAttr(G4Logical &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateMaterialprimAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
+}
+        
+static UsdAttribute
+_CreateFieldprimAttr(G4Logical &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateFieldprimAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
+}
+        
+static UsdAttribute
+_CreateSensitiveprimAttr(G4Logical &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateSensitiveprimAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
+}
+        
+static UsdAttribute
+_CreateLimitsprimAttr(G4Logical &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateLimitsprimAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
+}
 
 static std::string
 _Repr(const G4Logical &self)
@@ -85,6 +120,41 @@ void wrapG4Logical()
              &This::GetG4typeAttr)
         .def("CreateG4typeAttr",
              &_CreateG4typeAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetSolidprimAttr",
+             &This::GetSolidprimAttr)
+        .def("CreateSolidprimAttr",
+             &_CreateSolidprimAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetMaterialprimAttr",
+             &This::GetMaterialprimAttr)
+        .def("CreateMaterialprimAttr",
+             &_CreateMaterialprimAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetFieldprimAttr",
+             &This::GetFieldprimAttr)
+        .def("CreateFieldprimAttr",
+             &_CreateFieldprimAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetSensitiveprimAttr",
+             &This::GetSensitiveprimAttr)
+        .def("CreateSensitiveprimAttr",
+             &_CreateSensitiveprimAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetLimitsprimAttr",
+             &This::GetLimitsprimAttr)
+        .def("CreateLimitsprimAttr",
+             &_CreateLimitsprimAttr,
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
 

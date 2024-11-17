@@ -1245,6 +1245,7 @@ class Logical "Logical"
         vertex of each face in the mesh.  If this attribute has more than
         one timeSample, the mesh is considered to be topologically varying."""
     )
+    string fieldprim = "none"
     string g4type = "Logical"
     int[] holeIndices = [] (
         doc = """The indices of all faces that should be treated as holes,
@@ -1268,6 +1269,8 @@ class Logical "Logical"
         documentation:
         https://graphics.pixar.com/opensubdiv/docs/subdivision_surfaces.html#boundary-interpolation-rules'''
     )
+    string limitsprim = "none"
+    string materialprim = "none"
     normal3f[] normals (
         doc = """Provide an object-space orientation for individual points, 
         which, depending on subclass, may define a surface, curve, or free 
@@ -1334,6 +1337,8 @@ class Logical "Logical"
         See for more detail about how 
         purpose is computed and used."""
     )
+    string sensitiveprim = "none"
+    string solidprim = "none"
     uniform token subdivisionScheme = "catmullClark" (
         allowedTokens = ["catmullClark", "loop", "bilinear", "none"]
         doc = '''The subdivision scheme to be applied to the surface.
