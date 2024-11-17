@@ -19,44 +19,36 @@ def setXform(prim, pos = [0,0,0], rot = [0,0,0]) :
     xform.AddTranslateOp().Set(Gf.Vec3d(*pos))
     # Rotate
     xform.AddRotateZYXOp().Set(Gf.Vec3d(*rot))
-
-
-
 def test_booleantree(stage = None) :
     # make subtraction
     if not stage :
-        stage = Usd.Stage.CreateNew("test_booleantree.usda")
+        stage = Usd.Stage.CreateNew("test_booleantree1.usda")
 
-    s1 = G4.Subtraction.Define(stage,"/s1")
-    s1_solid2 = G4.DisplacedSolid.Define(stage,"/s1/solid2")
-    s2 = G4.Subtraction.Define(stage,"/s1/solid2/s2")
-    s2_solid2_= G4.DisplacedSolid.Define(stage,"/s1/solid2/s2/solid2")
+    sub1 = G4.Subtraction.Define(stage,"/sub1")
+    sub1_solid1 = G4.Subtraction.Define(stage,"/sub1/solid1")
+    sub1_solid2d = G4.DisplacedSolid.Define(stage,"/sub1/solid2")
+    sub1_solid2s = G4.Box.Define(stage,"/sub1/solid2/box")
+    sub1_result = UsdGeom.Mesh.Define(stage,"/sub1/result")
 
-    s2_solid1 = G4.Box.Define(stage, "/s1/solid2/s2/solid1")
-    setDefaultBox(s2_solid1)
+    sub1.GetSolid1primAttr().Set("solid1")
+    sub1.GetSolid2primAttr().Set("solid2")
+    sub1.GetSolid3primAttr().Set("result")
 
-    s2_solid2_s = G4.Box.Define(stage, "/s1/solid2/s2/solid2/solid")
-    setDefaultBox2(s2_solid2_s)
+    setDefaultBox2(sub1_solid2s)
+    setXform(sub1_solid2d.GetPrim(), [0, 0, 0], [90, 0, 0])
 
-    s2_result = UsdGeom.Mesh.Define(stage,"/s1/solid2/s2/result")
+    sub2_solid1 = G4.Box.Define(stage,"/sub1/solid1/solid1")
+    sub2_solid2d = G4.DisplacedSolid.Define(stage,"/sub1/solid1/solid2")
+    sub2_solid2s = G4.Box.Define(stage,"/sub1/solid1/solid2/box")
+    sub2_result = UsdGeom.Mesh.Define(stage,"/sub1/solid1/result")
 
-    s2.GetSolid1primAttr().Set("solid1")
-    s2.GetSolid2primAttr().Set("solid2")
-    s2.GetSolid3primAttr().Set("result")
+    sub1_solid1.GetSolid1primAttr().Set("solid1")
+    sub1_solid1.GetSolid2primAttr().Set("solid2")
+    sub1_solid1.GetSolid3primAttr().Set("result")
 
-    s1_solid1 = G4.Box.Define(stage, "/s1/solid1")
-    setDefaultBox2(s1_solid1)
-    s2_result = UsdGeom.Mesh.Define(stage,"/s1/result")
+    setDefaultBox(sub2_solid1)
+    setDefaultBox2(sub2_solid2s)
+    setXform(sub2_solid2d.GetPrim(), [1, 0, 0], [0, 0, 0])
 
-    setXform(s1_solid2.GetPrim(), [0, 0, 0], [90, 0, 0])
-
-    s1.GetSolid1primAttr().Set("solid1")
-    s1.GetSolid2primAttr().Set("solid2")
-    s1.GetSolid3primAttr().Set("result")
-
-    s2.Update()
-    s1.Update()
-
-    return s1
-
-    #stage.Save()
+    sub1_solid1.Update()
+    sub1.Update()
