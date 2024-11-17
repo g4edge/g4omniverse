@@ -126,6 +126,7 @@ class Logical "Logical" (
     string fieldprim = "none"
     string sensitiveprim = "none"
     string limitsprim = "none"
+    string[] daughters = []
 }
 
 class Physical "Physical" (

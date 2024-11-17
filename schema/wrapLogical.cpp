@@ -73,6 +73,13 @@ _CreateLimitsprimAttr(G4Logical &self,
     return self.CreateLimitsprimAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
 }
+        
+static UsdAttribute
+_CreateDaughtersAttr(G4Logical &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateDaughtersAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->StringArray), writeSparsely);
+}
 
 static std::string
 _Repr(const G4Logical &self)
@@ -155,6 +162,13 @@ void wrapG4Logical()
              &This::GetLimitsprimAttr)
         .def("CreateLimitsprimAttr",
              &_CreateLimitsprimAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetDaughtersAttr",
+             &This::GetDaughtersAttr)
+        .def("CreateDaughtersAttr",
+             &_CreateDaughtersAttr,
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
 

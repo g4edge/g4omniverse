@@ -263,6 +263,28 @@ public:
     UsdAttribute CreateLimitsprimAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
 
 public:
+    // --------------------------------------------------------------------- //
+    // DAUGHTERS 
+    // --------------------------------------------------------------------- //
+    /// 
+    ///
+    /// | ||
+    /// | -- | -- |
+    /// | Declaration | `string[] daughters = []` |
+    /// | C++ Type | VtArray<std::string> |
+    /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->StringArray |
+    G4_API
+    UsdAttribute GetDaughtersAttr() const;
+
+    /// See GetDaughtersAttr(), and also 
+    /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
+    /// If specified, author \p defaultValue as the attribute's default,
+    /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
+    /// the default for \p writeSparsely is \c false.
+    G4_API
+    UsdAttribute CreateDaughtersAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+
+public:
     // ===================================================================== //
     // Feel free to add custom code below this line, it will be preserved by 
     // the code generator. 

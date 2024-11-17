@@ -1171,6 +1171,7 @@ class Logical "Logical"
         the creases on a mesh.  Use the constant `SHARPNESS_INFINITE` for a
         perfectly sharp crease."""
     )
+    string[] daughters = []
     uniform bool doubleSided = 0 (
         doc = """Although some renderers treat all parametric or polygonal
         surfaces as if they were effectively laminae with outward-facing

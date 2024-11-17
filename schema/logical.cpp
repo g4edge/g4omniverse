@@ -188,6 +188,23 @@ G4Logical::CreateLimitsprimAttr(VtValue const &defaultValue, bool writeSparsely)
                        writeSparsely);
 }
 
+UsdAttribute
+G4Logical::GetDaughtersAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->daughters);
+}
+
+UsdAttribute
+G4Logical::CreateDaughtersAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->daughters,
+                       SdfValueTypeNames->StringArray,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
 namespace {
 static inline TfTokenVector
 _ConcatenateAttributeNames(const TfTokenVector& left,const TfTokenVector& right)
@@ -211,6 +228,7 @@ G4Logical::GetSchemaAttributeNames(bool includeInherited)
         G4Tokens->fieldprim,
         G4Tokens->sensitiveprim,
         G4Tokens->limitsprim,
+        G4Tokens->daughters,
     };
     static TfTokenVector allNames =
         _ConcatenateAttributeNames(

@@ -41,10 +41,14 @@ PXR_NAMESPACE_OPEN_SCOPE
 /// Use G4Tokens like so:
 ///
 /// \code
-///     gprim.GetMyTokenValuedAttr().Set(G4Tokens->fieldprim);
+///     gprim.GetMyTokenValuedAttr().Set(G4Tokens->daughters);
 /// \endcode
 struct G4TokensType {
     G4_API G4TokensType();
+    /// \brief "daughters"
+    /// 
+    /// G4Logical
+    const TfToken daughters;
     /// \brief "fieldprim"
     /// 
     /// G4Logical

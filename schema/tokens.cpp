@@ -9,6 +9,7 @@
 PXR_NAMESPACE_OPEN_SCOPE
 
 G4TokensType::G4TokensType() :
+    daughters("daughters", TfToken::Immortal),
     fieldprim("fieldprim", TfToken::Immortal),
     g4type("g4type", TfToken::Immortal),
     limitsprim("limitsprim", TfToken::Immortal),
@@ -35,6 +36,7 @@ G4TokensType::G4TokensType() :
     Union("Union", TfToken::Immortal),
     VSolid("VSolid", TfToken::Immortal),
     allTokens({
+        daughters,
         fieldprim,
         g4type,
         limitsprim,
