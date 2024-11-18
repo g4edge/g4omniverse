@@ -23,8 +23,7 @@ def test_subtraction_instance(stage = None) :
     solid1 = G4.Box.Define(stage,             "/sub1/solid1")
     solid2d = G4.DisplacedSolid.Define(stage, "/sub1/solid2")
     solid2s = G4.Box.Define(stage,            "/sub1/solid2/box")
-    solid1.GetPrim().SetInstanceable(True)
-    solid2s.GetPrim().GetReferences().AddReference("",solid1.GetPrim().GetPath())
+    solid2s.GetPrim().GetReferences().AddInternalReference(solid1.GetPrim().GetPath())
 
     result  = UsdGeom.Mesh.Define(stage,      "/sub1/result")
 

@@ -43,7 +43,6 @@ def test_logcial_physical(stage = None) :
 
     l2 = G4.Logical.Define(stage,"/det_log/det_phys1/sub_log")
     l2_solid =  G4.Box.Define(stage,"/det_log/det_phys1/sub_log/sub_box")
-    l2.GetPrim().SetInstanceable(True)
 
     l3 = G4.Logical.Define(stage,"/det_log/det_phys2/sub_log")
     l4 = G4.Logical.Define(stage,"/det_log/det_phys3/sub_log")
