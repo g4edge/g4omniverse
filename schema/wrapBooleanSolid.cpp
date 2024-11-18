@@ -75,7 +75,7 @@ void wrapG4BooleanSolid()
 {
     typedef G4BooleanSolid This;
 
-    class_<This, bases<UsdGeomXform> >
+    class_<This, bases<UsdGeomScope> >
         cls("BooleanSolid");
 
     cls

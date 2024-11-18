@@ -17,7 +17,7 @@ PXR_NAMESPACE_OPEN_SCOPE
 TF_REGISTRY_FUNCTION(TfType)
 {
     TfType::Define<G4Logical,
-        TfType::Bases< UsdGeomMesh > >();
+        TfType::Bases< UsdGeomScope > >();
     
     // Register the usd prim typename as an alias under UsdSchemaBase. This
     // enables one to call
@@ -232,7 +232,7 @@ G4Logical::GetSchemaAttributeNames(bool includeInherited)
     };
     static TfTokenVector allNames =
         _ConcatenateAttributeNames(
-            UsdGeomMesh::GetSchemaAttributeNames(true),
+            UsdGeomScope::GetSchemaAttributeNames(true),
             localNames);
 
     if (includeInherited)

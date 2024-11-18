@@ -11,7 +11,7 @@
 
 #include "pxr/pxr.h"
 #include ".//api.h"
-#include "pxr/usd/usdGeom/mesh.h"
+#include "pxr/usd/usdGeom/scope.h"
 #include "pxr/usd/usd/prim.h"
 #include "pxr/usd/usd/stage.h"
 #include ".//tokens.h"
@@ -36,7 +36,7 @@ class SdfAssetPath;
 /// \class G4Logical
 ///
 ///
-class G4Logical : public UsdGeomMesh
+class G4Logical : public UsdGeomScope
 {
 public:
     /// Compile time constant representing what kind of schema this class is.
@@ -49,7 +49,7 @@ public:
     /// for a \em valid \p prim, but will not immediately throw an error for
     /// an invalid \p prim
     explicit G4Logical(const UsdPrim& prim=UsdPrim())
-        : UsdGeomMesh(prim)
+        : UsdGeomScope(prim)
     {
     }
 
@@ -57,7 +57,7 @@ public:
     /// Should be preferred over G4Logical(schemaObj.GetPrim()),
     /// as it preserves SchemaBase state.
     explicit G4Logical(const UsdSchemaBase& schemaObj)
-        : UsdGeomMesh(schemaObj)
+        : UsdGeomScope(schemaObj)
     {
     }
 

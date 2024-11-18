@@ -96,7 +96,7 @@ void wrapG4Logical()
 {
     typedef G4Logical This;
 
-    class_<This, bases<UsdGeomMesh> >
+    class_<This, bases<UsdGeomScope> >
         cls("Logical");
 
     cls

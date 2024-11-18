@@ -60,7 +60,7 @@ class Tubs "Tubs" (
 }
 
 class BooleanSolid "BooleanSolid" (
-  inherits = </Xform>
+  inherits = </Scope>
 
   customData = {
     string className = "BooleanSolid"
@@ -114,7 +114,7 @@ class Intersection "Intersection" (
 }
 
 class Logical "Logical" (
-    inherits = </Mesh>
+    inherits = </Scope>
 
     customData = {
          string className = "Logical"
