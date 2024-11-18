@@ -1409,6 +1409,7 @@ class Logical "Logical"
 class Physical "Physical"
 {
     string g4type = "Physical"
+    string logicalprim = "none"
     rel proxyPrim (
         doc = '''The proxyPrim relationship allows us to link a
         prim whose purpose is "render" to its (single target)

@@ -103,6 +103,23 @@ G4Physical::CreateG4typeAttr(VtValue const &defaultValue, bool writeSparsely) co
                        writeSparsely);
 }
 
+UsdAttribute
+G4Physical::GetLogicalprimAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->logicalprim);
+}
+
+UsdAttribute
+G4Physical::CreateLogicalprimAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->logicalprim,
+                       SdfValueTypeNames->String,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
 namespace {
 static inline TfTokenVector
 _ConcatenateAttributeNames(const TfTokenVector& left,const TfTokenVector& right)
@@ -121,6 +138,7 @@ G4Physical::GetSchemaAttributeNames(bool includeInherited)
 {
     static TfTokenVector localNames = {
         G4Tokens->g4type,
+        G4Tokens->logicalprim,
     };
     static TfTokenVector allNames =
         _ConcatenateAttributeNames(

@@ -137,4 +137,5 @@ class Physical "Physical" (
     }
 ) {
     string g4type = "Physical"
+    string logicalprim = "none"
 }

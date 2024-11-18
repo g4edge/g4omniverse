@@ -61,6 +61,10 @@ struct G4TokensType {
     /// 
     /// G4Logical
     const TfToken limitsprim;
+    /// \brief "logicalprim"
+    /// 
+    /// G4Physical
+    const TfToken logicalprim;
     /// \brief "materialprim"
     /// 
     /// G4Logical

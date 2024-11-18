@@ -153,6 +153,28 @@ public:
     UsdAttribute CreateG4typeAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
 
 public:
+    // --------------------------------------------------------------------- //
+    // LOGICALPRIM 
+    // --------------------------------------------------------------------- //
+    /// 
+    ///
+    /// | ||
+    /// | -- | -- |
+    /// | Declaration | `string logicalprim = "none"` |
+    /// | C++ Type | std::string |
+    /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->String |
+    G4_API
+    UsdAttribute GetLogicalprimAttr() const;
+
+    /// See GetLogicalprimAttr(), and also 
+    /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
+    /// If specified, author \p defaultValue as the attribute's default,
+    /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
+    /// the default for \p writeSparsely is \c false.
+    G4_API
+    UsdAttribute CreateLogicalprimAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+
+public:
     // ===================================================================== //
     // Feel free to add custom code below this line, it will be preserved by 
     // the code generator. 

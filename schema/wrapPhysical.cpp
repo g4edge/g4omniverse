@@ -38,6 +38,13 @@ _CreateG4typeAttr(G4Physical &self,
     return self.CreateG4typeAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
 }
+        
+static UsdAttribute
+_CreateLogicalprimAttr(G4Physical &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateLogicalprimAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
+}
 
 static std::string
 _Repr(const G4Physical &self)
@@ -85,6 +92,13 @@ void wrapG4Physical()
              &This::GetG4typeAttr)
         .def("CreateG4typeAttr",
              &_CreateG4typeAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetLogicalprimAttr",
+             &This::GetLogicalprimAttr)
+        .def("CreateLogicalprimAttr",
+             &_CreateLogicalprimAttr,
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
 

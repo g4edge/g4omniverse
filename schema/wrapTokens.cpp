@@ -51,6 +51,7 @@ void wrapG4Tokens()
     _AddToken(cls, "fieldprim", G4Tokens->fieldprim);
     _AddToken(cls, "g4type", G4Tokens->g4type);
     _AddToken(cls, "limitsprim", G4Tokens->limitsprim);
+    _AddToken(cls, "logicalprim", G4Tokens->logicalprim);
     _AddToken(cls, "materialprim", G4Tokens->materialprim);
     _AddToken(cls, "name", G4Tokens->name);
     _AddToken(cls, "r1", G4Tokens->r1);
