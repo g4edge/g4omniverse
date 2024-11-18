@@ -14,10 +14,10 @@ def setXform(prim, pos = [0,0,0], rot = [0,0,0]) :
     # Rotate
     xform.AddRotateZYXOp().Set(Gf.Vec3d(*rot))
 
-def test_subtraction_instance(stage = None) :
+def test_subtraction_reference(stage = None) :
     # make subtraction
     if not stage :
-        stage = Usd.Stage.CreateNew("test_subtraction_instance.usda")
+        stage = Usd.Stage.CreateNew("test_subtraction_reference.usda")
 
     sub1 = G4.Subtraction.Define(stage,       "/sub1")
     solid1 = G4.Box.Define(stage,             "/sub1/solid1")
