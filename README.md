@@ -29,7 +29,7 @@ via NVIDIA Omniverse.
 * build plugin 
   * `terminal> python build_scripts/build_usd.py ../openusd-build/`
 * add plugin directory to python path
-  * `terminal> export $PYTHONPATH=$PYTHONPATH:<PATH_TO_USD`
+  * `terminal> export $PYTHONPATH=$PYTHONPATH:<PATH_TO_USD_BUILD>/lib/python`
 * test in python 
   * `python> from pxr import G4`
 
