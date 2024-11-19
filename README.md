@@ -1,7 +1,18 @@
 
+
 ### Introduction
 
-![image](./public/images/intro_image.png)
+USD is a modern composition file format used by 3D workflows.
+It is increasing being used in engineering/physics applications 
+via NVIDIA Omniverse. 
+
+![Example of usdview of G4-USD](./public/images/intro_image.png)
+
+### Aims
+
+1. Renderble USD file
+2. Direct load to Geant4
+3. As similar structure as GDML/G4
 
 ### Quick build instructions
 
