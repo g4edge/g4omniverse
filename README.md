@@ -13,6 +13,7 @@ via NVIDIA Omniverse.
 1. Renderble USD file
 2. Direct load to Geant4
 3. As similar structure as GDML/G4
+4. Dynamic update of boolean/references
 
 ### Quick build instructions
 
