@@ -38,6 +38,20 @@ _CreateG4typeAttr(G4DisplacedSolid &self,
     return self.CreateG4typeAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
 }
+        
+static UsdAttribute
+_CreateTranslationAttr(G4DisplacedSolid &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateTranslationAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double3), writeSparsely);
+}
+        
+static UsdAttribute
+_CreateRotationAttr(G4DisplacedSolid &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateRotationAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double3), writeSparsely);
+}
 
 static std::string
 _Repr(const G4DisplacedSolid &self)
@@ -85,6 +99,20 @@ void wrapG4DisplacedSolid()
              &This::GetG4typeAttr)
         .def("CreateG4typeAttr",
              &_CreateG4typeAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetTranslationAttr",
+             &This::GetTranslationAttr)
+        .def("CreateTranslationAttr",
+             &_CreateTranslationAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetRotationAttr",
+             &This::GetRotationAttr)
+        .def("CreateRotationAttr",
+             &_CreateRotationAttr,
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
 

@@ -103,6 +103,40 @@ G4DisplacedSolid::CreateG4typeAttr(VtValue const &defaultValue, bool writeSparse
                        writeSparsely);
 }
 
+UsdAttribute
+G4DisplacedSolid::GetTranslationAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->translation);
+}
+
+UsdAttribute
+G4DisplacedSolid::CreateTranslationAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->translation,
+                       SdfValueTypeNames->Double3,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
+UsdAttribute
+G4DisplacedSolid::GetRotationAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->rotation);
+}
+
+UsdAttribute
+G4DisplacedSolid::CreateRotationAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->rotation,
+                       SdfValueTypeNames->Double3,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
 namespace {
 static inline TfTokenVector
 _ConcatenateAttributeNames(const TfTokenVector& left,const TfTokenVector& right)
@@ -121,6 +155,8 @@ G4DisplacedSolid::GetSchemaAttributeNames(bool includeInherited)
 {
     static TfTokenVector localNames = {
         G4Tokens->g4type,
+        G4Tokens->translation,
+        G4Tokens->rotation,
     };
     static TfTokenVector allNames =
         _ConcatenateAttributeNames(

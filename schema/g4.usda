@@ -82,6 +82,8 @@ class DisplacedSolid "DisplacedSolid" (
    }
 ) {
     string g4type = "DisplacedSolid"
+    double3 translation = (0,0,0)
+    double3 rotation = (0,0,0)
 }
 
 class Subtraction "Subtraction" (

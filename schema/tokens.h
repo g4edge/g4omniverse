@@ -89,6 +89,10 @@ struct G4TokensType {
     /// 
     /// G4Tubs
     const TfToken r2;
+    /// \brief "rotation"
+    /// 
+    /// G4DisplacedSolid
+    const TfToken rotation;
     /// \brief "rotations"
     /// 
     /// G4MultiUnion
@@ -117,6 +121,10 @@ struct G4TokensType {
     /// 
     /// G4MultiUnion
     const TfToken solidprims;
+    /// \brief "translation"
+    /// 
+    /// G4DisplacedSolid
+    const TfToken translation;
     /// \brief "translations"
     /// 
     /// G4MultiUnion
