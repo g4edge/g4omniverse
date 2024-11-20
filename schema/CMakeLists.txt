@@ -29,6 +29,7 @@ pxr_plugin(${PXR_PACKAGE}
 		union
 		intersection
 		subtraction
+		multiUnion
 		logical
 		physical
 		tokens
@@ -51,6 +52,7 @@ pxr_plugin(${PXR_PACKAGE}
 		wrapIntersection.cpp
 		wrapUnion.cpp
 		wrapSubtraction.cpp
+		wrapMultiUnion.cpp
 		wrapLogical.cpp
 		wrapPhysical.cpp
 		wrapTokens.cpp

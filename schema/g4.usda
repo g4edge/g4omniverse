@@ -115,6 +115,17 @@ class Intersection "Intersection" (
 
 }
 
+class MultiUnion "MultiUnion" (
+  inherits = </Scope>
+
+  customData = {
+    string className = "MultiUnion"
+  }
+) {
+    string g4type = "MultiUnion"
+    string[] solidprims = []
+}
+
 class Logical "Logical" (
     inherits = </Scope>
 

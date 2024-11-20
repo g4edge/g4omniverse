@@ -59,7 +59,7 @@ struct G4TokensType {
     const TfToken fieldprim;
     /// \brief "g4type"
     /// 
-    /// G4VSolid, G4Box, G4Tubs, G4BooleanSolid, G4DisplacedSolid, G4Subtraction, G4Union, G4Intersection, G4Logical, G4Physical
+    /// G4VSolid, G4Box, G4Tubs, G4BooleanSolid, G4DisplacedSolid, G4Subtraction, G4Union, G4Intersection, G4MultiUnion, G4Logical, G4Physical
     const TfToken g4type;
     /// \brief "length_unit"
     /// 
@@ -109,6 +109,10 @@ struct G4TokensType {
     /// 
     /// G4Logical
     const TfToken solidprim;
+    /// \brief "solidprims"
+    /// 
+    /// G4MultiUnion
+    const TfToken solidprims;
     /// \brief "x"
     /// 
     /// G4Box
@@ -141,6 +145,10 @@ struct G4TokensType {
     /// 
     /// Schema identifer and family for G4Logical
     const TfToken Logical;
+    /// \brief "MultiUnion"
+    /// 
+    /// Schema identifer and family for G4MultiUnion
+    const TfToken MultiUnion;
     /// \brief "Physical"
     /// 
     /// Schema identifer and family for G4Physical

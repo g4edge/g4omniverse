@@ -63,6 +63,7 @@ void wrapG4Tokens()
     _AddToken(cls, "solid2prim", G4Tokens->solid2prim);
     _AddToken(cls, "solid3prim", G4Tokens->solid3prim);
     _AddToken(cls, "solidprim", G4Tokens->solidprim);
+    _AddToken(cls, "solidprims", G4Tokens->solidprims);
     _AddToken(cls, "x", G4Tokens->x);
     _AddToken(cls, "y", G4Tokens->y);
     _AddToken(cls, "z", G4Tokens->z);
@@ -71,6 +72,7 @@ void wrapG4Tokens()
     _AddToken(cls, "DisplacedSolid", G4Tokens->DisplacedSolid);
     _AddToken(cls, "Intersection", G4Tokens->Intersection);
     _AddToken(cls, "Logical", G4Tokens->Logical);
+    _AddToken(cls, "MultiUnion", G4Tokens->MultiUnion);
     _AddToken(cls, "Physical", G4Tokens->Physical);
     _AddToken(cls, "Subtraction", G4Tokens->Subtraction);
     _AddToken(cls, "Tubs", G4Tokens->Tubs);
