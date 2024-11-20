@@ -175,6 +175,72 @@ public:
     UsdAttribute CreateSolidprimsAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
 
 public:
+    // --------------------------------------------------------------------- //
+    // TRANSLATIONS 
+    // --------------------------------------------------------------------- //
+    /// 
+    ///
+    /// | ||
+    /// | -- | -- |
+    /// | Declaration | `double3[] translations = []` |
+    /// | C++ Type | VtArray<GfVec3d> |
+    /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double3Array |
+    G4_API
+    UsdAttribute GetTranslationsAttr() const;
+
+    /// See GetTranslationsAttr(), and also 
+    /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
+    /// If specified, author \p defaultValue as the attribute's default,
+    /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
+    /// the default for \p writeSparsely is \c false.
+    G4_API
+    UsdAttribute CreateTranslationsAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+
+public:
+    // --------------------------------------------------------------------- //
+    // ROTATIONS 
+    // --------------------------------------------------------------------- //
+    /// 
+    ///
+    /// | ||
+    /// | -- | -- |
+    /// | Declaration | `double3[] rotations = []` |
+    /// | C++ Type | VtArray<GfVec3d> |
+    /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double3Array |
+    G4_API
+    UsdAttribute GetRotationsAttr() const;
+
+    /// See GetRotationsAttr(), and also 
+    /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
+    /// If specified, author \p defaultValue as the attribute's default,
+    /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
+    /// the default for \p writeSparsely is \c false.
+    G4_API
+    UsdAttribute CreateRotationsAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+
+public:
+    // --------------------------------------------------------------------- //
+    // SOLID3PRIM 
+    // --------------------------------------------------------------------- //
+    /// 
+    ///
+    /// | ||
+    /// | -- | -- |
+    /// | Declaration | `string solid3prim = "none"` |
+    /// | C++ Type | std::string |
+    /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->String |
+    G4_API
+    UsdAttribute GetSolid3primAttr() const;
+
+    /// See GetSolid3primAttr(), and also 
+    /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
+    /// If specified, author \p defaultValue as the attribute's default,
+    /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
+    /// the default for \p writeSparsely is \c false.
+    G4_API
+    UsdAttribute CreateSolid3primAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+
+public:
     // ===================================================================== //
     // Feel free to add custom code below this line, it will be preserved by 
     // the code generator. 

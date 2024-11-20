@@ -89,6 +89,10 @@ struct G4TokensType {
     /// 
     /// G4Tubs
     const TfToken r2;
+    /// \brief "rotations"
+    /// 
+    /// G4MultiUnion
+    const TfToken rotations;
     /// \brief "sensitiveprim"
     /// 
     /// G4Logical
@@ -103,7 +107,7 @@ struct G4TokensType {
     const TfToken solid2prim;
     /// \brief "solid3prim"
     /// 
-    /// G4BooleanSolid
+    /// G4BooleanSolid, G4MultiUnion
     const TfToken solid3prim;
     /// \brief "solidprim"
     /// 
@@ -113,6 +117,10 @@ struct G4TokensType {
     /// 
     /// G4MultiUnion
     const TfToken solidprims;
+    /// \brief "translations"
+    /// 
+    /// G4MultiUnion
+    const TfToken translations;
     /// \brief "x"
     /// 
     /// G4Box

@@ -124,6 +124,9 @@ class MultiUnion "MultiUnion" (
 ) {
     string g4type = "MultiUnion"
     string[] solidprims = []
+    double3[] translations = []
+    double3[] rotations = []
+    string solid3prim = "none"
 }
 
 class Logical "Logical" (

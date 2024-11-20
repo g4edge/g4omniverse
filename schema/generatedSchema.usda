@@ -1122,7 +1122,10 @@ class MultiUnion "MultiUnion"
         See for more detail about how 
         purpose is computed and used."""
     )
+    double3[] rotations = []
+    string solid3prim = "none"
     string[] solidprims = []
+    double3[] translations = []
     token visibility = "inherited" (
         allowedTokens = ["inherited", "invisible"]
         doc = '''Visibility is meant to be the simplest form of "pruning" 

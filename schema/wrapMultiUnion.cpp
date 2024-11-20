@@ -45,6 +45,27 @@ _CreateSolidprimsAttr(G4MultiUnion &self,
     return self.CreateSolidprimsAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->StringArray), writeSparsely);
 }
+        
+static UsdAttribute
+_CreateTranslationsAttr(G4MultiUnion &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateTranslationsAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double3Array), writeSparsely);
+}
+        
+static UsdAttribute
+_CreateRotationsAttr(G4MultiUnion &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateRotationsAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double3Array), writeSparsely);
+}
+        
+static UsdAttribute
+_CreateSolid3primAttr(G4MultiUnion &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateSolid3primAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
+}
 
 static std::string
 _Repr(const G4MultiUnion &self)
@@ -99,6 +120,27 @@ void wrapG4MultiUnion()
              &This::GetSolidprimsAttr)
         .def("CreateSolidprimsAttr",
              &_CreateSolidprimsAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetTranslationsAttr",
+             &This::GetTranslationsAttr)
+        .def("CreateTranslationsAttr",
+             &_CreateTranslationsAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetRotationsAttr",
+             &This::GetRotationsAttr)
+        .def("CreateRotationsAttr",
+             &_CreateRotationsAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetSolid3primAttr",
+             &This::GetSolid3primAttr)
+        .def("CreateSolid3primAttr",
+             &_CreateSolid3primAttr,
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
 

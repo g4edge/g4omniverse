@@ -120,6 +120,57 @@ G4MultiUnion::CreateSolidprimsAttr(VtValue const &defaultValue, bool writeSparse
                        writeSparsely);
 }
 
+UsdAttribute
+G4MultiUnion::GetTranslationsAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->translations);
+}
+
+UsdAttribute
+G4MultiUnion::CreateTranslationsAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->translations,
+                       SdfValueTypeNames->Double3Array,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
+UsdAttribute
+G4MultiUnion::GetRotationsAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->rotations);
+}
+
+UsdAttribute
+G4MultiUnion::CreateRotationsAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->rotations,
+                       SdfValueTypeNames->Double3Array,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
+UsdAttribute
+G4MultiUnion::GetSolid3primAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->solid3prim);
+}
+
+UsdAttribute
+G4MultiUnion::CreateSolid3primAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->solid3prim,
+                       SdfValueTypeNames->String,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
 namespace {
 static inline TfTokenVector
 _ConcatenateAttributeNames(const TfTokenVector& left,const TfTokenVector& right)
@@ -139,6 +190,9 @@ G4MultiUnion::GetSchemaAttributeNames(bool includeInherited)
     static TfTokenVector localNames = {
         G4Tokens->g4type,
         G4Tokens->solidprims,
+        G4Tokens->translations,
+        G4Tokens->rotations,
+        G4Tokens->solid3prim,
     };
     static TfTokenVector allNames =
         _ConcatenateAttributeNames(
