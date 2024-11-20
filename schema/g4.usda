@@ -31,6 +31,8 @@ class "VSolid" (
 )  {
     string name = "name"
     string g4type = "VSolid"
+    string length_unit = "mm"
+    string angle_unit = "rad"
 }    
 
 class Box "Box" (

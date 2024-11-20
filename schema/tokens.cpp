@@ -9,9 +9,11 @@
 PXR_NAMESPACE_OPEN_SCOPE
 
 G4TokensType::G4TokensType() :
+    angle_unit("angle_unit", TfToken::Immortal),
     daughters("daughters", TfToken::Immortal),
     fieldprim("fieldprim", TfToken::Immortal),
     g4type("g4type", TfToken::Immortal),
+    length_unit("length_unit", TfToken::Immortal),
     limitsprim("limitsprim", TfToken::Immortal),
     logicalprim("logicalprim", TfToken::Immortal),
     materialprim("materialprim", TfToken::Immortal),
@@ -37,9 +39,11 @@ G4TokensType::G4TokensType() :
     Union("Union", TfToken::Immortal),
     VSolid("VSolid", TfToken::Immortal),
     allTokens({
+        angle_unit,
         daughters,
         fieldprim,
         g4type,
+        length_unit,
         limitsprim,
         logicalprim,
         materialprim,

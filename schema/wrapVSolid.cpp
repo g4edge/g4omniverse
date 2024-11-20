@@ -45,6 +45,20 @@ _CreateG4typeAttr(G4VSolid &self,
     return self.CreateG4typeAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
 }
+        
+static UsdAttribute
+_CreateLength_unitAttr(G4VSolid &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateLength_unitAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
+}
+        
+static UsdAttribute
+_CreateAngle_unitAttr(G4VSolid &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateAngle_unitAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
+}
 
 static std::string
 _Repr(const G4VSolid &self)
@@ -96,6 +110,20 @@ void wrapG4VSolid()
              &This::GetG4typeAttr)
         .def("CreateG4typeAttr",
              &_CreateG4typeAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetLength_unitAttr",
+             &This::GetLength_unitAttr)
+        .def("CreateLength_unitAttr",
+             &_CreateLength_unitAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetAngle_unitAttr",
+             &This::GetAngle_unitAttr)
+        .def("CreateAngle_unitAttr",
+             &_CreateAngle_unitAttr,
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
 

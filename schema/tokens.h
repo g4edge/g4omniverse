@@ -41,10 +41,14 @@ PXR_NAMESPACE_OPEN_SCOPE
 /// Use G4Tokens like so:
 ///
 /// \code
-///     gprim.GetMyTokenValuedAttr().Set(G4Tokens->daughters);
+///     gprim.GetMyTokenValuedAttr().Set(G4Tokens->angle_unit);
 /// \endcode
 struct G4TokensType {
     G4_API G4TokensType();
+    /// \brief "angle_unit"
+    /// 
+    /// G4VSolid
+    const TfToken angle_unit;
     /// \brief "daughters"
     /// 
     /// G4Logical
@@ -57,6 +61,10 @@ struct G4TokensType {
     /// 
     /// G4VSolid, G4Box, G4Tubs, G4BooleanSolid, G4DisplacedSolid, G4Subtraction, G4Union, G4Intersection, G4Logical, G4Physical
     const TfToken g4type;
+    /// \brief "length_unit"
+    /// 
+    /// G4VSolid
+    const TfToken length_unit;
     /// \brief "limitsprim"
     /// 
     /// G4Logical

@@ -13,6 +13,7 @@ class Mesh "VSolid"
         To convert to position units per squared UsdTimeCode, divide by the
         square of UsdStage::GetTimeCodesPerSecond()."""
     )
+    string angle_unit = "rad"
     int[] cornerIndices = [] (
         doc = """The indices of points for which a corresponding sharpness
         value is specified in _cornerSharpnesses_ (so the size of this array
@@ -145,6 +146,7 @@ class Mesh "VSolid"
         documentation:
         https://graphics.pixar.com/opensubdiv/docs/subdivision_surfaces.html#boundary-interpolation-rules'''
     )
+    string length_unit = "mm"
     string name = "name"
     normal3f[] normals (
         doc = """Provide an object-space orientation for individual points, 
@@ -288,6 +290,7 @@ class Box "Box"
         To convert to position units per squared UsdTimeCode, divide by the
         square of UsdStage::GetTimeCodesPerSecond()."""
     )
+    string angle_unit = "rad"
     int[] cornerIndices = [] (
         doc = """The indices of points for which a corresponding sharpness
         value is specified in _cornerSharpnesses_ (so the size of this array
@@ -420,6 +423,7 @@ class Box "Box"
         documentation:
         https://graphics.pixar.com/opensubdiv/docs/subdivision_surfaces.html#boundary-interpolation-rules'''
     )
+    string length_unit = "mm"
     string name = "name"
     normal3f[] normals (
         doc = """Provide an object-space orientation for individual points, 
@@ -566,6 +570,7 @@ class Tubs "Tubs"
         To convert to position units per squared UsdTimeCode, divide by the
         square of UsdStage::GetTimeCodesPerSecond()."""
     )
+    string angle_unit = "rad"
     int[] cornerIndices = [] (
         doc = """The indices of points for which a corresponding sharpness
         value is specified in _cornerSharpnesses_ (so the size of this array
@@ -698,6 +703,7 @@ class Tubs "Tubs"
         documentation:
         https://graphics.pixar.com/opensubdiv/docs/subdivision_surfaces.html#boundary-interpolation-rules'''
     )
+    string length_unit = "mm"
     string name = "name"
     normal3f[] normals (
         doc = """Provide an object-space orientation for individual points, 

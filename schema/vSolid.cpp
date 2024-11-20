@@ -101,6 +101,40 @@ G4VSolid::CreateG4typeAttr(VtValue const &defaultValue, bool writeSparsely) cons
                        writeSparsely);
 }
 
+UsdAttribute
+G4VSolid::GetLength_unitAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->length_unit);
+}
+
+UsdAttribute
+G4VSolid::CreateLength_unitAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->length_unit,
+                       SdfValueTypeNames->String,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
+UsdAttribute
+G4VSolid::GetAngle_unitAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->angle_unit);
+}
+
+UsdAttribute
+G4VSolid::CreateAngle_unitAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->angle_unit,
+                       SdfValueTypeNames->String,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
 namespace {
 static inline TfTokenVector
 _ConcatenateAttributeNames(const TfTokenVector& left,const TfTokenVector& right)
@@ -120,6 +154,8 @@ G4VSolid::GetSchemaAttributeNames(bool includeInherited)
     static TfTokenVector localNames = {
         G4Tokens->name,
         G4Tokens->g4type,
+        G4Tokens->length_unit,
+        G4Tokens->angle_unit,
     };
     static TfTokenVector allNames =
         _ConcatenateAttributeNames(
