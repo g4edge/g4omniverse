@@ -6,17 +6,6 @@ def setDefaultBox(box) :
     box.GetYAttr().Set(5)
     box.GetZAttr().Set(5)
 
-
-def setXform(prim, pos = [0,0,0], rot = [0,0,0]) :
-    # Transformation
-    xform = UsdGeom.Xformable(prim)
-    # Translation
-    xform.AddTranslateOp().Set(Gf.Vec3d(*pos))
-    # Rotate
-    xform.AddRotateZYXOp().Set(Gf.Vec3d(*rot))
-
-
-
 def test_logcial(stage = None) :
     # make subtraction
     if not stage :

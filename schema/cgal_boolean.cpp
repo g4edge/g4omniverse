@@ -140,17 +140,11 @@ void g4usdboolean(UsdPrim const& prim, g4usdbooleanOperation op) {
   VtArray<int> vi;
 
   std::cout << "g4usdboolean> getting solid1 data" << " " << solid1Name << std::endl;
-  //solid1.GetAttribute(pxr::TfToken("points")).Get(&points);
-  //solid1.GetAttribute(pxr::TfToken("faceVertexCounts")).Get(&vc);
-  //solid1.GetAttribute(pxr::TfToken("faceVertexIndices")).Get(&vi);
   g4prim_to_meshdata(solid1, points, vc, vi );
   std::cout << "g4usdboolean> got solid1 data" << std::endl;
   auto sm1 = usdmesh_to_cgal(points,vc,vi);
 
   std::cout << "g4usdboolean> getting solid2 data" << " " << solid2Name << std::endl;
-  //solid2.GetChildren().begin()->GetAttribute(pxr::TfToken("points")).Get(&points);
-  //solid2.GetChildren().begin()->GetAttribute(pxr::TfToken("faceVertexCounts")).Get(&vc);
-  //solid2.GetChildren().begin()->GetAttribute(pxr::TfToken("faceVertexIndices")).Get(&vi);
   g4prim_to_meshdata(solid2, points, vc, vi );
   std::cout << "g4usdboolean> got solid2 data" << std::endl;
   auto sm2 = usdmesh_to_cgal(points,vc,vi);
@@ -174,7 +168,7 @@ void g4usdboolean(UsdPrim const& prim, g4usdbooleanOperation op) {
 
   // Compute subtraction
 
-  Surface_mesh_3 *sm3;
+  Surface_mesh_3 *sm3 = nullptr;
   if(op == SUBTRACTION) {
     sm3 = cgal_subtraction(sm1, sm2);
   }
@@ -200,6 +194,52 @@ void g4usdboolean(UsdPrim const& prim, g4usdbooleanOperation op) {
   delete sm2;
   delete sm3;
 }
+
+void g4usdboolean_multiunion(UsdPrim const& prim) {
+  std::cout << "g4usdboolean_multiunion> getting solid names" << std::endl;
+
+  VtArray<std::string> solidnames;
+  VtArray<GfVec3d> translations;
+  VtArray<GfVec3f> rotations;
+
+  prim.GetAttribute(TfToken("solidnames")).Get(&solidnames);
+  prim.GetAttribute(TfToken("translations")).Get(&translations);
+  prim.GetAttribute(TfToken("rotations")).Get(&rotations);
+
+  // loop over solids
+
+  Surface_mesh_3 *sm1 = nullptr;
+  Surface_mesh_3 *sm2 = nullptr;
+  Surface_mesh_3 *sm3 = nullptr;
+
+  for (size_t i = 0; i < solidnames.size(); ++i) {
+    auto solidprim = solidnames[i];
+    auto translation = translations[i];
+    auto rotation = rotations[i];
+
+
+    if (i==0) {
+      // load into sm1
+    }
+    else {
+      // get mesh and load into sm2
+
+
+      // perform union
+      sm3 = cgal_union(sm1, sm2);
+      delete sm1;
+      delete sm2;
+      sm1 = sm3;
+    }
+  }
+
+  // copy sm1 back to USD
+
+  // clean up memory
+  delete sm1;
+
+}
+
 PXR_NAMESPACE_CLOSE_SCOPE
 
 Surface_mesh_3* cgal_subtraction(Surface_mesh_3 *sm1, Surface_mesh_3 *sm2) {

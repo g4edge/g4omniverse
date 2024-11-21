@@ -120,6 +120,40 @@ G4Physical::CreateLogicalprimAttr(VtValue const &defaultValue, bool writeSparsel
                        writeSparsely);
 }
 
+UsdAttribute
+G4Physical::GetTranslationAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->translation);
+}
+
+UsdAttribute
+G4Physical::CreateTranslationAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->translation,
+                       SdfValueTypeNames->Double3,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
+UsdAttribute
+G4Physical::GetRotationAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->rotation);
+}
+
+UsdAttribute
+G4Physical::CreateRotationAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->rotation,
+                       SdfValueTypeNames->Double3,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
 namespace {
 static inline TfTokenVector
 _ConcatenateAttributeNames(const TfTokenVector& left,const TfTokenVector& right)
@@ -139,6 +173,8 @@ G4Physical::GetSchemaAttributeNames(bool includeInherited)
     static TfTokenVector localNames = {
         G4Tokens->g4type,
         G4Tokens->logicalprim,
+        G4Tokens->translation,
+        G4Tokens->rotation,
     };
     static TfTokenVector allNames =
         _ConcatenateAttributeNames(
@@ -161,3 +197,59 @@ PXR_NAMESPACE_CLOSE_SCOPE
 // 'PXR_NAMESPACE_OPEN_SCOPE', 'PXR_NAMESPACE_CLOSE_SCOPE'.
 // ===================================================================== //
 // --(BEGIN CUSTOM CODE)--
+
+#include <iostream>
+#include "pxr/usd/usd/notice.h"
+
+class PhysicalChangeListener : public pxr::TfWeakBase {
+public:
+  PhysicalChangeListener(pxr::G4Physical physical) : _physical(physical) {
+    // Register the listener for object changes
+    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<PhysicalChangeListener>(this),
+                            &PhysicalChangeListener::Update);
+  }
+
+  void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
+
+    if (notice.AffectedObject(_physical.GetTranslationAttr()) ||
+        notice.AffectedObject(_physical.GetRotationAttr()) ) {
+      _physical.Update();
+    }
+  }
+
+private:
+  pxr::G4Physical _physical;
+};
+
+void pxr::G4Physical::Update() {
+  std::cout << "G4Physical::Update() " << this->GetPrim().GetPath() << std::endl;
+
+  // Get physical position and rotation attributes
+  pxr::GfVec3d translation;
+  pxr::GfVec3d rotation;
+  this->GetTranslationAttr().Get(&translation);
+  this->GetRotationAttr().Get(&rotation);
+
+  // Convert to float
+  pxr::GfVec3f translation_float = GfVec3f(float(translation[0]), float(translation[1]), float(translation[2]));
+  pxr::GfVec3f rotation_float = GfVec3f(float(rotation[0]), float(rotation[1]), float(rotation[2]));
+
+  // Add or update xform operators
+  pxr::UsdGeomXform xformable(*this);
+
+  bool resetsXformStack = false;
+  if (xformable.GetOrderedXformOps(&resetsXformStack).size() == 0) {
+    xformable.AddTranslateOp().Set(translation);
+    xformable.AddRotateZYXOp().Set(rotation_float);
+  }
+  else {
+    this->GetPrim().GetAttribute(pxr::TfToken("xformOp:rotateZYX")).Set(rotation_float);
+    this->GetPrim().GetAttribute(pxr::TfToken("xformOp:translate")).Set(translation);
+  }
+}
+
+void pxr::G4Physical::InstallUpdateListener() {
+  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<PhysicalChangeListener>(new PhysicalChangeListener(*this)),
+                          &PhysicalChangeListener::Update,
+                          this->GetPrim().GetStage());
+}

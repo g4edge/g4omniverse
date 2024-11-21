@@ -201,7 +201,7 @@ PXR_NAMESPACE_CLOSE_SCOPE
 #include <iostream>
 
 void pxr::G4Box::Update() {
-  // std::cout << "pxr::G4Box::Update()" << std::endl;
+  std::cout << "G4Box::Update() " << this->GetPrim().GetPath() << std::endl;
 
   double x;
   double y;
@@ -214,9 +214,9 @@ void pxr::G4Box::Update() {
   float yf = (float)y;
   float zf = (float)z;
 
-  auto p = GetPrim().GetAttribute(TfToken("points"));
-  auto vc = GetPrim().GetAttribute(TfToken("faceVertexCounts"));
-  auto vi = GetPrim().GetAttribute(TfToken("faceVertexIndices"));
+  auto p = GetPointsAttr();
+  auto vc = GetFaceVertexCountsAttr();
+  auto vi = GetFaceVertexIndicesAttr();
 
   VtArray<GfVec3f> pArray = {GfVec3f(-xf, -yf, -zf),
                              GfVec3f(-xf,  yf, -zf),
@@ -248,9 +248,6 @@ void pxr::G4Box::Update() {
 
   // update parents
   auto parent = GetPrim().GetParent();
-  // std::cout << "parent path=" << " " << parent.GetPath() << " type='" << parent.GetTypeName() << "'" << std::endl;
-
-
 }
 
 #include "pxr/usd/usd/notice.h"
@@ -264,8 +261,12 @@ public:
   }
 
   void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
-    // std::cout << "updated" << " " << std::endl;
-    _box.Update();
+
+    if (notice.AffectedObject(_box.GetXAttr()) ||
+        notice.AffectedObject(_box.GetYAttr()) ||
+        notice.AffectedObject(_box.GetZAttr())) {
+      _box.Update();
+    }
   }
 
 private:

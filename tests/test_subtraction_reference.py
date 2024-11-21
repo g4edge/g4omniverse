@@ -6,14 +6,6 @@ def setBox(box, x = 5, y = 5, z =5 ) :
     box.GetYAttr().Set(y)
     box.GetZAttr().Set(z)
 
-def setXform(prim, pos = [0,0,0], rot = [0,0,0]) :
-    # Transformation
-    xform = UsdGeom.Xformable(prim)
-    # Translation
-    xform.AddTranslateOp().Set(Gf.Vec3d(*pos))
-    # Rotate
-    xform.AddRotateZYXOp().Set(Gf.Vec3d(*rot))
-
 def test_subtraction_reference(stage = None) :
     # make subtraction
     if not stage :
@@ -28,8 +20,9 @@ def test_subtraction_reference(stage = None) :
     result  = UsdGeom.Mesh.Define(stage,      "/sub1/result")
 
     setBox(solid1, 10,10,10 )
-    # setBox(solid2s, 10, 10, 10)
-    setXform(solid2d.GetPrim(), [10, 10, 10], [45, 0, 0])
+    solid2d.InstallUpdateListener()
+    solid2d.GetTranslationAttr().Set((10,10,10))
+    solid2d.GetRotationAttr().Set((45,0,0))
     sub1.GetSolid1primAttr().Set("solid1")
     sub1.GetSolid2primAttr().Set("solid2")
     sub1.GetSolid3primAttr().Set("result")

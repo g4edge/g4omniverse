@@ -55,6 +55,7 @@ void g4prim_to_meshdata(UsdPrim const& prim,
                         VtIntArray &faceVertexCounts,
                         VtIntArray &faceVertexIndices);
 void g4usdboolean(UsdPrim const &p, g4usdbooleanOperation op);
+void g4usdboolean_multiunion(UsdPrim const& prim);
 PXR_NAMESPACE_CLOSE_SCOPE
 
 Surface_mesh_3* cgal_subtraction(Surface_mesh_3 *sm1, Surface_mesh_3 *sm2);

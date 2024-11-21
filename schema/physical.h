@@ -175,6 +175,50 @@ public:
     UsdAttribute CreateLogicalprimAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
 
 public:
+    // --------------------------------------------------------------------- //
+    // TRANSLATION 
+    // --------------------------------------------------------------------- //
+    /// 
+    ///
+    /// | ||
+    /// | -- | -- |
+    /// | Declaration | `double3 translation = (0, 0, 0)` |
+    /// | C++ Type | GfVec3d |
+    /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double3 |
+    G4_API
+    UsdAttribute GetTranslationAttr() const;
+
+    /// See GetTranslationAttr(), and also 
+    /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
+    /// If specified, author \p defaultValue as the attribute's default,
+    /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
+    /// the default for \p writeSparsely is \c false.
+    G4_API
+    UsdAttribute CreateTranslationAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+
+public:
+    // --------------------------------------------------------------------- //
+    // ROTATION 
+    // --------------------------------------------------------------------- //
+    /// 
+    ///
+    /// | ||
+    /// | -- | -- |
+    /// | Declaration | `double3 rotation = (0, 0, 0)` |
+    /// | C++ Type | GfVec3d |
+    /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double3 |
+    G4_API
+    UsdAttribute GetRotationAttr() const;
+
+    /// See GetRotationAttr(), and also 
+    /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
+    /// If specified, author \p defaultValue as the attribute's default,
+    /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
+    /// the default for \p writeSparsely is \c false.
+    G4_API
+    UsdAttribute CreateRotationAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+
+public:
     // ===================================================================== //
     // Feel free to add custom code below this line, it will be preserved by 
     // the code generator. 
@@ -185,6 +229,8 @@ public:
     //  - Close the include guard with #endif
     // ===================================================================== //
     // --(BEGIN CUSTOM CODE)--
+    void InstallUpdateListener();
+    void Update();
 };
 
 PXR_NAMESPACE_CLOSE_SCOPE

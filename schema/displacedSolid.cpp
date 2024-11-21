@@ -179,3 +179,59 @@ PXR_NAMESPACE_CLOSE_SCOPE
 // 'PXR_NAMESPACE_OPEN_SCOPE', 'PXR_NAMESPACE_CLOSE_SCOPE'.
 // ===================================================================== //
 // --(BEGIN CUSTOM CODE)--
+
+#include <iostream>
+#include "pxr/usd/usd/notice.h"
+
+class DisplacedSolidChangeListener : public pxr::TfWeakBase {
+public:
+  DisplacedSolidChangeListener(pxr::G4DisplacedSolid displaced) : _displaced(displaced) {
+    // Register the listener for object changes
+    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<DisplacedSolidChangeListener>(this),
+                            &DisplacedSolidChangeListener::Update);
+  }
+
+  void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
+
+    if (notice.AffectedObject(_displaced.GetTranslationAttr()) ||
+        notice.AffectedObject(_displaced.GetRotationAttr()) ) {
+      _displaced.Update();
+    }
+  }
+
+private:
+  pxr::G4DisplacedSolid _displaced;
+};
+
+void pxr::G4DisplacedSolid::Update() {
+  std::cout << "G4DisplacedSolid::Update() " << this->GetPrim().GetPath() << std::endl;
+
+  // Get DisplacedSolid position and rotation attributes
+  pxr::GfVec3d translation;
+  pxr::GfVec3d rotation;
+  this->GetTranslationAttr().Get(&translation);
+  this->GetRotationAttr().Get(&rotation);
+
+  // Convert to float
+  pxr::GfVec3f translation_float = GfVec3f(float(translation[0]), float(translation[1]), float(translation[2]));
+  pxr::GfVec3f rotation_float = GfVec3f(float(rotation[0]), float(rotation[1]), float(rotation[2]));
+
+  // Add or update xform operators
+  pxr::UsdGeomXform xformable(*this);
+
+  bool resetsXformStack = false;
+  if (xformable.GetOrderedXformOps(&resetsXformStack).size() == 0) {
+    xformable.AddTranslateOp().Set(translation);
+    xformable.AddRotateZYXOp().Set(rotation_float);
+  }
+  else {
+    this->GetPrim().GetAttribute(pxr::TfToken("xformOp:rotateZYX")).Set(rotation_float);
+    this->GetPrim().GetAttribute(pxr::TfToken("xformOp:translate")).Set(translation);
+  }
+}
+
+void pxr::G4DisplacedSolid::InstallUpdateListener() {
+  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<DisplacedSolidChangeListener>(new DisplacedSolidChangeListener(*this)),
+                          &DisplacedSolidChangeListener::Update,
+                          this->GetPrim().GetStage());
+}

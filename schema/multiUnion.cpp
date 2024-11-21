@@ -215,3 +215,34 @@ PXR_NAMESPACE_CLOSE_SCOPE
 // 'PXR_NAMESPACE_OPEN_SCOPE', 'PXR_NAMESPACE_CLOSE_SCOPE'.
 // ===================================================================== //
 // --(BEGIN CUSTOM CODE)--
+
+#include <iostream>
+#include "cgal_boolean.h"
+#include "pxr/usd/usd/notice.h"
+
+class MultiUnionChangeListener : public pxr::TfWeakBase {
+public:
+  MultiUnionChangeListener(pxr::G4MultiUnion un1on) : _union(un1on) {
+    // Register the listener for object changes
+    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<MultiUnionChangeListener>(this),
+                            &MultiUnionChangeListener::Update);
+  }
+
+  void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
+    std::cout << "updated" << " " << std::endl;
+    _union.Update();
+  }
+
+private:
+  pxr::G4MultiUnion _union;
+};
+
+void pxr::G4MultiUnion::Update() {
+  std::cout << "pxr::G4MultiUnion::Update()" << std::endl;
+  g4usdboolean_multiunion(this->GetPrim());
+}
+
+void pxr::G4MultiUnion::InstallUpdateListener() {
+  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<MultiUnionChangeListener>(new MultiUnionChangeListener(*this)),
+                          &MultiUnionChangeListener::Update);
+}

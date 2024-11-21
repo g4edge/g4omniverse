@@ -144,6 +144,9 @@ void wrapG4DisplacedSolid()
 namespace {
 
 WRAP_CUSTOM {
+  _class
+      .def("Update",&G4DisplacedSolid::Update)
+      .def("InstallUpdateListener",&G4DisplacedSolid::InstallUpdateListener);
 }
 
 }

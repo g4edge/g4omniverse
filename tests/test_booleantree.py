@@ -36,7 +36,9 @@ def test_booleantree(stage = None) :
     sub1.GetSolid3primAttr().Set("result")
 
     setDefaultBox2(sub1_solid2s)
-    setXform(sub1_solid2d.GetPrim(), [0, 0, 0], [90, 0, 0])
+    sub1_solid2d.InstallUpdateListener()
+    sub1_solid2d.GetTranslationAttr().Set((0,0,0))
+    sub1_solid2d.GetRotationAttr().Set((90,0,0))
 
     sub2_solid1 = G4.Box.Define(stage,            "/sub1/solid1/solid1")
     sub2_solid2d = G4.DisplacedSolid.Define(stage,"/sub1/solid1/solid2")
@@ -49,7 +51,9 @@ def test_booleantree(stage = None) :
 
     setDefaultBox(sub2_solid1)
     setDefaultBox2(sub2_solid2s)
-    setXform(sub2_solid2d.GetPrim(), [0, 0, 0], [0, 0, 0])
+    sub2_solid2d.InstallUpdateListener()
+    sub2_solid2d.GetTranslationAttr().Set((0,0,0))
+    sub2_solid2d.GetRotationAttr().Set((0,0,0))
 
     sub1_solid1.Update()
     sub1.Update()

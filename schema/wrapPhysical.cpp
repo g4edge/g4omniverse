@@ -45,6 +45,20 @@ _CreateLogicalprimAttr(G4Physical &self,
     return self.CreateLogicalprimAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
 }
+        
+static UsdAttribute
+_CreateTranslationAttr(G4Physical &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateTranslationAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double3), writeSparsely);
+}
+        
+static UsdAttribute
+_CreateRotationAttr(G4Physical &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateRotationAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double3), writeSparsely);
+}
 
 static std::string
 _Repr(const G4Physical &self)
@@ -101,6 +115,20 @@ void wrapG4Physical()
              &_CreateLogicalprimAttr,
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
+        
+        .def("GetTranslationAttr",
+             &This::GetTranslationAttr)
+        .def("CreateTranslationAttr",
+             &_CreateTranslationAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetRotationAttr",
+             &This::GetRotationAttr)
+        .def("CreateRotationAttr",
+             &_CreateRotationAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
 
         .def("__repr__", ::_Repr)
     ;
@@ -130,6 +158,8 @@ void wrapG4Physical()
 namespace {
 
 WRAP_CUSTOM {
+  _class
+      .def("Update",&G4Physical::Update)
+      .def("InstallUpdateListener",&G4Physical::InstallUpdateListener);
 }
-
 }

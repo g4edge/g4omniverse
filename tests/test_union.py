@@ -12,16 +12,6 @@ def setDefaultBox2(box) :
     box.GetYAttr().Set(2)
     box.GetZAttr().Set(2)
 
-def setXform(prim, pos = [0,0,0], rot = [0,0,0]) :
-    # Transformation
-    xform = UsdGeom.Xformable(prim)
-    # Translation
-    xform.AddTranslateOp().Set(Gf.Vec3d(*pos))
-    # Rotate
-    xform.AddRotateZYXOp().Set(Gf.Vec3d(*rot))
-
-
-
 def test_union(stage = None) :
     # make subtraction
     if not stage :
@@ -36,7 +26,11 @@ def test_union(stage = None) :
     x = G4.DisplacedSolid.Define(stage, "/u1/solid2")
     b2 = G4.Box.Define(stage, "/u1/solid2/b2")
     setDefaultBox2(b2)
-    setXform(x.GetPrim(), [5, 5, 5], [45, 0, 0])
+
+    x.InstallUpdateListener()
+    x.GetTranslationAttr().Set((5,5,5))
+    x.GetRotationAttr().Set((45,0,0))
+
     s.GetSolid1primAttr().Set("b1")
     s.GetSolid2primAttr().Set("solid2")
     s.GetSolid3primAttr().Set("u1result")

@@ -1225,6 +1225,8 @@ class Physical "Physical"
         See for more detail about how 
         purpose is computed and used."""
     )
+    double3 rotation = (0, 0, 0)
+    double3 translation = (0, 0, 0)
     token visibility = "inherited" (
         allowedTokens = ["inherited", "invisible"]
         doc = '''Visibility is meant to be the simplest form of "pruning" 

@@ -12,16 +12,6 @@ def setDefaultBox2(box) :
     box.GetYAttr().Set(1)
     box.GetZAttr().Set(1)
 
-def setXform(prim, pos = [0,0,0], rot = [0,0,0]) :
-    # Transformation
-    xform = UsdGeom.Xformable(prim)
-    # Translation
-    xform.AddTranslateOp().Set(Gf.Vec3d(*pos))
-    # Rotate
-    xform.AddRotateZYXOp().Set(Gf.Vec3d(*rot))
-
-
-
 def test_logcial_physical(stage = None) :
     # make subtraction
     if not stage :
@@ -37,9 +27,15 @@ def test_logcial_physical(stage = None) :
     p2 = G4.Physical.Define(stage, "/det_log/det_phys2")
     p3 = G4.Physical.Define(stage, "/det_log/det_phys3")
     l.GetPrim().GetAttribute("daughters").Set(["det_phys1","det_phys2","det_phys3"])
+    p1.InstallUpdateListener()
+    p2.InstallUpdateListener()
+    p3.InstallUpdateListener()
 
-    setXform(p1, [-5,0,0,],[0,0,0])
-    setXform(p3, [ 5,0,0,],[0,0,0])
+    p1.GetTranslationAttr().Set((-5,0,0,))
+    p3.GetTranslationAttr().Set(( 5,0,0,))
+
+    #setXform(p1, [-5,0,0,],[0,0,0])
+    #setXform(p3, [ 5,0,0,],[0,0,0])
 
     l2 = G4.Logical.Define(stage,"/det_log/det_phys1/sub_log")
     l2_solid =  G4.Box.Define(stage,"/det_log/det_phys1/sub_log/sub_box")

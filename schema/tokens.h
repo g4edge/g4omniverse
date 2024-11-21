@@ -91,7 +91,7 @@ struct G4TokensType {
     const TfToken r2;
     /// \brief "rotation"
     /// 
-    /// G4DisplacedSolid
+    /// G4DisplacedSolid, G4Physical
     const TfToken rotation;
     /// \brief "rotations"
     /// 
@@ -123,7 +123,7 @@ struct G4TokensType {
     const TfToken solidprims;
     /// \brief "translation"
     /// 
-    /// G4DisplacedSolid
+    /// G4DisplacedSolid, G4Physical
     const TfToken translation;
     /// \brief "translations"
     /// 
