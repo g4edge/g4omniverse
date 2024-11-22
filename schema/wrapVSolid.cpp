@@ -155,6 +155,8 @@ void wrapG4VSolid()
 namespace {
 
 WRAP_CUSTOM {
+//  _class
+//      .def("IsOutputAffected",&G4VSolid::IsOutputAffected);
 }
 
 }

@@ -178,3 +178,22 @@ PXR_NAMESPACE_CLOSE_SCOPE
 // 'PXR_NAMESPACE_OPEN_SCOPE', 'PXR_NAMESPACE_CLOSE_SCOPE'.
 // ===================================================================== //
 // --(BEGIN CUSTOM CODE)--
+
+#include <iostream>
+bool pxr::G4VSolid::IsOutputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
+
+    std::cout << "G4VSolid::IsOutputAffected> ";
+    for(auto path : notice.GetChangedInfoOnlyPaths()) {
+      std::cout << path << " ";
+    }
+    std::cout << std::endl;
+
+    return notice.AffectedObject(this->GetPointsAttr()) ||
+           notice.AffectedObject(this->GetFaceVertexCountsAttr()) ||
+           notice.AffectedObject(this->GetFaceVertexIndicesAttr());
+}
+
+ bool pxr::G4VSolid::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
+  return true;
+}
+

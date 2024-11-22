@@ -157,7 +157,8 @@ public:
 
   void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
     std::cout << "updated" << " " << std::endl;
-    _intersection.Update();
+    if(_intersection.IsInputAffected(notice))
+      _intersection.Update();
   }
 
 private:

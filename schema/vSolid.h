@@ -25,6 +25,8 @@
 #include "pxr/base/tf/token.h"
 #include "pxr/base/tf/type.h"
 
+#include "pxr/usd/usd/notice.h"
+
 PXR_NAMESPACE_OPEN_SCOPE
 
 class SdfAssetPath;
@@ -204,6 +206,9 @@ public:
     //  - Close the include guard with #endif
     // ===================================================================== //
     // --(BEGIN CUSTOM CODE)--
+
+    virtual bool IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice);
+    bool IsOutputAffected(const UsdNotice::ObjectsChanged& notice);
 };
 
 PXR_NAMESPACE_CLOSE_SCOPE

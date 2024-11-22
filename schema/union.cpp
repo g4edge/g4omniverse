@@ -157,8 +157,9 @@ public:
   }
 
   void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
-    std::cout << "updated" << " " << std::endl;
-    _union.Update();
+    std::cout << "UnionChangeListener::Update>" << " " << std::endl;
+    if(_union.IsInputAffected(notice))
+        _union.Update();
   }
 
 private:

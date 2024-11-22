@@ -231,6 +231,7 @@ public:
     // --(BEGIN CUSTOM CODE)--
     void InstallUpdateListener();
     void Update();
+    virtual bool IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) override;
 };
 
 PXR_NAMESPACE_CLOSE_SCOPE

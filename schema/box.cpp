@@ -199,6 +199,32 @@ PXR_NAMESPACE_CLOSE_SCOPE
 // --(BEGIN CUSTOM CODE)--
 
 #include <iostream>
+#include "pxr/usd/usd/notice.h"
+
+class BoxChangeListener : public pxr::TfWeakBase {
+public:
+  BoxChangeListener(pxr::G4Box box) : _box(box) {
+    // Register the listener for object changes
+    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<BoxChangeListener>(this),
+                            &BoxChangeListener::Update);
+  }
+
+  void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
+
+    if (_box.IsInputAffected(notice)) {
+      _box.Update();
+    }
+  }
+
+private:
+  pxr::G4Box _box;
+};
+
+
+void pxr::G4Box::InstallUpdateListener() {
+  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<BoxChangeListener>(new BoxChangeListener(*this)),
+                          &BoxChangeListener::Update);
+}
 
 void pxr::G4Box::Update() {
   std::cout << "G4Box::Update() " << this->GetPrim().GetPath() << std::endl;
@@ -240,7 +266,7 @@ void pxr::G4Box::Update() {
                         0,7,4,
                         4,6,5,
                         4,7,6
-                        };
+  };
 
   p.Set(pArray);
   vc.Set(vcArray);
@@ -250,30 +276,14 @@ void pxr::G4Box::Update() {
   auto parent = GetPrim().GetParent();
 }
 
-#include "pxr/usd/usd/notice.h"
-
-class BoxChangeListener : public pxr::TfWeakBase {
-public:
-  BoxChangeListener(pxr::G4Box box) : _box(box) {
-    // Register the listener for object changes
-    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<BoxChangeListener>(this),
-                            &BoxChangeListener::Update);
+bool pxr::G4Box::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
+  std::cout << "G4Box::IsInputAffected> ";
+  for(auto path : notice.GetChangedInfoOnlyPaths()) {
+    std::cout << path <<  " ";
   }
+  std::cout << std::endl;
 
-  void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
-
-    if (notice.AffectedObject(_box.GetXAttr()) ||
-        notice.AffectedObject(_box.GetYAttr()) ||
-        notice.AffectedObject(_box.GetZAttr())) {
-      _box.Update();
-    }
-  }
-
-private:
-  pxr::G4Box _box;
-};
-
-void pxr::G4Box::InstallUpdateListener() {
-  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<BoxChangeListener>(new BoxChangeListener(*this)),
-                          &BoxChangeListener::Update);
+  return notice.AffectedObject(this->GetXAttr()) ||
+         notice.AffectedObject(this->GetYAttr()) ||
+         notice.AffectedObject(this->GetZAttr());
 }

@@ -182,6 +182,10 @@ PXR_NAMESPACE_CLOSE_SCOPE
 
 #include <iostream>
 #include "pxr/usd/usd/notice.h"
+#include "vSolid.h"
+#include "union.h"
+#include "intersection.h"
+#include "subtraction.h"
 
 class DisplacedSolidChangeListener : public pxr::TfWeakBase {
 public:
@@ -192,9 +196,8 @@ public:
   }
 
   void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
-
-    if (notice.AffectedObject(_displaced.GetTranslationAttr()) ||
-        notice.AffectedObject(_displaced.GetRotationAttr()) ) {
+    std::cout << "DisplacedSolidChangeListener::Update()" << std::endl;
+    if (_displaced.IsInputAffected(notice)) {
       _displaced.Update();
     }
   }
@@ -234,4 +237,36 @@ void pxr::G4DisplacedSolid::InstallUpdateListener() {
   pxr::TfNotice::Register(pxr::TfCreateWeakPtr<DisplacedSolidChangeListener>(new DisplacedSolidChangeListener(*this)),
                           &DisplacedSolidChangeListener::Update,
                           this->GetPrim().GetStage());
+}
+
+bool pxr::G4DisplacedSolid::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
+  std::cout << "G4DisplacedSolid::IsInputAffected> " ;
+  for(auto path : notice.GetChangedInfoOnlyPaths()) {
+    std::cout << path << " ";
+  }
+  std::cout << std::endl;
+
+  auto solidprim = *this->GetPrim().GetChildren().begin();
+
+  bool solidbool = false;
+  if(solidprim.GetTypeName() == "Subtraction") solidbool = G4Subtraction(solidprim).IsOutputAffected(notice);
+  else if(solidprim.GetTypeName() == "Union")  solidbool = G4Union(solidprim).IsOutputAffected(notice);
+  else if(solidprim.GetTypeName() == "Intersection") solidbool = G4Subtraction(solidprim).IsOutputAffected(notice);
+  else solidbool = G4VSolid(solidprim).IsOutputAffected(notice);
+
+  return notice.AffectedObject(this->GetTranslationAttr()) ||
+         notice.AffectedObject(this->GetRotationAttr()) ||
+         solidbool;
+}
+
+bool pxr::G4DisplacedSolid::IsOutputAffected(const UsdNotice::ObjectsChanged& notice) {
+  std::cout << "G4DisplacedSolid::IsOutputAffected> ";
+  for(auto path : notice.GetChangedInfoOnlyPaths()) {
+    std::cout << path << " " ;
+  }
+  std::cout << std::endl;
+
+  return notice.AffectedObject(this->GetPrim().GetAttribute(pxr::TfToken("xformOp:rotateZYX"))) ||
+         notice.AffectedObject(this->GetPrim().GetAttribute(pxr::TfToken("xformOp:translate"))) ||
+         this->IsInputAffected(notice);
 }

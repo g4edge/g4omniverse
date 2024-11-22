@@ -197,3 +197,63 @@ PXR_NAMESPACE_CLOSE_SCOPE
 // 'PXR_NAMESPACE_OPEN_SCOPE', 'PXR_NAMESPACE_CLOSE_SCOPE'.
 // ===================================================================== //
 // --(BEGIN CUSTOM CODE)--
+
+#include <iostream>
+#include "vSolid.h"
+#include "displacedSolid.h"
+#include "union.h"
+#include "intersection.h"
+#include "subtraction.h"
+
+bool pxr::G4BooleanSolid::IsOutputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
+  std::cout << "G4BooleanSolid::IsOutputAffected> " << std::endl;
+  for(auto path : notice.GetChangedInfoOnlyPaths()) {
+    std::cout << path << " ";
+  }
+  std::cout << std::endl;
+
+  std::string solid3name;
+  this->GetSolid3primAttr().Get(&solid3name);
+
+  auto solid3prim = this->GetPrim().GetChild(pxr::TfToken(solid3name));
+
+  return notice.AffectedObject(solid3prim.GetAttribute(pxr::TfToken("Points"))) ||
+         notice.AffectedObject(solid3prim.GetAttribute(pxr::TfToken("FaceVertexCounts"))) ||
+         notice.AffectedObject(solid3prim.GetAttribute(pxr::TfToken("FaceVertexIndices")));
+}
+
+bool pxr::G4BooleanSolid::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
+  std::cout << "G4BooleanSolid::IsInputAffected> ";
+  for(auto path : notice.GetChangedInfoOnlyPaths()) {
+    std::cout << path << " " ;
+  }
+  std::cout << std::endl;
+
+  std::string solid1name;
+  std::string solid2name;
+
+  this->GetSolid1primAttr().Get(&solid1name);
+  this->GetSolid2primAttr().Get(&solid2name);
+
+  auto solid1prim = this->GetPrim().GetChild(pxr::TfToken(solid1name));
+  auto solid2prim = this->GetPrim().GetChild(pxr::TfToken(solid2name));
+
+  bool solid1bool = false;
+
+  std::cout << "G4BooleanSolid::IsInputAffected> objects " << solid1prim.GetTypeName() << " " << solid2prim.GetTypeName() << std::endl;
+
+  if(solid1prim.GetTypeName() == "DisplacedSolid") solid1bool = G4DisplacedSolid(solid1prim).IsOutputAffected(notice);
+  else if(solid1prim.GetTypeName() == "Subtraction") solid1bool = G4Subtraction(solid1prim).IsOutputAffected(notice);
+  else if(solid1prim.GetTypeName() == "Union")  solid1bool = G4Union(solid1prim).IsOutputAffected(notice);
+  else if(solid1prim.GetTypeName() == "Intersection") solid1bool = G4Subtraction(solid1prim).IsOutputAffected(notice);
+  else solid1bool = G4VSolid(solid1prim).IsOutputAffected(notice);
+
+  bool solid2bool = false;
+  if(solid2prim.GetTypeName() == "DisplacedSolid") solid2bool = G4DisplacedSolid(solid2prim).IsOutputAffected(notice);
+  else if(solid2prim.GetTypeName() == "Subtraction") solid2bool = G4Subtraction(solid2prim).IsOutputAffected(notice);
+  else if(solid2prim.GetTypeName() == "Union")  solid2bool = G4Union(solid2prim).IsOutputAffected(notice);
+  else if(solid2prim.GetTypeName() == "Intersection") solid2bool = G4Subtraction(solid2prim).IsOutputAffected(notice);
+  else solid2bool = G4VSolid(solid2prim).IsOutputAffected(notice);
+
+  return solid1bool || solid2bool;
+}

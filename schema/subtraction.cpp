@@ -166,7 +166,10 @@ public:
 
   void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
     // std::cout << "updated" << " " << std::endl;
-    _sub.Update();
+
+    // get names of dependent solids
+    if(_sub.IsInputAffected(notice))
+      _sub.Update();
   }
 
 private:
