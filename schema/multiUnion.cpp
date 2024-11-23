@@ -248,10 +248,28 @@ void pxr::G4MultiUnion::Update() {
 }
 
 bool pxr::G4MultiUnion::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
+  // loop over transformations and apply to displaced solids
+
+  // check if displaced solids are updated
+
   return true;
 }
+
 bool pxr::G4MultiUnion::IsOutputAffected(const UsdNotice::ObjectsChanged& notice) {
-  return true;
+  std::cout << "G4MultiUnion::IsOutputAffected> ";
+  for(auto path : notice.GetChangedInfoOnlyPaths()) {
+    std::cout << path << " ";
+  }
+  std::cout << std::endl;
+
+  std::string solid3name;
+  this->GetSolid3primAttr().Get(&solid3name);
+
+  auto solid3prim = this->GetPrim().GetChild(pxr::TfToken(solid3name));
+
+  return notice.AffectedObject(solid3prim.GetAttribute(pxr::TfToken("Points"))) ||
+         notice.AffectedObject(solid3prim.GetAttribute(pxr::TfToken("FaceVertexCounts"))) ||
+         notice.AffectedObject(solid3prim.GetAttribute(pxr::TfToken("FaceVertexIndices")));
 }
 
 

@@ -155,6 +155,7 @@ void g4usdboolean(UsdPrim const& prim, g4usdbooleanOperation op) {
   bool resetsXformStack = false;
   xformable.GetLocalTransformation(&trans, &resetsXformStack);
 
+  /* TODO (replace with G4 attribute opposed to xform transformation) */
   auto rotn = Aff_transformation_3(trans[0][0],trans[1][0],trans[2][0],
                                    trans[0][1],trans[1][1],trans[2][1],
                                    trans[0][2],trans[1][2],trans[2][2],1);
@@ -196,13 +197,13 @@ void g4usdboolean(UsdPrim const& prim, g4usdbooleanOperation op) {
 }
 
 void g4usdboolean_multiunion(UsdPrim const& prim) {
-  std::cout << "g4usdboolean_multiunion> getting solid names" << std::endl;
+  std::cout << "g4usdboolean_multiunion> getting solid names, translations and rotations" << std::endl;
 
   VtArray<std::string> solidnames;
   VtArray<GfVec3d> translations;
   VtArray<GfVec3f> rotations;
 
-  prim.GetAttribute(TfToken("solidnames")).Get(&solidnames);
+  prim.GetAttribute(TfToken("solidprims")).Get(&solidnames);
   prim.GetAttribute(TfToken("translations")).Get(&translations);
   prim.GetAttribute(TfToken("rotations")).Get(&rotations);
 
@@ -212,32 +213,87 @@ void g4usdboolean_multiunion(UsdPrim const& prim) {
   Surface_mesh_3 *sm2 = nullptr;
   Surface_mesh_3 *sm3 = nullptr;
 
+  VtArray<GfVec3f> points;
+  VtArray<int> vc;
+  VtArray<int> vi;
+
+  std::cout << "g4usdboolean_multiunion> looping over displaced solids " << solidnames.size() << std::endl;
   for (size_t i = 0; i < solidnames.size(); ++i) {
-    auto solidprim = solidnames[i];
+    std::cout << "g4usdboolean_multiunion> solid " << i << std::endl;
+
+
+    auto solidname = solidnames[i];
     auto translation = translations[i];
     auto rotation = rotations[i];
 
+    // all children must be displaced solids
+    auto solid = *prim.GetChild(TfToken(solidname)).GetChildren().begin();
+
+    points.clear();
+    vc.clear();
+    vi.clear();
+
+    g4prim_to_meshdata(solid, points, vc, vi );
 
     if (i==0) {
-      // load into sm1
+      std::cout << "g4usdboolean_multiunion> first solid " << i << std::endl;
+      sm1 = usdmesh_to_cgal(points,vc,vi);
+
+      /* TODO (rotation of daughter meshes)
+      auto rotn = Aff_transformation_3(trans[0][0],trans[1][0],trans[2][0],
+                                       trans[0][1],trans[1][1],trans[2][1],
+                                       trans[0][2],trans[1][2],trans[2][2],1);
+      CGAL::Polygon_mesh_processing::transform(rotn,*sm1);
+      */
+
+      auto tr3 = Vector_3(translation[0],translation[1],translation[2]);
+      auto at3 = Aff_transformation_3(CGAL::TRANSLATION, tr3);
+
+      CGAL::Polygon_mesh_processing::transform(at3,*sm1);
+
     }
     else {
-      // get mesh and load into sm2
+      std::cout << "g4usdboolean_multiunion> other solid " << i << std::endl;
 
+      sm2 = usdmesh_to_cgal(points,vc,vi);
+
+      /* TODO (rotation of daughter meshes)
+       auto rotn = Aff_transformation_3(trans[0][0],trans[1][0],trans[2][0],
+                                        trans[0][1],trans[1][1],trans[2][1],
+                                        trans[0][2],trans[1][2],trans[2][2],1);
+       CGAL::Polygon_mesh_processing::transform(rotn,*sm1);
+       */
+
+      auto tr3 = Vector_3(translation[0],translation[1],translation[2]);
+      auto at3 = Aff_transformation_3(CGAL::TRANSLATION, tr3);
+
+      CGAL::Polygon_mesh_processing::transform(at3,*sm2);
 
       // perform union
       sm3 = cgal_union(sm1, sm2);
-      delete sm1;
-      delete sm2;
+      if(sm1 != nullptr) delete sm1;
+      if(sm2 != nullptr) delete sm2;
       sm1 = sm3;
     }
   }
 
   // copy sm1 back to USD
+  points.clear();
+  vc.clear();
+  vi.clear();
+
+  cgal_to_usdmesh(points,vc,vi,sm1);
+
+  std::string solid3Name;
+  prim.GetAttribute(pxr::TfToken("solid3prim")).Get(&solid3Name);
+  auto solid3 = prim.GetChild(pxr::TfToken(solid3Name));
+
+  solid3.GetAttribute(pxr::TfToken("points")).Set(points);
+  solid3.GetAttribute(pxr::TfToken("faceVertexCounts")).Set(vc);
+  solid3.GetAttribute(pxr::TfToken("faceVertexIndices")).Set(vi);
 
   // clean up memory
-  delete sm1;
-
+  if(sm1 != nullptr) delete sm1;
 }
 
 PXR_NAMESPACE_CLOSE_SCOPE

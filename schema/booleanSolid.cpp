@@ -206,7 +206,7 @@ PXR_NAMESPACE_CLOSE_SCOPE
 #include "subtraction.h"
 
 bool pxr::G4BooleanSolid::IsOutputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
-  std::cout << "G4BooleanSolid::IsOutputAffected> " << std::endl;
+  std::cout << "G4BooleanSolid::IsOutputAffected> ";
   for(auto path : notice.GetChangedInfoOnlyPaths()) {
     std::cout << path << " ";
   }
