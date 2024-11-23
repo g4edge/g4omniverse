@@ -237,12 +237,21 @@ private:
   pxr::G4MultiUnion _union;
 };
 
+void pxr::G4MultiUnion::InstallUpdateListener() {
+  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<MultiUnionChangeListener>(new MultiUnionChangeListener(*this)),
+                          &MultiUnionChangeListener::Update);
+}
+
 void pxr::G4MultiUnion::Update() {
   std::cout << "pxr::G4MultiUnion::Update()" << std::endl;
   g4usdboolean_multiunion(this->GetPrim());
 }
 
-void pxr::G4MultiUnion::InstallUpdateListener() {
-  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<MultiUnionChangeListener>(new MultiUnionChangeListener(*this)),
-                          &MultiUnionChangeListener::Update);
+bool pxr::G4MultiUnion::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
+  return true;
 }
+bool pxr::G4MultiUnion::IsOutputAffected(const UsdNotice::ObjectsChanged& notice) {
+  return true;
+}
+
+
