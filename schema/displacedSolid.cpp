@@ -206,6 +206,12 @@ private:
   pxr::G4DisplacedSolid _displaced;
 };
 
+void pxr::G4DisplacedSolid::InstallUpdateListener() {
+  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<DisplacedSolidChangeListener>(new DisplacedSolidChangeListener(*this)),
+                          &DisplacedSolidChangeListener::Update,
+                          this->GetPrim().GetStage());
+}
+
 void pxr::G4DisplacedSolid::Update() {
   std::cout << "G4DisplacedSolid::Update() " << this->GetPrim().GetPath() << std::endl;
 
@@ -231,12 +237,6 @@ void pxr::G4DisplacedSolid::Update() {
     this->GetPrim().GetAttribute(pxr::TfToken("xformOp:rotateZYX")).Set(rotation_float);
     this->GetPrim().GetAttribute(pxr::TfToken("xformOp:translate")).Set(translation);
   }
-}
-
-void pxr::G4DisplacedSolid::InstallUpdateListener() {
-  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<DisplacedSolidChangeListener>(new DisplacedSolidChangeListener(*this)),
-                          &DisplacedSolidChangeListener::Update,
-                          this->GetPrim().GetStage());
 }
 
 bool pxr::G4DisplacedSolid::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
