@@ -121,40 +121,6 @@ G4MultiUnion::CreateSolidprimsAttr(VtValue const &defaultValue, bool writeSparse
 }
 
 UsdAttribute
-G4MultiUnion::GetTranslationsAttr() const
-{
-    return GetPrim().GetAttribute(G4Tokens->translations);
-}
-
-UsdAttribute
-G4MultiUnion::CreateTranslationsAttr(VtValue const &defaultValue, bool writeSparsely) const
-{
-    return UsdSchemaBase::_CreateAttr(G4Tokens->translations,
-                       SdfValueTypeNames->Double3Array,
-                       /* custom = */ false,
-                       SdfVariabilityVarying,
-                       defaultValue,
-                       writeSparsely);
-}
-
-UsdAttribute
-G4MultiUnion::GetRotationsAttr() const
-{
-    return GetPrim().GetAttribute(G4Tokens->rotations);
-}
-
-UsdAttribute
-G4MultiUnion::CreateRotationsAttr(VtValue const &defaultValue, bool writeSparsely) const
-{
-    return UsdSchemaBase::_CreateAttr(G4Tokens->rotations,
-                       SdfValueTypeNames->Double3Array,
-                       /* custom = */ false,
-                       SdfVariabilityVarying,
-                       defaultValue,
-                       writeSparsely);
-}
-
-UsdAttribute
 G4MultiUnion::GetSolid3primAttr() const
 {
     return GetPrim().GetAttribute(G4Tokens->solid3prim);
@@ -190,8 +156,6 @@ G4MultiUnion::GetSchemaAttributeNames(bool includeInherited)
     static TfTokenVector localNames = {
         G4Tokens->g4type,
         G4Tokens->solidprims,
-        G4Tokens->translations,
-        G4Tokens->rotations,
         G4Tokens->solid3prim,
     };
     static TfTokenVector allNames =
@@ -218,6 +182,7 @@ PXR_NAMESPACE_CLOSE_SCOPE
 
 #include <iostream>
 #include "cgal_boolean.h"
+#include "displacedSolid.h"
 #include "pxr/usd/usd/notice.h"
 
 class MultiUnionChangeListener : public pxr::TfWeakBase {
@@ -230,7 +195,9 @@ public:
 
   void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
     std::cout << "updated" << " " << std::endl;
-    _union.Update();
+    if(_union.IsInputAffected(notice)) {
+      _union.Update();
+    }
   }
 
 private:
@@ -248,11 +215,20 @@ void pxr::G4MultiUnion::Update() {
 }
 
 bool pxr::G4MultiUnion::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
-  // loop over transformations and apply to displaced solids
+  std::cout << "G4MultiUnion::IsInputAffected> ";
+  for(auto path : notice.GetChangedInfoOnlyPaths()) {
+    std::cout << path << " " ;
+  }
 
+  bool update = false;
   // check if displaced solids are updated
+  for(auto it = this->GetPrim().GetChildren().begin(); it != this->GetPrim().GetChildren().end(); it++) {
+    if (it->GetTypeName() == "DisplacedSolid") {
+      update = update || G4DisplacedSolid(*it).IsOutputAffected(notice);
+    }
+  }
 
-  return true;
+  return update;
 }
 
 bool pxr::G4MultiUnion::IsOutputAffected(const UsdNotice::ObjectsChanged& notice) {

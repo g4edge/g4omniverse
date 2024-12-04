@@ -93,10 +93,6 @@ struct G4TokensType {
     /// 
     /// G4DisplacedSolid, G4Physical
     const TfToken rotation;
-    /// \brief "rotations"
-    /// 
-    /// G4MultiUnion
-    const TfToken rotations;
     /// \brief "sensitiveprim"
     /// 
     /// G4Logical
@@ -125,10 +121,6 @@ struct G4TokensType {
     /// 
     /// G4DisplacedSolid, G4Physical
     const TfToken translation;
-    /// \brief "translations"
-    /// 
-    /// G4MultiUnion
-    const TfToken translations;
     /// \brief "x"
     /// 
     /// G4Box

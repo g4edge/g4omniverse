@@ -186,6 +186,7 @@ PXR_NAMESPACE_CLOSE_SCOPE
 #include "union.h"
 #include "intersection.h"
 #include "subtraction.h"
+#include "multiUnion.h"
 
 class DisplacedSolidChangeListener : public pxr::TfWeakBase {
 public:
@@ -252,6 +253,7 @@ bool pxr::G4DisplacedSolid::IsInputAffected(const pxr::UsdNotice::ObjectsChanged
   if(solidprim.GetTypeName() == "Subtraction") solidbool = G4Subtraction(solidprim).IsOutputAffected(notice);
   else if(solidprim.GetTypeName() == "Union")  solidbool = G4Union(solidprim).IsOutputAffected(notice);
   else if(solidprim.GetTypeName() == "Intersection") solidbool = G4Subtraction(solidprim).IsOutputAffected(notice);
+  else if(solidprim.GetTypeName() == "MultiUnion") solidbool = G4MultiUnion(solidprim).IsOutputAffected(notice);
   else solidbool = G4VSolid(solidprim).IsOutputAffected(notice);
 
   return notice.AffectedObject(this->GetTranslationAttr()) ||

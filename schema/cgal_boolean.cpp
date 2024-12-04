@@ -223,11 +223,15 @@ void g4usdboolean_multiunion(UsdPrim const& prim) {
 
 
     auto solidname = solidnames[i];
-    auto translation = translations[i];
-    auto rotation = rotations[i];
+    pxr::GfVec3d translation;
+    pxr::GfVec3d rotation;
 
     // all children must be displaced solids
+    auto displacedsolid = prim.GetChild(TfToken(solidname));
     auto solid = *prim.GetChild(TfToken(solidname)).GetChildren().begin();
+
+    displacedsolid.GetAttribute(pxr::TfToken("translation")).Get(&translation);
+    displacedsolid.GetAttribute(pxr::TfToken("rotation")).Get(&rotation);
 
     points.clear();
     vc.clear();

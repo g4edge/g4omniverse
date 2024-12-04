@@ -51,15 +51,7 @@ def test_multiunion(stage = None) :
     d4.GetTranslationAttr().Set((24,24,24))
     d4.GetRotationAttr().Set((0,0,0))
 
-    # mu.InstallUpdateListener()
-    mu.GetTranslationsAttr().Set(((0,0,0),
-                                  (10,10,10),
-                                  (18,18,18),
-                                  (24,24,24)))
-    mu.GetRotationsAttr().Set(((0,0,0),
-                               (0,0,0),
-                               (0,0,0),
-                               (0,0,0)))
+
     mu.GetSolidprimsAttr().Set(["solid1","solid2","solid3","solid4"])
     mu.GetSolid3primAttr().Set("result")
 

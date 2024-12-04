@@ -204,6 +204,7 @@ PXR_NAMESPACE_CLOSE_SCOPE
 #include "union.h"
 #include "intersection.h"
 #include "subtraction.h"
+#include "multiUnion.h"
 
 bool pxr::G4BooleanSolid::IsOutputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
   std::cout << "G4BooleanSolid::IsOutputAffected> ";
@@ -246,6 +247,7 @@ bool pxr::G4BooleanSolid::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& 
   else if(solid1prim.GetTypeName() == "Subtraction") solid1bool = G4Subtraction(solid1prim).IsOutputAffected(notice);
   else if(solid1prim.GetTypeName() == "Union")  solid1bool = G4Union(solid1prim).IsOutputAffected(notice);
   else if(solid1prim.GetTypeName() == "Intersection") solid1bool = G4Subtraction(solid1prim).IsOutputAffected(notice);
+  else if(solid1prim.GetTypeName() == "MultiUnion") solid1bool = G4MultiUnion(solid1prim).IsOutputAffected(notice);
   else solid1bool = G4VSolid(solid1prim).IsOutputAffected(notice);
 
   bool solid2bool = false;
@@ -253,6 +255,7 @@ bool pxr::G4BooleanSolid::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& 
   else if(solid2prim.GetTypeName() == "Subtraction") solid2bool = G4Subtraction(solid2prim).IsOutputAffected(notice);
   else if(solid2prim.GetTypeName() == "Union")  solid2bool = G4Union(solid2prim).IsOutputAffected(notice);
   else if(solid2prim.GetTypeName() == "Intersection") solid2bool = G4Subtraction(solid2prim).IsOutputAffected(notice);
+  else if(solid1prim.GetTypeName() == "MultiUnion") solid1bool = G4MultiUnion(solid1prim).IsOutputAffected(notice);
   else solid2bool = G4VSolid(solid2prim).IsOutputAffected(notice);
 
   return solid1bool || solid2bool;
