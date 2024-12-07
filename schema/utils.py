@@ -14,6 +14,7 @@ def traverse_add_listeners(stage) :
             G4.Subtraction(x).InstallUpdateListener()
         elif x.GetTypeName() == "Intersection" :
             G4.Intersection(x).InstallUpdateListener()
-
+        else :
+            print("Not found", x.GetTypeName())
 
 
