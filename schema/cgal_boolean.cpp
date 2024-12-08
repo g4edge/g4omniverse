@@ -12,6 +12,8 @@
 #include "pxr/usd/usdGeom/xformable.h"
 #include "pxr/base/gf/matrix4d.h"
 
+// #define CGAL_BOOLEAN_DEUBUG
+
 Surface_mesh_3* usdmesh_to_cgal(pxr::VtVec3fArray &points,
                                 pxr::VtIntArray &faceVertexCounts,
                                 pxr::VtIntArray &faceVertexIndices) {
@@ -78,10 +80,14 @@ void g4prim_to_meshdata(UsdPrim const& prim,
 
   std::string g4type;
   prim.GetAttribute(TfToken("g4type")).Get(&g4type);
-  // std::cout << "g4prim_to_meshdata> " << g4type << std::endl;
+#ifdef CGAL_BOOLEAN_DEUBUG
+  std::cout << "g4prim_to_meshdata> " << g4type << std::endl;
+#endif
 
   if(g4type == "Subtraction" || g4type == "Union" || g4type == "Intersection") {
-    // std::cout << "g4prim_to_meshdata> Boolean" << std::endl;
+#ifdef CGAL_BOOLEAN_DEUBUG
+    std::cout << "g4prim_to_meshdata> Boolean" << std::endl;
+#endif
     std::string resultName;
     prim.GetAttribute(pxr::TfToken("solid3prim")).Get(&resultName);
     prim.GetChild(TfToken(resultName)).GetAttribute(TfToken("points")).Get(&points);
@@ -89,7 +95,9 @@ void g4prim_to_meshdata(UsdPrim const& prim,
     prim.GetChild(TfToken(resultName)).GetAttribute(TfToken("faceVertexIndices")).Get(&faceVertexIndices);
   }
   else if(g4type== "DisplacedSolid") {
-    // std::cout << "g4prim_to_meshdata> DisplacedSolid" << std::endl;
+#ifdef CGAL_BOOLEAN_DEUBUG
+    std::cout << "g4prim_to_meshdata> DisplacedSolid" << std::endl;
+#endif
     std::string displaced_g4type;
     prim.GetChildren().begin()->GetAttribute(TfToken("g4type")).Get(&displaced_g4type);
     if (displaced_g4type == "Subtraction" ||
@@ -104,7 +112,9 @@ void g4prim_to_meshdata(UsdPrim const& prim,
     }
   }
   else {
-    // std::cout << "g4prim_to_meshdata> Geant4 solid" << std::endl;
+#ifdef CGAL_BOOLEAN_DEUBUG
+    std::cout << "g4prim_to_meshdata> Geant4 solid" << std::endl;
+#endif
     prim.GetAttribute(TfToken("points")).Get(&points);
     prim.GetAttribute(TfToken("faceVertexCounts")).Get(&faceVertexCounts);
     prim.GetAttribute(TfToken("faceVertexIndices")).Get(&faceVertexIndices);
@@ -112,44 +122,68 @@ void g4prim_to_meshdata(UsdPrim const& prim,
 }
 
 void g4usdboolean(UsdPrim const& prim, g4usdbooleanOperation op) {
-
-  // std::cout << "g4usdboolean>" << std::endl;
-
+#ifdef CGAL_BOOLEAN_DEUBUG
+  std::cout << "g4usdboolean>" << std::endl;
+#endif
   // get solid names
   std::string solid1Name;
   std::string solid2Name;
   std::string solid3Name;
-  // std::cout << "g4usdboolean> getting solid names" << std::endl;
+
+#ifdef CGAL_BOOLEAN_DEUBUG
+  std::cout << "g4usdboolean> getting solid names" << std::endl;
+#endif
   prim.GetAttribute(pxr::TfToken("solid1prim")).Get(&solid1Name);
   prim.GetAttribute(pxr::TfToken("solid2prim")).Get(&solid2Name);
   prim.GetAttribute(pxr::TfToken("solid3prim")).Get(&solid3Name);
-  //std::cout << "g4usdboolean> got solid names" << " "
-  //          << solid1Name << " "
-  //          << solid2Name << " "
-  //          << solid3Name << " " << std::endl;
+
+#ifdef CGAL_BOOLEAN_DEUBUG
+  std::cout << "g4usdboolean> got solid names" << " "
+            << solid1Name << " "
+            << solid2Name << " "
+            << solid3Name << " " << std::endl;
+#endif
 
   // get solid prims
-  // std::cout << "g4usdboolean> getting solid prims"  << std::endl;
+#ifdef CGAL_BOOLEAN_DEUBUG
+  std::cout << "g4usdboolean> getting solid prims"  << std::endl;
+#endif
   auto solid1 = prim.GetChild(pxr::TfToken(solid1Name));
   auto solid2 = prim.GetChild(pxr::TfToken(solid2Name));
   auto solid3 = prim.GetChild(pxr::TfToken(solid3Name));
-  // std::cout << "g4usdboolean> got solid prims"  << std::endl;
+
+#ifdef CGAL_BOOLEAN_DEUBUG
+  std::cout << "g4usdboolean> got solid prims"  << std::endl;
+#endif
 
   VtArray<GfVec3f> points;
   VtArray<int> vc;
   VtArray<int> vi;
 
-  // std::cout << "g4usdboolean> getting solid1 data" << " " << solid1Name << std::endl;
+#ifdef CGAL_BOOLEAN_DEUBUG
+  std::cout << "g4usdboolean> getting solid1 data" << " " << solid1Name << std::endl;
+#endif
   g4prim_to_meshdata(solid1, points, vc, vi );
-  // std::cout << "g4usdboolean> got solid1 data" << std::endl;
+
+#ifdef CGAL_BOOLEAN_DEUBUG
+  std::cout << "g4usdboolean> got solid1 data" << std::endl;
+#endif
   auto sm1 = usdmesh_to_cgal(points,vc,vi);
 
-  // std::cout << "g4usdboolean> getting solid2 data" << " " << solid2Name << std::endl;
+#ifdef CGAL_BOOLEAN_DEUBUG
+  std::cout << "g4usdboolean> getting solid2 data" << " " << solid2Name << std::endl;
+#endif
   g4prim_to_meshdata(solid2, points, vc, vi );
-  // std::cout << "g4usdboolean> got solid2 data" << std::endl;
+
+#ifdef CGAL_BOOLEAN_DEUBUG
+  std::cout << "g4usdboolean> got solid2 data" << std::endl;
+#endif
   auto sm2 = usdmesh_to_cgal(points,vc,vi);
 
   // Transform sm2
+#ifdef CGAL_BOOLEAN_DEUBUG
+  std::cout << "g4usdboolean> transformation of solid2" << std::endl;
+#endif
   pxr::UsdGeomXformable xformable(solid2);
   GfMatrix4d trans;
   bool resetsXformStack = false;
@@ -167,7 +201,10 @@ void g4usdboolean(UsdPrim const& prim, g4usdbooleanOperation op) {
 
   CGAL::Polygon_mesh_processing::transform(at3,*sm2);
 
-  // Compute subtraction
+  // Compute boolean
+#ifdef CGAL_BOOLEAN_DEUBUG
+  std::cout << "g4usdboolean> compute boolean" << std::endl;
+#endif
 
   Surface_mesh_3 *sm3 = nullptr;
   if(op == SUBTRACTION) {
@@ -186,19 +223,21 @@ void g4usdboolean(UsdPrim const& prim, g4usdbooleanOperation op) {
   vi.clear();
   cgal_to_usdmesh(points,vc,vi,sm3);
 
-  solid3.GetAttribute(pxr::TfToken("points")).Set(points);
   solid3.GetAttribute(pxr::TfToken("faceVertexCounts")).Set(vc);
   solid3.GetAttribute(pxr::TfToken("faceVertexIndices")).Set(vi);
-  // std::cout << "g4usdboolean> set solid3 data" << std::endl;
-
+  solid3.GetAttribute(pxr::TfToken("points")).Set(points);
+#ifdef CGAL_BOOLEAN_DEUBUG
+  std::cout << "g4usdboolean> set solid3 data" << std::endl;
+#endif
   delete sm1;
   delete sm2;
   delete sm3;
 }
 
 void g4usdboolean_multiunion(UsdPrim const& prim) {
-  // std::cout << "g4usdboolean_multiunion> getting solid names, translations and rotations" << std::endl;
-
+#ifdef CGAL_BOOLEAN_DEUBUG
+  std::cout << "g4usdboolean_multiunion> getting solid names, translations and rotations" << std::endl;
+#endif
   VtArray<std::string> solidnames;
   VtArray<GfVec3d> translations;
   VtArray<GfVec3f> rotations;
@@ -217,10 +256,13 @@ void g4usdboolean_multiunion(UsdPrim const& prim) {
   VtArray<int> vc;
   VtArray<int> vi;
 
-  // std::cout << "g4usdboolean_multiunion> looping over displaced solids " << solidnames.size() << std::endl;
+#ifdef CGAL_BOOLEAN_DEUBUG
+  std::cout << "g4usdboolean_multiunion> looping over displaced solids " << solidnames.size() << std::endl;
+#endif
   for (size_t i = 0; i < solidnames.size(); ++i) {
-    // std::cout << "g4usdboolean_multiunion> solid " << i << std::endl;
-
+#ifdef CGAL_BOOLEAN_DEUBUG
+    std::cout << "g4usdboolean_multiunion> solid " << i << std::endl;
+#endif
 
     auto solidname = solidnames[i];
     pxr::GfVec3d translation;
@@ -240,7 +282,10 @@ void g4usdboolean_multiunion(UsdPrim const& prim) {
     g4prim_to_meshdata(solid, points, vc, vi );
 
     if (i==0) {
-      // std::cout << "g4usdboolean_multiunion> first solid " << i << std::endl;
+#ifdef CGAL_BOOLEAN_DEUBUG
+      std::cout << "g4usdboolean_multiunion> first solid " << i << std::endl;
+#endif
+
       sm1 = usdmesh_to_cgal(points,vc,vi);
 
       /* TODO (rotation of daughter meshes)
@@ -257,7 +302,9 @@ void g4usdboolean_multiunion(UsdPrim const& prim) {
 
     }
     else {
-      // std::cout << "g4usdboolean_multiunion> other solid " << i << std::endl;
+#ifdef CGAL_BOOLEAN_DEUBUG
+      std::cout << "g4usdboolean_multiunion> other solid " << i << std::endl;
+#endif
 
       sm2 = usdmesh_to_cgal(points,vc,vi);
 
