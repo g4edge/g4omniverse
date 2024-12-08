@@ -9,7 +9,9 @@
 #include "pxr/usd/usd/stage.h"
 #include "pxr/base/gf/vec3f.h"
 #include "pxr/base/gf/vec3d.h"
+#include "pxr/base/gf/rotation.h"
 #include "pxr/usd/usdGeom/xformable.h"
+#include "pxr/base/gf/matrix3f.h"
 #include "pxr/base/gf/matrix4d.h"
 
 // #define CGAL_BOOLEAN_DEUBUG
@@ -288,13 +290,24 @@ void g4usdboolean_multiunion(UsdPrim const& prim) {
 
       sm1 = usdmesh_to_cgal(points,vc,vi);
 
-      /* TODO (rotation of daughter meshes)
-      auto rotn = Aff_transformation_3(trans[0][0],trans[1][0],trans[2][0],
-                                       trans[0][1],trans[1][1],trans[2][1],
-                                       trans[0][2],trans[1][2],trans[2][2],1);
-      CGAL::Polygon_mesh_processing::transform(rotn,*sm1);
-      */
+      /***************************
+       * Rotation of mesh
+       ***************************/
+      GfRotation xRot(GfVec3d(1,0,0), rotation[0]);
+      GfRotation yRot(GfVec3d(0,1,0), rotation[1]);
+      GfRotation zRot(GfVec3d(0,0,1), rotation[2]);
 
+      auto rot = zRot*yRot*xRot;
+      auto rotMat = GfMatrix3f(rot);
+
+      auto rotAff_3 = Aff_transformation_3(rotMat[0][0],rotMat[1][0],rotMat[2][0],
+                                           rotMat[0][1],rotMat[1][1],rotMat[2][1],
+                                           rotMat[0][2],rotMat[1][2],rotMat[2][2],1);
+      CGAL::Polygon_mesh_processing::transform(rotAff_3,*sm1);
+
+      /***************************
+       * Translations of mesh
+       * ***************************/
       auto tr3 = Vector_3(translation[0],translation[1],translation[2]);
       auto at3 = Aff_transformation_3(CGAL::TRANSLATION, tr3);
 
@@ -308,13 +321,24 @@ void g4usdboolean_multiunion(UsdPrim const& prim) {
 
       sm2 = usdmesh_to_cgal(points,vc,vi);
 
-      /* TODO (rotation of daughter meshes)
-       auto rotn = Aff_transformation_3(trans[0][0],trans[1][0],trans[2][0],
-                                        trans[0][1],trans[1][1],trans[2][1],
-                                        trans[0][2],trans[1][2],trans[2][2],1);
-       CGAL::Polygon_mesh_processing::transform(rotn,*sm1);
-       */
+      /***************************
+       * Rotation of mesh
+       ***************************/
+      GfRotation xRot(GfVec3d(1,0,0), rotation[0]);
+      GfRotation yRot(GfVec3d(0,1,0), rotation[1]);
+      GfRotation zRot(GfVec3d(0,0,1), rotation[2]);
 
+      auto rot = zRot*yRot*xRot;
+      auto rotMat = GfMatrix3f(rot);
+
+      auto rotAff_3 = Aff_transformation_3(rotMat[0][0],rotMat[1][0],rotMat[2][0],
+                                           rotMat[0][1],rotMat[1][1],rotMat[2][1],
+                                           rotMat[0][2],rotMat[1][2],rotMat[2][2],1);
+      CGAL::Polygon_mesh_processing::transform(rotAff_3,*sm2);
+
+      /***************************
+       * Translations of mesh
+       * ***************************/
       auto tr3 = Vector_3(translation[0],translation[1],translation[2]);
       auto at3 = Aff_transformation_3(CGAL::TRANSLATION, tr3);
 
