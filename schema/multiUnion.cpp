@@ -210,16 +210,10 @@ void pxr::G4MultiUnion::InstallUpdateListener() {
 }
 
 void pxr::G4MultiUnion::Update() {
-  std::cout << "pxr::G4MultiUnion::Update()" << std::endl;
   g4usdboolean_multiunion(this->GetPrim());
 }
 
 bool pxr::G4MultiUnion::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
-  std::cout << "G4MultiUnion::IsInputAffected> ";
-  for(auto path : notice.GetChangedInfoOnlyPaths()) {
-    std::cout << path << " " ;
-  }
-
   bool update = false;
   // check if displaced solids are updated
   for(auto it = this->GetPrim().GetChildren().begin(); it != this->GetPrim().GetChildren().end(); it++) {
@@ -232,12 +226,6 @@ bool pxr::G4MultiUnion::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& no
 }
 
 bool pxr::G4MultiUnion::IsOutputAffected(const UsdNotice::ObjectsChanged& notice) {
-  std::cout << "G4MultiUnion::IsOutputAffected> ";
-  for(auto path : notice.GetChangedInfoOnlyPaths()) {
-    std::cout << path << " ";
-  }
-  std::cout << std::endl;
-
   std::string solid3name;
   this->GetSolid3primAttr().Get(&solid3name);
 

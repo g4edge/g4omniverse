@@ -197,7 +197,6 @@ public:
   }
 
   void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
-    std::cout << "DisplacedSolidChangeListener::Update()" << std::endl;
     if (_displaced.IsInputAffected(notice)) {
       _displaced.Update();
     }
@@ -214,8 +213,6 @@ void pxr::G4DisplacedSolid::InstallUpdateListener() {
 }
 
 void pxr::G4DisplacedSolid::Update() {
-  std::cout << "G4DisplacedSolid::Update() " << this->GetPrim().GetPath() << std::endl;
-
   // Get DisplacedSolid position and rotation attributes
   pxr::GfVec3d translation;
   pxr::GfVec3d rotation;
@@ -241,11 +238,6 @@ void pxr::G4DisplacedSolid::Update() {
 }
 
 bool pxr::G4DisplacedSolid::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
-  std::cout << "G4DisplacedSolid::IsInputAffected> " ;
-  for(auto path : notice.GetChangedInfoOnlyPaths()) {
-    std::cout << path << " ";
-  }
-  std::cout << std::endl;
 
   auto solidprim = *this->GetPrim().GetChildren().begin();
 
@@ -262,12 +254,6 @@ bool pxr::G4DisplacedSolid::IsInputAffected(const pxr::UsdNotice::ObjectsChanged
 }
 
 bool pxr::G4DisplacedSolid::IsOutputAffected(const UsdNotice::ObjectsChanged& notice) {
-  std::cout << "G4DisplacedSolid::IsOutputAffected> ";
-  for(auto path : notice.GetChangedInfoOnlyPaths()) {
-    std::cout << path << " " ;
-  }
-  std::cout << std::endl;
-
   return notice.AffectedObject(this->GetPrim().GetAttribute(pxr::TfToken("xformOp:rotateZYX"))) ||
          notice.AffectedObject(this->GetPrim().GetAttribute(pxr::TfToken("xformOp:translate"))) ||
          this->IsInputAffected(notice);

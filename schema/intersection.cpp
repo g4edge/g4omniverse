@@ -156,7 +156,6 @@ public:
   }
 
   void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
-    std::cout << "updated" << " " << std::endl;
     if(_intersection.IsInputAffected(notice))
       _intersection.Update();
   }
@@ -166,7 +165,6 @@ private:
 };
 
 void pxr::G4Intersection::Update() {
-  std::cout << "pxr::G4Intersection::Update()" << std::endl;
   g4usdboolean(this->GetPrim(), INTERSECTION);
 }
 

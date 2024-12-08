@@ -157,7 +157,6 @@ public:
   }
 
   void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
-    std::cout << "UnionChangeListener::Update>" << " " << std::endl;
     if(_union.IsInputAffected(notice))
         _union.Update();
   }
@@ -167,7 +166,6 @@ private:
 };
 
 void pxr::G4Union::Update() {
-  std::cout << "pxr::G4Union::Update()" << std::endl;
   g4usdboolean(this->GetPrim(), UNION);
 }
 

@@ -210,7 +210,6 @@ public:
   }
 
   void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
-
     if (_box.IsInputAffected(notice)) {
       _box.Update();
     }
@@ -227,8 +226,6 @@ void pxr::G4Box::InstallUpdateListener() {
 }
 
 void pxr::G4Box::Update() {
-  std::cout << "G4Box::Update() " << this->GetPrim().GetPath() << std::endl;
-
   double x;
   double y;
   double z;
@@ -277,12 +274,6 @@ void pxr::G4Box::Update() {
 }
 
 bool pxr::G4Box::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
-  std::cout << "G4Box::IsInputAffected> ";
-  for(auto path : notice.GetChangedInfoOnlyPaths()) {
-    std::cout << path <<  " ";
-  }
-  std::cout << std::endl;
-
   return notice.AffectedObject(this->GetXAttr()) ||
          notice.AffectedObject(this->GetYAttr()) ||
          notice.AffectedObject(this->GetZAttr());

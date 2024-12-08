@@ -149,8 +149,6 @@ PXR_NAMESPACE_CLOSE_SCOPE
 #include "pxr/base/gf/matrix4d.h"
 
 void pxr::G4Subtraction::Update() {
-
-  std::cout << "pxr::G4Subtraction::Update()" << std::endl;
   g4usdboolean(this->GetPrim(), SUBTRACTION);
 }
 
@@ -165,7 +163,6 @@ public:
   }
 
   void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
-    // std::cout << "updated" << " " << std::endl;
 
     // get names of dependent solids
     if(_sub.IsInputAffected(notice))
