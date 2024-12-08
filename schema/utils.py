@@ -1,7 +1,8 @@
 from pxr import G4
 
-def traverse_add_listeners(stage) :
+def add_listeners(stage) :
     for x in stage.Traverse() :
+        print(x.GetName(),x.GetTypeName())
         if x.GetTypeName() == "MultiUnion" :
             G4.MultiUnion(x).InstallUpdateListener()
         elif x.GetTypeName() == "DisplacedSolid" :
@@ -15,6 +16,6 @@ def traverse_add_listeners(stage) :
         elif x.GetTypeName() == "Intersection" :
             G4.Intersection(x).InstallUpdateListener()
         else :
-            print("Not found", x.GetTypeName())
+            print("Not found", x.GetName(), x.GetTypeName())
 
 
