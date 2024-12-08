@@ -199,36 +199,100 @@ PXR_NAMESPACE_CLOSE_SCOPE
 // --(BEGIN CUSTOM CODE)--
 
 #include <iostream>
+#include "pxr/usd/usd/stage.h"
+#include "pxr/usd/usd/primRange.h"
 #include "vSolid.h"
+#include "box.h"
 #include "displacedSolid.h"
 #include "union.h"
 #include "intersection.h"
 #include "subtraction.h"
 #include "multiUnion.h"
 
-bool pxr::G4BooleanSolid::IsOutputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
-  std::cout << "G4BooleanSolid::IsOutputAffected> ";
-  for(auto path : notice.GetChangedInfoOnlyPaths()) {
-    std::cout << path << " ";
+// #define USD_NOTIFICATION_DEBUG
+
+PXR_NAMESPACE_OPEN_SCOPE
+
+class BooleanChangeListener : public TfWeakBase {
+public:
+  BooleanChangeListener() {
+    pxr::TfNotice::Register(TfCreateWeakPtr<BooleanChangeListener>(this),
+                            &BooleanChangeListener::Update);
   }
-  std::cout << std::endl;
+
+  void Update(const UsdNotice::ObjectsChanged& notice) {
+    /***************************
+    Debug IO
+    *****************************/
+#ifdef USD_NOTIFICATION_DEBUG
+    std::cout << "BooleanChangeListener::Update> info=(";
+    for(auto path : notice.GetChangedInfoOnlyPaths()) {
+      std::cout << path << ",";
+    }
+    std::cout << ") resynched=(";
+    for(auto path : notice.GetResyncedPaths()) {
+      std::cout << path << ",";
+    }
+    std::cout << ") resoloved_resynched=(";
+    for(auto path : notice.GetResolvedAssetPathsResyncedPaths()) {
+      std::cout << path << ",";
+    }
+    std::cout << ") " << std::endl;
+#endif
+
+    /***************************
+     * Loop info only paths
+     * *****************************/
+    for(auto path : notice.GetChangedInfoOnlyPaths()) {
+      if(path.IsPrimPath()) continue;
+
+
+      /***************************
+       * Loop over entire stage
+       * *****************************/
+      for(auto prim : notice.GetStage()->Traverse()) {
+        if(prim.GetTypeName() == "Box") {
+          auto p = G4Box(prim);
+          if(p.IsInputAffected(notice)) p.Update();
+        }
+        else if(prim.GetTypeName() == "DisplacedSolid") {
+          auto p = G4DisplacedSolid(prim);
+          if(p.IsInputAffected(notice)) p.Update();
+        }
+        else if(prim.GetTypeName() == "Subtraction") {
+          auto p = G4Subtraction(prim);
+          if(p.IsInputAffected(notice)) p.Update();
+        }
+        else if(prim.GetTypeName() == "Union") {
+          auto p = G4Union(prim);
+          if(p.IsInputAffected(notice)) p.Update();
+        }
+        else if(prim.GetTypeName() == "Intersection") {
+          auto p = G4Intersection(prim);
+          if(p.IsInputAffected(notice)) p.Update();
+        }
+        else if(prim.GetTypeName() == "MultiUnion") {
+          auto p = G4MultiUnion(prim);
+          if(p.IsInputAffected(notice)) p.Update();
+        }
+      }
+    }
+  }
+};
+
+PXR_NAMESPACE_CLOSE_SCOPE
+
+bool pxr::G4BooleanSolid::IsOutputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
 
   std::string solid3name;
   this->GetSolid3primAttr().Get(&solid3name);
 
   auto solid3prim = this->GetPrim().GetChild(pxr::TfToken(solid3name));
 
-  return notice.AffectedObject(solid3prim.GetAttribute(pxr::TfToken("Points"))) ||
-         notice.AffectedObject(solid3prim.GetAttribute(pxr::TfToken("FaceVertexCounts"))) ||
-         notice.AffectedObject(solid3prim.GetAttribute(pxr::TfToken("FaceVertexIndices")));
+  return notice.AffectedObject(solid3prim.GetAttribute(pxr::TfToken("points")));
 }
 
 bool pxr::G4BooleanSolid::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
-  std::cout << "G4BooleanSolid::IsInputAffected> ";
-  for(auto path : notice.GetChangedInfoOnlyPaths()) {
-    std::cout << path << " " ;
-  }
-  std::cout << std::endl;
 
   std::string solid1name;
   std::string solid2name;
@@ -240,8 +304,6 @@ bool pxr::G4BooleanSolid::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& 
   auto solid2prim = this->GetPrim().GetChild(pxr::TfToken(solid2name));
 
   bool solid1bool = false;
-
-  std::cout << "G4BooleanSolid::IsInputAffected> objects " << solid1prim.GetTypeName() << " " << solid2prim.GetTypeName() << std::endl;
 
   if(solid1prim.GetTypeName() == "DisplacedSolid") solid1bool = G4DisplacedSolid(solid1prim).IsOutputAffected(notice);
   else if(solid1prim.GetTypeName() == "Subtraction") solid1bool = G4Subtraction(solid1prim).IsOutputAffected(notice);
@@ -260,3 +322,10 @@ bool pxr::G4BooleanSolid::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& 
 
   return solid1bool || solid2bool;
 }
+
+void pxr::G4BooleanSolid::InstallStageBooleanListener() {
+  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<BooleanChangeListener>(new BooleanChangeListener()),
+                          &BooleanChangeListener::Update);
+}
+
+

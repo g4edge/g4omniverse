@@ -158,6 +158,7 @@ void wrapG4BooleanSolid()
 namespace {
 
 WRAP_CUSTOM {
+  _class
+      .def("InstallStageBooleanListener",&G4BooleanSolid::InstallStageBooleanListener);
 }
-
 }

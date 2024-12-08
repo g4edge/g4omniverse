@@ -231,7 +231,8 @@ public:
     //  - Close the include guard with #endif
     // ===================================================================== //
     // --(BEGIN CUSTOM CODE)--
-    virtual bool IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice);
+    static void InstallStageBooleanListener();
+    virtual bool IsInputAffected(const UsdNotice::ObjectsChanged& notice);
     bool IsOutputAffected(const UsdNotice::ObjectsChanged& notice);
 };
 
