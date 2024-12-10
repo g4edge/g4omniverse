@@ -14,6 +14,7 @@
                         "bases": [
                             "UsdGeomScope"
                         ], 
+                        "schemaIdentifier": "BooleanSolid", 
                         "schemaKind": "concreteTyped"
                     }, 
                     "G4Box": {
@@ -24,6 +25,7 @@
                         "bases": [
                             "G4VSolid"
                         ], 
+                        "schemaIdentifier": "Box", 
                         "schemaKind": "concreteTyped"
                     }, 
                     "G4DisplacedSolid": {
@@ -34,6 +36,7 @@
                         "bases": [
                             "UsdGeomXform"
                         ], 
+                        "schemaIdentifier": "DisplacedSolid", 
                         "schemaKind": "concreteTyped"
                     }, 
                     "G4Intersection": {
@@ -44,6 +47,7 @@
                         "bases": [
                             "G4BooleanSolid"
                         ], 
+                        "schemaIdentifier": "Intersection", 
                         "schemaKind": "concreteTyped"
                     }, 
                     "G4Logical": {
@@ -54,6 +58,7 @@
                         "bases": [
                             "UsdGeomScope"
                         ], 
+                        "schemaIdentifier": "Logical", 
                         "schemaKind": "concreteTyped"
                     }, 
                     "G4MultiUnion": {
@@ -64,6 +69,7 @@
                         "bases": [
                             "UsdGeomScope"
                         ], 
+                        "schemaIdentifier": "MultiUnion", 
                         "schemaKind": "concreteTyped"
                     }, 
                     "G4Placement": {
@@ -74,6 +80,7 @@
                         "bases": [
                             "UsdGeomXform"
                         ], 
+                        "schemaIdentifier": "Physical", 
                         "schemaKind": "concreteTyped"
                     }, 
                     "G4Subtraction": {
@@ -84,6 +91,7 @@
                         "bases": [
                             "G4BooleanSolid"
                         ], 
+                        "schemaIdentifier": "Subtraction", 
                         "schemaKind": "concreteTyped"
                     }, 
                     "G4Tubs": {
@@ -94,6 +102,7 @@
                         "bases": [
                             "G4VSolid"
                         ], 
+                        "schemaIdentifier": "Tubs", 
                         "schemaKind": "concreteTyped"
                     }, 
                     "G4Union": {
@@ -104,6 +113,7 @@
                         "bases": [
                             "G4BooleanSolid"
                         ], 
+                        "schemaIdentifier": "Union", 
                         "schemaKind": "concreteTyped"
                     }, 
                     "G4VSolid": {
@@ -114,6 +124,7 @@
                         "bases": [
                             "UsdGeomMesh"
                         ], 
+                        "schemaIdentifier": "VSolid", 
                         "schemaKind": "abstractTyped"
                     }, 
                     "VSolidAdapter": {
