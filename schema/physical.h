@@ -25,6 +25,8 @@
 #include "pxr/base/tf/token.h"
 #include "pxr/base/tf/type.h"
 
+#include "pxr/usd/usd/notice.h"
+
 PXR_NAMESPACE_OPEN_SCOPE
 
 class SdfAssetPath;
@@ -231,6 +233,7 @@ public:
     // --(BEGIN CUSTOM CODE)--
     void InstallUpdateListener();
     void Update();
+    bool IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice);
 };
 
 PXR_NAMESPACE_CLOSE_SCOPE

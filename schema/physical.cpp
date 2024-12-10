@@ -222,7 +222,6 @@ private:
 };
 
 void pxr::G4Physical::Update() {
-  std::cout << "G4Physical::Update() " << this->GetPrim().GetPath() << std::endl;
 
   // Get physical position and rotation attributes
   pxr::GfVec3d translation;
@@ -252,4 +251,9 @@ void pxr::G4Physical::InstallUpdateListener() {
   pxr::TfNotice::Register(pxr::TfCreateWeakPtr<PhysicalChangeListener>(new PhysicalChangeListener(*this)),
                           &PhysicalChangeListener::Update,
                           this->GetPrim().GetStage());
+}
+
+bool pxr::G4Physical::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
+  return notice.AffectedObject(this->GetTranslationAttr()) ||
+         notice.AffectedObject(this->GetRotationAttr());
 }
