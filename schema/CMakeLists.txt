@@ -31,7 +31,7 @@ pxr_plugin(${PXR_PACKAGE}
 		subtraction
 		multiUnion
 		logical
-		physical
+		placement
 		tokens
 		VSolidAdapter
 		cgal_boolean
@@ -55,7 +55,7 @@ pxr_plugin(${PXR_PACKAGE}
 		wrapSubtraction.cpp
 		wrapMultiUnion.cpp
 		wrapLogical.cpp
-		wrapPhysical.cpp
+		wrapPlacement.cpp
 		wrapTokens.cpp
 
     RESOURCE_FILES

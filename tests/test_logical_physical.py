@@ -23,9 +23,9 @@ def test_logcial_physical(stage = None) :
     setDefaultBox(b1)
     l.GetPrim().GetAttribute("solidprim").Set("det_box")
 
-    p1 = G4.Physical.Define(stage, "/det_log/det_phys1")
-    p2 = G4.Physical.Define(stage, "/det_log/det_phys2")
-    p3 = G4.Physical.Define(stage, "/det_log/det_phys3")
+    p1 = G4.Placement.Define(stage, "/det_log/det_phys1")
+    p2 = G4.Placement.Define(stage, "/det_log/det_phys2")
+    p3 = G4.Placement.Define(stage, "/det_log/det_phys3")
     l.GetPrim().GetAttribute("daughters").Set(["det_phys1","det_phys2","det_phys3"])
     p1.InstallUpdateListener()
     p2.InstallUpdateListener()

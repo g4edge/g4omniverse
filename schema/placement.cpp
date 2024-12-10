@@ -4,7 +4,7 @@
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#include ".//physical.h"
+#include ".//placement.h"
 #include "pxr/usd/usd/schemaRegistry.h"
 #include "pxr/usd/usd/typed.h"
 
@@ -16,64 +16,64 @@ PXR_NAMESPACE_OPEN_SCOPE
 // Register the schema with the TfType system.
 TF_REGISTRY_FUNCTION(TfType)
 {
-    TfType::Define<G4Physical,
+    TfType::Define<G4Placement,
         TfType::Bases< UsdGeomXform > >();
     
     // Register the usd prim typename as an alias under UsdSchemaBase. This
     // enables one to call
-    // TfType::Find<UsdSchemaBase>().FindDerivedByName("Physical")
-    // to find TfType<G4Physical>, which is how IsA queries are
+    // TfType::Find<UsdSchemaBase>().FindDerivedByName("Placement")
+    // to find TfType<G4Placement>, which is how IsA queries are
     // answered.
-    TfType::AddAlias<UsdSchemaBase, G4Physical>("Physical");
+    TfType::AddAlias<UsdSchemaBase, G4Placement>("Placement");
 }
 
 /* virtual */
-G4Physical::~G4Physical()
+G4Placement::~G4Placement()
 {
 }
 
 /* static */
-G4Physical
-G4Physical::Get(const UsdStagePtr &stage, const SdfPath &path)
+G4Placement
+G4Placement::Get(const UsdStagePtr &stage, const SdfPath &path)
 {
     if (!stage) {
         TF_CODING_ERROR("Invalid stage");
-        return G4Physical();
+        return G4Placement();
     }
-    return G4Physical(stage->GetPrimAtPath(path));
+    return G4Placement(stage->GetPrimAtPath(path));
 }
 
 /* static */
-G4Physical
-G4Physical::Define(
+G4Placement
+G4Placement::Define(
     const UsdStagePtr &stage, const SdfPath &path)
 {
-    static TfToken usdPrimTypeName("Physical");
+    static TfToken usdPrimTypeName("Placement");
     if (!stage) {
         TF_CODING_ERROR("Invalid stage");
-        return G4Physical();
+        return G4Placement();
     }
-    return G4Physical(
+    return G4Placement(
         stage->DefinePrim(path, usdPrimTypeName));
 }
 
 /* virtual */
-UsdSchemaKind G4Physical::_GetSchemaKind() const
+UsdSchemaKind G4Placement::_GetSchemaKind() const
 {
-    return G4Physical::schemaKind;
+    return G4Placement::schemaKind;
 }
 
 /* static */
 const TfType &
-G4Physical::_GetStaticTfType()
+G4Placement::_GetStaticTfType()
 {
-    static TfType tfType = TfType::Find<G4Physical>();
+    static TfType tfType = TfType::Find<G4Placement>();
     return tfType;
 }
 
 /* static */
 bool 
-G4Physical::_IsTypedSchema()
+G4Placement::_IsTypedSchema()
 {
     static bool isTyped = _GetStaticTfType().IsA<UsdTyped>();
     return isTyped;
@@ -81,19 +81,19 @@ G4Physical::_IsTypedSchema()
 
 /* virtual */
 const TfType &
-G4Physical::_GetTfType() const
+G4Placement::_GetTfType() const
 {
     return _GetStaticTfType();
 }
 
 UsdAttribute
-G4Physical::GetG4typeAttr() const
+G4Placement::GetG4typeAttr() const
 {
     return GetPrim().GetAttribute(G4Tokens->g4type);
 }
 
 UsdAttribute
-G4Physical::CreateG4typeAttr(VtValue const &defaultValue, bool writeSparsely) const
+G4Placement::CreateG4typeAttr(VtValue const &defaultValue, bool writeSparsely) const
 {
     return UsdSchemaBase::_CreateAttr(G4Tokens->g4type,
                        SdfValueTypeNames->String,
@@ -104,13 +104,13 @@ G4Physical::CreateG4typeAttr(VtValue const &defaultValue, bool writeSparsely) co
 }
 
 UsdAttribute
-G4Physical::GetLogicalprimAttr() const
+G4Placement::GetLogicalprimAttr() const
 {
     return GetPrim().GetAttribute(G4Tokens->logicalprim);
 }
 
 UsdAttribute
-G4Physical::CreateLogicalprimAttr(VtValue const &defaultValue, bool writeSparsely) const
+G4Placement::CreateLogicalprimAttr(VtValue const &defaultValue, bool writeSparsely) const
 {
     return UsdSchemaBase::_CreateAttr(G4Tokens->logicalprim,
                        SdfValueTypeNames->String,
@@ -121,13 +121,13 @@ G4Physical::CreateLogicalprimAttr(VtValue const &defaultValue, bool writeSparsel
 }
 
 UsdAttribute
-G4Physical::GetTranslationAttr() const
+G4Placement::GetTranslationAttr() const
 {
     return GetPrim().GetAttribute(G4Tokens->translation);
 }
 
 UsdAttribute
-G4Physical::CreateTranslationAttr(VtValue const &defaultValue, bool writeSparsely) const
+G4Placement::CreateTranslationAttr(VtValue const &defaultValue, bool writeSparsely) const
 {
     return UsdSchemaBase::_CreateAttr(G4Tokens->translation,
                        SdfValueTypeNames->Double3,
@@ -138,13 +138,13 @@ G4Physical::CreateTranslationAttr(VtValue const &defaultValue, bool writeSparsel
 }
 
 UsdAttribute
-G4Physical::GetRotationAttr() const
+G4Placement::GetRotationAttr() const
 {
     return GetPrim().GetAttribute(G4Tokens->rotation);
 }
 
 UsdAttribute
-G4Physical::CreateRotationAttr(VtValue const &defaultValue, bool writeSparsely) const
+G4Placement::CreateRotationAttr(VtValue const &defaultValue, bool writeSparsely) const
 {
     return UsdSchemaBase::_CreateAttr(G4Tokens->rotation,
                        SdfValueTypeNames->Double3,
@@ -168,7 +168,7 @@ _ConcatenateAttributeNames(const TfTokenVector& left,const TfTokenVector& right)
 
 /*static*/
 const TfTokenVector&
-G4Physical::GetSchemaAttributeNames(bool includeInherited)
+G4Placement::GetSchemaAttributeNames(bool includeInherited)
 {
     static TfTokenVector localNames = {
         G4Tokens->g4type,
@@ -201,29 +201,29 @@ PXR_NAMESPACE_CLOSE_SCOPE
 #include <iostream>
 #include "pxr/usd/usd/notice.h"
 
-class PhysicalChangeListener : public pxr::TfWeakBase {
+class PlacementChangeListener : public pxr::TfWeakBase {
 public:
-  PhysicalChangeListener(pxr::G4Physical physical) : _physical(physical) {
+  PlacementChangeListener(pxr::G4Placement placement) : _placement(placement) {
     // Register the listener for object changes
-    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<PhysicalChangeListener>(this),
-                            &PhysicalChangeListener::Update);
+    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<PlacementChangeListener>(this),
+                            &PlacementChangeListener::Update);
   }
 
   void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
 
-    if (notice.AffectedObject(_physical.GetTranslationAttr()) ||
-        notice.AffectedObject(_physical.GetRotationAttr()) ) {
-      _physical.Update();
+    if (notice.AffectedObject(_placement.GetTranslationAttr()) ||
+        notice.AffectedObject(_placement.GetRotationAttr()) ) {
+      _placement.Update();
     }
   }
 
 private:
-  pxr::G4Physical _physical;
+  pxr::G4Placement _placement;
 };
 
-void pxr::G4Physical::Update() {
+void pxr::G4Placement::Update() {
 
-  // Get physical position and rotation attributes
+  // Get Placement position and rotation attributes
   pxr::GfVec3d translation;
   pxr::GfVec3d rotation;
   this->GetTranslationAttr().Get(&translation);
@@ -247,13 +247,13 @@ void pxr::G4Physical::Update() {
   }
 }
 
-void pxr::G4Physical::InstallUpdateListener() {
-  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<PhysicalChangeListener>(new PhysicalChangeListener(*this)),
-                          &PhysicalChangeListener::Update,
+void pxr::G4Placement::InstallUpdateListener() {
+  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<PlacementChangeListener>(new PlacementChangeListener(*this)),
+                          &PlacementChangeListener::Update,
                           this->GetPrim().GetStage());
 }
 
-bool pxr::G4Physical::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
+bool pxr::G4Placement::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
   return notice.AffectedObject(this->GetTranslationAttr()) ||
          notice.AffectedObject(this->GetRotationAttr());
 }

@@ -1188,9 +1188,9 @@ class Logical "Logical"
     )
 }
 
-class Physical "Physical"
+class Placement "Placement"
 {
-    string g4type = "Physical"
+    string g4type = "Placement"
     string logicalprim = "none"
     rel proxyPrim (
         doc = '''The proxyPrim relationship allows us to link a

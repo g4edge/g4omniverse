@@ -145,14 +145,14 @@ class Logical "Logical" (
     string[] daughters = []
 }
 
-class Physical "Physical" (
+class Placement "Placement" (
     inherits = </Xform>
 
     customData = {
-         string className = "Physical"
+         string className = "Placement"
     }
 ) {
-    string g4type = "Physical"
+    string g4type = "Placement"
     string logicalprim = "none"
     double3 translation = (0,0,0)
     double3 rotation = (0,0,0)

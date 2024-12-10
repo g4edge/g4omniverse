@@ -208,7 +208,7 @@ PXR_NAMESPACE_CLOSE_SCOPE
 #include "intersection.h"
 #include "subtraction.h"
 #include "multiUnion.h"
-#include "physical.h"
+#include "placement.h"
 
 // #define USD_NOTIFICATION_DEBUG
 
@@ -276,8 +276,8 @@ public:
           auto p = G4MultiUnion(prim);
           if(p.IsInputAffected(notice)) p.Update();
         }
-        else if(prim.GetTypeName() == "Physical") {
-          auto p = G4Physical(prim);
+        else if(prim.GetTypeName() == "Placement") {
+          auto p = G4Placement(prim);
           if (p.IsInputAffected(notice)) p.Update();
         }
       }

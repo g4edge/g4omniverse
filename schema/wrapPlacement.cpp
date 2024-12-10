@@ -4,7 +4,7 @@
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#include ".//physical.h"
+#include ".//placement.h"
 #include "pxr/usd/usd/schemaBase.h"
 
 #include "pxr/usd/sdf/primSpec.h"
@@ -33,50 +33,50 @@ WRAP_CUSTOM;
 
         
 static UsdAttribute
-_CreateG4typeAttr(G4Physical &self,
+_CreateG4typeAttr(G4Placement &self,
                                       object defaultVal, bool writeSparsely) {
     return self.CreateG4typeAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
 }
         
 static UsdAttribute
-_CreateLogicalprimAttr(G4Physical &self,
+_CreateLogicalprimAttr(G4Placement &self,
                                       object defaultVal, bool writeSparsely) {
     return self.CreateLogicalprimAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
 }
         
 static UsdAttribute
-_CreateTranslationAttr(G4Physical &self,
+_CreateTranslationAttr(G4Placement &self,
                                       object defaultVal, bool writeSparsely) {
     return self.CreateTranslationAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double3), writeSparsely);
 }
         
 static UsdAttribute
-_CreateRotationAttr(G4Physical &self,
+_CreateRotationAttr(G4Placement &self,
                                       object defaultVal, bool writeSparsely) {
     return self.CreateRotationAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double3), writeSparsely);
 }
 
 static std::string
-_Repr(const G4Physical &self)
+_Repr(const G4Placement &self)
 {
     std::string primRepr = TfPyRepr(self.GetPrim());
     return TfStringPrintf(
-        "G4.Physical(%s)",
+        "G4.Placement(%s)",
         primRepr.c_str());
 }
 
 } // anonymous namespace
 
-void wrapG4Physical()
+void wrapG4Placement()
 {
-    typedef G4Physical This;
+    typedef G4Placement This;
 
     class_<This, bases<UsdGeomXform> >
-        cls("Physical");
+        cls("Placement");
 
     cls
         .def(init<UsdPrim>(arg("prim")))
@@ -159,7 +159,8 @@ namespace {
 
 WRAP_CUSTOM {
   _class
-      .def("Update",&G4Physical::Update)
-      .def("InstallUpdateListener",&G4Physical::InstallUpdateListener);
+      .def("Update",&G4Placement::Update)
+      .def("InstallUpdateListener",&G4Placement::InstallUpdateListener);
 }
+
 }

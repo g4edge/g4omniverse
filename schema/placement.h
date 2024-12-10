@@ -4,10 +4,10 @@
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#ifndef G4_GENERATED_PHYSICAL_H
-#define G4_GENERATED_PHYSICAL_H
+#ifndef G4_GENERATED_PLACEMENT_H
+#define G4_GENERATED_PLACEMENT_H
 
-/// \file G4/physical.h
+/// \file G4/placement.h
 
 #include "pxr/pxr.h"
 #include ".//api.h"
@@ -32,13 +32,13 @@ PXR_NAMESPACE_OPEN_SCOPE
 class SdfAssetPath;
 
 // -------------------------------------------------------------------------- //
-// PHYSICAL                                                                   //
+// PLACEMENT                                                                  //
 // -------------------------------------------------------------------------- //
 
-/// \class G4Physical
+/// \class G4Placement
 ///
 ///
-class G4Physical : public UsdGeomXform
+class G4Placement : public UsdGeomXform
 {
 public:
     /// Compile time constant representing what kind of schema this class is.
@@ -46,26 +46,26 @@ public:
     /// \sa UsdSchemaKind
     static const UsdSchemaKind schemaKind = UsdSchemaKind::ConcreteTyped;
 
-    /// Construct a G4Physical on UsdPrim \p prim .
-    /// Equivalent to G4Physical::Get(prim.GetStage(), prim.GetPath())
+    /// Construct a G4Placement on UsdPrim \p prim .
+    /// Equivalent to G4Placement::Get(prim.GetStage(), prim.GetPath())
     /// for a \em valid \p prim, but will not immediately throw an error for
     /// an invalid \p prim
-    explicit G4Physical(const UsdPrim& prim=UsdPrim())
+    explicit G4Placement(const UsdPrim& prim=UsdPrim())
         : UsdGeomXform(prim)
     {
     }
 
-    /// Construct a G4Physical on the prim held by \p schemaObj .
-    /// Should be preferred over G4Physical(schemaObj.GetPrim()),
+    /// Construct a G4Placement on the prim held by \p schemaObj .
+    /// Should be preferred over G4Placement(schemaObj.GetPrim()),
     /// as it preserves SchemaBase state.
-    explicit G4Physical(const UsdSchemaBase& schemaObj)
+    explicit G4Placement(const UsdSchemaBase& schemaObj)
         : UsdGeomXform(schemaObj)
     {
     }
 
     /// Destructor.
     G4_API
-    virtual ~G4Physical();
+    virtual ~G4Placement();
 
     /// Return a vector of names of all pre-declared attributes for this schema
     /// class and all its ancestor classes.  Does not include attributes that
@@ -74,17 +74,17 @@ public:
     static const TfTokenVector &
     GetSchemaAttributeNames(bool includeInherited=true);
 
-    /// Return a G4Physical holding the prim adhering to this
+    /// Return a G4Placement holding the prim adhering to this
     /// schema at \p path on \p stage.  If no prim exists at \p path on
     /// \p stage, or if the prim at that path does not adhere to this schema,
     /// return an invalid schema object.  This is shorthand for the following:
     ///
     /// \code
-    /// G4Physical(stage->GetPrimAtPath(path));
+    /// G4Placement(stage->GetPrimAtPath(path));
     /// \endcode
     ///
     G4_API
-    static G4Physical
+    static G4Placement
     Get(const UsdStagePtr &stage, const SdfPath &path);
 
     /// Attempt to ensure a \a UsdPrim adhering to this schema at \p path
@@ -110,7 +110,7 @@ public:
     /// the opinion at the current EditTarget.
     ///
     G4_API
-    static G4Physical
+    static G4Placement
     Define(const UsdStagePtr &stage, const SdfPath &path);
 
 protected:
@@ -140,7 +140,7 @@ public:
     ///
     /// | ||
     /// | -- | -- |
-    /// | Declaration | `string g4type = "Physical"` |
+    /// | Declaration | `string g4type = "Placement"` |
     /// | C++ Type | std::string |
     /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->String |
     G4_API
