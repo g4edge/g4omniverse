@@ -20,7 +20,7 @@ def test_multiunion(stage = None) :
     b1 = G4.Box.Define(stage,"/mu/solid1/b1")
     b2 = G4.Box.Define(stage,"/mu/solid2/b2")
     b3 = G4.Box.Define(stage,"/mu/solid3/b3")
-    b4 = G4.Box.Define(stage,"/mu/solid4/b3")
+    b4 = G4.Box.Define(stage,"/mu/solid4/b4")
 
     mur = UsdGeom.Mesh.Define(stage,"/mu/result")
 
@@ -56,7 +56,3 @@ def test_multiunion(stage = None) :
     mu.GetSolid3primAttr().Set("result")
 
     mu.Update()
-
-
-
-

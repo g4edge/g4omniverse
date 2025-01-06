@@ -80,7 +80,7 @@
                         "bases": [
                             "UsdGeomXform"
                         ], 
-                        "schemaIdentifier": "Physical", 
+                        "schemaIdentifier": "Placement", 
                         "schemaKind": "concreteTyped"
                     }, 
                     "G4Subtraction": {

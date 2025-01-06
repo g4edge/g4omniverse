@@ -53,6 +53,10 @@ struct G4TokensType {
     /// 
     /// G4Logical
     const TfToken daughters;
+    /// \brief "dPhi"
+    /// 
+    /// G4Tubs
+    const TfToken dPhi;
     /// \brief "fieldprim"
     /// 
     /// G4Logical
@@ -81,14 +85,14 @@ struct G4TokensType {
     /// 
     /// G4VSolid
     const TfToken name;
-    /// \brief "r1"
+    /// \brief "rMax"
     /// 
     /// G4Tubs
-    const TfToken r1;
-    /// \brief "r2"
+    const TfToken rMax;
+    /// \brief "rMin"
     /// 
     /// G4Tubs
-    const TfToken r2;
+    const TfToken rMin;
     /// \brief "rotation"
     /// 
     /// G4DisplacedSolid, G4Placement
@@ -117,6 +121,10 @@ struct G4TokensType {
     /// 
     /// G4MultiUnion
     const TfToken solidprims;
+    /// \brief "sPhi"
+    /// 
+    /// G4Tubs
+    const TfToken sPhi;
     /// \brief "translation"
     /// 
     /// G4DisplacedSolid, G4Placement
