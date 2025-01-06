@@ -104,15 +104,15 @@ G4Tubs::CreateG4typeAttr(VtValue const &defaultValue, bool writeSparsely) const
 }
 
 UsdAttribute
-G4Tubs::GetR1Attr() const
+G4Tubs::GetRMinAttr() const
 {
-    return GetPrim().GetAttribute(G4Tokens->r1);
+    return GetPrim().GetAttribute(G4Tokens->rMin);
 }
 
 UsdAttribute
-G4Tubs::CreateR1Attr(VtValue const &defaultValue, bool writeSparsely) const
+G4Tubs::CreateRMinAttr(VtValue const &defaultValue, bool writeSparsely) const
 {
-    return UsdSchemaBase::_CreateAttr(G4Tokens->r1,
+    return UsdSchemaBase::_CreateAttr(G4Tokens->rMin,
                        SdfValueTypeNames->Double,
                        /* custom = */ false,
                        SdfVariabilityVarying,
@@ -121,15 +121,15 @@ G4Tubs::CreateR1Attr(VtValue const &defaultValue, bool writeSparsely) const
 }
 
 UsdAttribute
-G4Tubs::GetR2Attr() const
+G4Tubs::GetRMaxAttr() const
 {
-    return GetPrim().GetAttribute(G4Tokens->r2);
+    return GetPrim().GetAttribute(G4Tokens->rMax);
 }
 
 UsdAttribute
-G4Tubs::CreateR2Attr(VtValue const &defaultValue, bool writeSparsely) const
+G4Tubs::CreateRMaxAttr(VtValue const &defaultValue, bool writeSparsely) const
 {
-    return UsdSchemaBase::_CreateAttr(G4Tokens->r2,
+    return UsdSchemaBase::_CreateAttr(G4Tokens->rMax,
                        SdfValueTypeNames->Double,
                        /* custom = */ false,
                        SdfVariabilityVarying,
@@ -147,6 +147,40 @@ UsdAttribute
 G4Tubs::CreateZAttr(VtValue const &defaultValue, bool writeSparsely) const
 {
     return UsdSchemaBase::_CreateAttr(G4Tokens->z,
+                       SdfValueTypeNames->Double,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
+UsdAttribute
+G4Tubs::GetSPhiAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->sPhi);
+}
+
+UsdAttribute
+G4Tubs::CreateSPhiAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->sPhi,
+                       SdfValueTypeNames->Double,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
+UsdAttribute
+G4Tubs::GetDPhiAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->dPhi);
+}
+
+UsdAttribute
+G4Tubs::CreateDPhiAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->dPhi,
                        SdfValueTypeNames->Double,
                        /* custom = */ false,
                        SdfVariabilityVarying,
@@ -172,9 +206,11 @@ G4Tubs::GetSchemaAttributeNames(bool includeInherited)
 {
     static TfTokenVector localNames = {
         G4Tokens->g4type,
-        G4Tokens->r1,
-        G4Tokens->r2,
+        G4Tokens->rMin,
+        G4Tokens->rMax,
         G4Tokens->z,
+        G4Tokens->sPhi,
+        G4Tokens->dPhi,
     };
     static TfTokenVector allNames =
         _ConcatenateAttributeNames(
@@ -197,3 +233,249 @@ PXR_NAMESPACE_CLOSE_SCOPE
 // 'PXR_NAMESPACE_OPEN_SCOPE', 'PXR_NAMESPACE_CLOSE_SCOPE'.
 // ===================================================================== //
 // --(BEGIN CUSTOM CODE)--
+
+#include <iostream>
+#include "pxr/usd/usd/notice.h"
+
+class TubsChangeListener : public pxr::TfWeakBase {
+public:
+  TubsChangeListener(pxr::G4Tubs tubs) : _tubs(tubs) {
+    // Register the listener for object changes
+    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<TubsChangeListener>(this),
+                            &TubsChangeListener::Update);
+  }
+
+  void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
+    if (_tubs.IsInputAffected(notice)) {
+      _tubs.Update();
+    }
+  }
+
+private:
+  pxr::G4Tubs _tubs;
+};
+
+
+void pxr::G4Tubs::InstallUpdateListener() {
+  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<TubsChangeListener>(new TubsChangeListener(*this)),
+                          &TubsChangeListener::Update);
+}
+
+void pxr::G4Tubs::Update() {
+  double rMin;
+  double rMax;
+  double z;
+  double sPhi;
+  double dPhi;
+  GetRMinAttr().Get(&rMin);
+  GetRMaxAttr().Get(&rMax);
+  GetZAttr().Get(&z);
+  GetSPhiAttr().Get(&sPhi);
+  GetDPhiAttr().Get(&dPhi);
+
+  float rMinf = float(rMin);
+  float rMaxf = float(rMax);
+  float zf = float(z);
+  float sPhif = float(sPhi);
+  float dPhif = float(dPhi);
+
+  auto p = GetPointsAttr();
+  auto vc = GetFaceVertexCountsAttr();
+  auto vi = GetFaceVertexIndicesAttr();
+
+  VtArray<GfVec3f> pArray;
+  VtIntArray vcArray;
+  VtIntArray viArray;
+  float nslice = 314;// this needs to be thought about more
+
+  float pDPhi = dPhif / nslice;
+
+  for (int i = 0; i < nslice; ++i)
+  {
+    float phi1 = sPhif + i * pDPhi;
+    float phi2 = sPhif + (i + 1) * pDPhi;
+
+    float xRMin1 = rMinf * std::cos(phi1);
+    float yRMin1 = rMinf * std::sin(phi1);
+    float xRMin2 = rMinf * std::cos(phi2);
+    float yRMin2 = rMinf * std::sin(phi2);
+
+    float xRMax1 = rMaxf * std::cos(phi1);
+    float yRMax1 = rMaxf * std::sin(phi1);
+    float xRMax2 = rMaxf * std::cos(phi2);
+    float yRMax2 = rMaxf * std::sin(phi2);
+
+    // wedge ends
+    if (dPhif != 2.0*M_PI && i==0)
+      {
+      //polulate vertices for the 4 corners of the wedge end
+      pArray.push_back(GfVec3f(xRMin1, yRMin1, -zf));
+      pArray.push_back(GfVec3f(xRMin1, yRMin1, zf));
+      pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));
+      pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf));
+
+      // push back the 3 vertices to describe first polygon on wedge end
+      viArray.push_back(pArray.size() - 1);
+      viArray.push_back(pArray.size() - 2);
+      viArray.push_back(pArray.size() - 3);
+      //add polygon number of vertices
+      vcArray.push_back(3);
+
+      // push back the 3 vertices to describe 2nd polygon on wedge end
+      viArray.push_back(pArray.size() - 2);
+      viArray.push_back(pArray.size() - 3);
+      viArray.push_back(pArray.size() - 4);
+      //add polygon number of vertices
+      vcArray.push_back(3);
+
+      }
+    if (dPhif != 2.0*M_PI && i==nslice-1)
+      {
+       pArray.push_back(GfVec3f(xRMin2, yRMin2, -zf));
+       pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));
+       pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));
+       pArray.push_back(GfVec3f(xRMin2, yRMin2, zf));
+
+        viArray.push_back(pArray.size() - 1);
+        viArray.push_back(pArray.size() - 2);
+        viArray.push_back(pArray.size() - 3);
+        vcArray.push_back(3);
+
+        viArray.push_back(pArray.size() - 2);
+        viArray.push_back(pArray.size() - 3);
+        viArray.push_back(pArray.size() - 4);
+        vcArray.push_back(3);
+      }
+
+    //tube ends
+    if (rMinf ==0)
+      {
+      //top and bottom without inner radius
+
+       pArray.push_back(GfVec3f(0, 0, -zf));
+       pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));
+       pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf));
+       viArray.push_back(pArray.size() - 1);
+       viArray.push_back(pArray.size() - 2);
+       viArray.push_back(pArray.size() - 3);
+       vcArray.push_back(3);
+
+       pArray.push_back(GfVec3f(0, 0, zf));
+       pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));
+       pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));
+       viArray.push_back(pArray.size() - 1);
+       viArray.push_back(pArray.size() - 2);
+       viArray.push_back(pArray.size() - 3);
+       vcArray.push_back(3);
+
+       }
+      else
+      {
+       //top and bottom with inner radius
+
+       pArray.push_back(GfVec3f(xRMin1, yRMin1, -zf));
+       pArray.push_back(GfVec3f(xRMin2, yRMin2, -zf));
+       pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf));
+       pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));
+       viArray.push_back(pArray.size() - 1);
+       viArray.push_back(pArray.size() - 2);
+       viArray.push_back(pArray.size() - 3);
+       vcArray.push_back(3);
+
+       viArray.push_back(pArray.size() - 2);
+       viArray.push_back(pArray.size() - 3);
+       viArray.push_back(pArray.size() - 4);
+       vcArray.push_back(3);
+
+       pArray.push_back(GfVec3f(xRMin1, yRMin1, zf));
+       pArray.push_back(GfVec3f(xRMin2, yRMin2, zf));
+       pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));
+       pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));
+       viArray.push_back(pArray.size() - 1);
+       viArray.push_back(pArray.size() - 2);
+       viArray.push_back(pArray.size() - 3);
+       vcArray.push_back(3);
+
+       viArray.push_back(pArray.size() - 2);
+       viArray.push_back(pArray.size() - 3);
+       viArray.push_back(pArray.size() - 4);
+       vcArray.push_back(3);
+      }
+
+      //curved faces
+      //inner face
+      pArray.push_back(GfVec3f(xRMin1, yRMin1, -zf));
+      pArray.push_back(GfVec3f(xRMin1, yRMin1, zf));
+      pArray.push_back(GfVec3f(xRMin2, yRMin2, -zf));
+      pArray.push_back(GfVec3f(xRMin2, yRMin2, zf));
+      viArray.push_back(pArray.size() - 1);
+      viArray.push_back(pArray.size() - 2);
+      viArray.push_back(pArray.size() - 3);
+      vcArray.push_back(3);
+
+      viArray.push_back(pArray.size() - 2);
+      viArray.push_back(pArray.size() - 3);
+      viArray.push_back(pArray.size() - 4);
+      vcArray.push_back(3);
+
+      //outer face
+
+      pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf));
+      pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));
+      pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));
+      pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));
+      viArray.push_back(pArray.size() - 1);
+      viArray.push_back(pArray.size() - 2);
+      viArray.push_back(pArray.size() - 3);
+      vcArray.push_back(3);
+
+      viArray.push_back(pArray.size() - 2);
+      viArray.push_back(pArray.size() - 3);
+      viArray.push_back(pArray.size() - 4);
+      vcArray.push_back(3);
+    }
+
+  VtArray<GfVec3f> pArrayUpdate;
+  ReplaceDuplicateVertices(pArray,viArray,pArrayUpdate);
+
+  p.Set(pArrayUpdate);
+  vc.Set(vcArray);
+  vi.Set(viArray);
+  // update parents
+  auto parent = GetPrim().GetParent();
+}
+//// update these
+bool pxr::G4Tubs::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
+  return notice.AffectedObject(this->GetRMinAttr()) ||
+         notice.AffectedObject(this->GetRMaxAttr()) ||
+         notice.AffectedObject(this->GetZAttr())    ||
+         notice.AffectedObject(this->GetSPhiAttr()) ||
+         notice.AffectedObject(this->GetDPhiAttr());
+}
+
+void pxr::G4Tubs::ReplaceDuplicateVertices(VtArray<GfVec3f> &vertices, VtIntArray &indices, VtArray<GfVec3f> &newVertices)
+{
+  std::unordered_map<std::string, int> hashMap;
+  for (auto it = vertices.begin(); it != vertices.end(); ++it)
+    {
+      int count = 0;
+      std::string key1 = std::to_string(it[0][0]);
+      std::string key2 = std::to_string(it[1][0]);
+      std::string key3 = std::to_string(it[2][0]);
+
+      std::string key = key1 + key2 + key3;
+      if (hashMap.find(key) == hashMap.end())
+      {
+        hashMap[key] = count;
+        newVertices.push_back(GfVec3f(it[0][0], it[0][1], it[0][2]));
+      }
+      else
+      {
+        std::replace(indices.begin(), indices.end(), count, hashMap[key]);
+      }
+      count++;
+
+
+    }
+
+}

@@ -56,9 +56,11 @@ class Tubs "Tubs" (
     }
 )  {
     string g4type = "Tubs"
-    double r1 = 0
-    double r2 = 0
-    double z = 0 
+    double rMin = 0
+    double rMax = 0
+    double z = 0
+    double sPhi = 0
+    double dPhi = 0
 }
 
 class BooleanSolid "BooleanSolid" (

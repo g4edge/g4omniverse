@@ -40,16 +40,16 @@ _CreateG4typeAttr(G4Tubs &self,
 }
         
 static UsdAttribute
-_CreateR1Attr(G4Tubs &self,
+_CreateRMinAttr(G4Tubs &self,
                                       object defaultVal, bool writeSparsely) {
-    return self.CreateR1Attr(
+    return self.CreateRMinAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double), writeSparsely);
 }
         
 static UsdAttribute
-_CreateR2Attr(G4Tubs &self,
+_CreateRMaxAttr(G4Tubs &self,
                                       object defaultVal, bool writeSparsely) {
-    return self.CreateR2Attr(
+    return self.CreateRMaxAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double), writeSparsely);
 }
         
@@ -57,6 +57,20 @@ static UsdAttribute
 _CreateZAttr(G4Tubs &self,
                                       object defaultVal, bool writeSparsely) {
     return self.CreateZAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double), writeSparsely);
+}
+        
+static UsdAttribute
+_CreateSPhiAttr(G4Tubs &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateSPhiAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double), writeSparsely);
+}
+        
+static UsdAttribute
+_CreateDPhiAttr(G4Tubs &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateDPhiAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double), writeSparsely);
 }
 
@@ -109,17 +123,17 @@ void wrapG4Tubs()
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
         
-        .def("GetR1Attr",
-             &This::GetR1Attr)
-        .def("CreateR1Attr",
-             &_CreateR1Attr,
+        .def("GetRMinAttr",
+             &This::GetRMinAttr)
+        .def("CreateRMinAttr",
+             &_CreateRMinAttr,
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
         
-        .def("GetR2Attr",
-             &This::GetR2Attr)
-        .def("CreateR2Attr",
-             &_CreateR2Attr,
+        .def("GetRMaxAttr",
+             &This::GetRMaxAttr)
+        .def("CreateRMaxAttr",
+             &_CreateRMaxAttr,
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
         
@@ -127,6 +141,20 @@ void wrapG4Tubs()
              &This::GetZAttr)
         .def("CreateZAttr",
              &_CreateZAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetSPhiAttr",
+             &This::GetSPhiAttr)
+        .def("CreateSPhiAttr",
+             &_CreateSPhiAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetDPhiAttr",
+             &This::GetDPhiAttr)
+        .def("CreateDPhiAttr",
+             &_CreateDPhiAttr,
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
 
@@ -158,6 +186,9 @@ void wrapG4Tubs()
 namespace {
 
 WRAP_CUSTOM {
+    _class
+    .def("Update",&G4Tubs::Update)
+    .def("InstallUpdateListener",&G4Tubs::InstallUpdateListener);
 }
 
 }

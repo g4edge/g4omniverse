@@ -625,6 +625,7 @@ class Tubs "Tubs"
         forward-facing normals on each side of the surface for lighting
         calculations."""
     )
+    double dPhi = 0
     float3[] extent (
         doc = """Extent is a three dimensional range measuring the geometric
         extent of the authored gprim in its own local space (i.e. its own
@@ -771,8 +772,9 @@ class Tubs "Tubs"
         See for more detail about how 
         purpose is computed and used."""
     )
-    double r1 = 0
-    double r2 = 0
+    double rMax = 0
+    double rMin = 0
+    double sPhi = 0
     uniform token subdivisionScheme = "catmullClark" (
         allowedTokens = ["catmullClark", "loop", "bilinear", "none"]
         doc = '''The subdivision scheme to be applied to the surface.

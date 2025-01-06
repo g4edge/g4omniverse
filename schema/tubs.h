@@ -154,47 +154,47 @@ public:
 
 public:
     // --------------------------------------------------------------------- //
-    // R1 
+    // RMIN 
     // --------------------------------------------------------------------- //
     /// 
     ///
     /// | ||
     /// | -- | -- |
-    /// | Declaration | `double r1 = 0` |
+    /// | Declaration | `double rMin = 0` |
     /// | C++ Type | double |
     /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double |
     G4_API
-    UsdAttribute GetR1Attr() const;
+    UsdAttribute GetRMinAttr() const;
 
-    /// See GetR1Attr(), and also 
+    /// See GetRMinAttr(), and also 
     /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
     /// If specified, author \p defaultValue as the attribute's default,
     /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
     /// the default for \p writeSparsely is \c false.
     G4_API
-    UsdAttribute CreateR1Attr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+    UsdAttribute CreateRMinAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
 
 public:
     // --------------------------------------------------------------------- //
-    // R2 
+    // RMAX 
     // --------------------------------------------------------------------- //
     /// 
     ///
     /// | ||
     /// | -- | -- |
-    /// | Declaration | `double r2 = 0` |
+    /// | Declaration | `double rMax = 0` |
     /// | C++ Type | double |
     /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double |
     G4_API
-    UsdAttribute GetR2Attr() const;
+    UsdAttribute GetRMaxAttr() const;
 
-    /// See GetR2Attr(), and also 
+    /// See GetRMaxAttr(), and also 
     /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
     /// If specified, author \p defaultValue as the attribute's default,
     /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
     /// the default for \p writeSparsely is \c false.
     G4_API
-    UsdAttribute CreateR2Attr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+    UsdAttribute CreateRMaxAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
 
 public:
     // --------------------------------------------------------------------- //
@@ -219,6 +219,50 @@ public:
     UsdAttribute CreateZAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
 
 public:
+    // --------------------------------------------------------------------- //
+    // SPHI 
+    // --------------------------------------------------------------------- //
+    /// 
+    ///
+    /// | ||
+    /// | -- | -- |
+    /// | Declaration | `double sPhi = 0` |
+    /// | C++ Type | double |
+    /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double |
+    G4_API
+    UsdAttribute GetSPhiAttr() const;
+
+    /// See GetSPhiAttr(), and also 
+    /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
+    /// If specified, author \p defaultValue as the attribute's default,
+    /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
+    /// the default for \p writeSparsely is \c false.
+    G4_API
+    UsdAttribute CreateSPhiAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+
+public:
+    // --------------------------------------------------------------------- //
+    // DPHI 
+    // --------------------------------------------------------------------- //
+    /// 
+    ///
+    /// | ||
+    /// | -- | -- |
+    /// | Declaration | `double dPhi = 0` |
+    /// | C++ Type | double |
+    /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double |
+    G4_API
+    UsdAttribute GetDPhiAttr() const;
+
+    /// See GetDPhiAttr(), and also 
+    /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
+    /// If specified, author \p defaultValue as the attribute's default,
+    /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
+    /// the default for \p writeSparsely is \c false.
+    G4_API
+    UsdAttribute CreateDPhiAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+
+public:
     // ===================================================================== //
     // Feel free to add custom code below this line, it will be preserved by 
     // the code generator. 
@@ -229,6 +273,10 @@ public:
     //  - Close the include guard with #endif
     // ===================================================================== //
     // --(BEGIN CUSTOM CODE)--
+    void InstallUpdateListener();
+    void Update();
+    virtual bool IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) override;
+    void ReplaceDuplicateVertices(VtArray<GfVec3f> &vertices,VtIntArray &indices, VtArray<GfVec3f> &newVertices);
 };
 
 PXR_NAMESPACE_CLOSE_SCOPE
