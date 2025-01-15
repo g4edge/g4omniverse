@@ -276,7 +276,7 @@ public:
     void InstallUpdateListener();
     void Update();
     virtual bool IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) override;
-    void ReplaceDuplicateVertices(VtArray<GfVec3f> &vertices,VtIntArray &indices, VtArray<GfVec3f> &newVertices);
+    void ReplaceDuplicateVertices(VtArray<GfVec3f> &vertices, VtIntArray &indices, VtArray<GfVec3f> &newVertices,VtIntArray &newIndices);
 };
 
 PXR_NAMESPACE_CLOSE_SCOPE

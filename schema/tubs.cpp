@@ -286,7 +286,7 @@ void pxr::G4Tubs::Update() {
   VtArray<GfVec3f> pArray;
   VtIntArray vcArray;
   VtIntArray viArray;
-  float nslice = 314;// this needs to be thought about more
+  float nslice = 30;// this needs to be thought about more
 
   float pDPhi = dPhif / nslice;
 
@@ -436,46 +436,51 @@ void pxr::G4Tubs::Update() {
     }
 
   VtArray<GfVec3f> pArrayUpdate;
-  ReplaceDuplicateVertices(pArray,viArray,pArrayUpdate);
+  VtIntArray viArrayUpdate;
+  ReplaceDuplicateVertices(pArray,viArray,pArrayUpdate,viArrayUpdate);
 
-  p.Set(pArrayUpdate);
+  p.Set(pArray);
   vc.Set(vcArray);
-  vi.Set(viArray);
+  vi.Set(viArrayUpdate);
   // update parents
   auto parent = GetPrim().GetParent();
 }
 //// update these
 bool pxr::G4Tubs::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
-  return notice.AffectedObject(this->GetRMinAttr()) ||
-         notice.AffectedObject(this->GetRMaxAttr()) ||
-         notice.AffectedObject(this->GetZAttr())    ||
-         notice.AffectedObject(this->GetSPhiAttr()) ||
-         notice.AffectedObject(this->GetDPhiAttr());
+    return notice.AffectedObject(this->GetRMinAttr()) ||
+           notice.AffectedObject(this->GetRMaxAttr()) ||
+           notice.AffectedObject(this->GetZAttr())    ||
+           notice.AffectedObject(this->GetSPhiAttr()) ||
+           notice.AffectedObject(this->GetDPhiAttr());
 }
 
-void pxr::G4Tubs::ReplaceDuplicateVertices(VtArray<GfVec3f> &vertices, VtIntArray &indices, VtArray<GfVec3f> &newVertices)
+void pxr::G4Tubs::ReplaceDuplicateVertices(VtArray<GfVec3f> &vertices, VtIntArray &indices, VtArray<GfVec3f> &newVertices, VtIntArray &newIndices)
 {
-  std::unordered_map<std::string, int> hashMap;
-  for (auto it = vertices.begin(); it != vertices.end(); ++it)
+    int count = 0;
+    std::unordered_map<std::string, int> hashMap;
+    for (auto it = vertices.begin(); it != vertices.end(); ++it)
     {
-      int count = 0;
-      std::string key1 = std::to_string(it[0][0]);
-      std::string key2 = std::to_string(it[1][0]);
-      std::string key3 = std::to_string(it[2][0]);
+        std::string key1 = std::to_string(it->GetArray()[0]);
+        std::string key2 = std::to_string(it->GetArray()[1]);
+        std::string key3 = std::to_string(it->GetArray()[2]);
 
-      std::string key = key1 + key2 + key3;
-      if (hashMap.find(key) == hashMap.end())
-      {
-        hashMap[key] = count;
-        newVertices.push_back(GfVec3f(it[0][0], it[0][1], it[0][2]));
-      }
-      else
-      {
-        std::replace(indices.begin(), indices.end(), count, hashMap[key]);
-      }
-      count++;
+        std::string key = key1 + key2 + key3;
 
-
+        if (hashMap.find(key) == hashMap.end())
+        {
+            hashMap[key] = count;
+            newVertices.push_back(GfVec3f(it->GetArray()[0], it->GetArray()[1], it->GetArray()[2]));
+        }
+        count++;
     }
 
+    for (auto idx : indices) {
+        // Get the deduplicated index from the mapping
+        std::string key = std::to_string(vertices[idx].GetArray()[0]) +
+                          std::to_string(vertices[idx].GetArray()[1]) +
+                          std::to_string(vertices[idx].GetArray()[2]);
+
+        // Add the deduplicated index to the newIndices list
+        newIndices.push_back(hashMap[key]);
+    }
 }
