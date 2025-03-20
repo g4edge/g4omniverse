@@ -236,6 +236,8 @@ PXR_NAMESPACE_CLOSE_SCOPE
 
 #include <iostream>
 #include "pxr/usd/usd/notice.h"
+#include <unordered_map>
+#include "SurfaceMesh.h"
 
 class TubsChangeListener : public pxr::TfWeakBase {
 public:
@@ -284,17 +286,17 @@ void pxr::G4Tubs::Update() {
   auto vi = GetFaceVertexIndicesAttr();
 
   VtArray<GfVec3f> pArray;
+
   VtIntArray vcArray;
   VtIntArray viArray;
-  float nslice = 30;// this needs to be thought about more
+  float nslice = 6;// this needs to be thought about more
 
   float pDPhi = dPhif / nslice;
 
-  for (int i = 0; i < nslice; ++i)
+  for (int i = 0; i <= nslice-1; ++i)
   {
     float phi1 = sPhif + i * pDPhi;
     float phi2 = sPhif + (i + 1) * pDPhi;
-
     float xRMin1 = rMinf * std::cos(phi1);
     float yRMin1 = rMinf * std::sin(phi1);
     float xRMin2 = rMinf * std::cos(phi2);
@@ -306,145 +308,166 @@ void pxr::G4Tubs::Update() {
     float yRMax2 = rMaxf * std::sin(phi2);
 
     // wedge ends
+
+    //tube ends
+
+    //tpo and bottom with inner radius
+    if(rMin==0)
+      {      //top and bottom without inner radius
+     pArray.push_back(GfVec3f(0, 0, -zf));
+     pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf));
+     pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));
+
+     viArray.push_back(pArray.size()-3);
+     viArray.push_back(pArray.size()-2);
+     viArray.push_back(pArray.size()-1);
+
+     vcArray.push_back(3);
+
+     pArray.push_back(GfVec3f(0, 0, zf));
+     pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));
+     pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));
+
+     viArray.push_back(pArray.size()-3);
+     viArray.push_back(pArray.size()-2);
+     viArray.push_back(pArray.size()-1);
+
+     vcArray.push_back(3);
+     }
+    else
+    {
+      //top
+      pArray.push_back(GfVec3f(xRMin1, yRMin1, zf));//-8
+      pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));//-7
+      pArray.push_back(GfVec3f(xRMin2, yRMin2, zf));//-6
+      pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));//-5
+
+      viArray.push_back(pArray.size()-4);
+      viArray.push_back(pArray.size()-3);
+      viArray.push_back(pArray.size()-1);
+      vcArray.push_back(3);
+
+
+      viArray.push_back(pArray.size()-4);
+      viArray.push_back(pArray.size()-1);
+      viArray.push_back(pArray.size()-2);
+      vcArray.push_back(3);
+
+      //bottom
+      pArray.push_back(GfVec3f(xRMin1, yRMin1, -zf));//-4
+      pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf));//-3
+      pArray.push_back(GfVec3f(xRMin2, yRMin2, -zf));//-2
+      pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));//-1
+
+      viArray.push_back(pArray.size()-4);
+      viArray.push_back(pArray.size()-3);
+      viArray.push_back(pArray.size()-1);
+      vcArray.push_back(3);
+
+      viArray.push_back(pArray.size()-4);
+      viArray.push_back(pArray.size()-1);
+      viArray.push_back(pArray.size()-2);
+      vcArray.push_back(3);
+
+
+      //inner curved face
+      viArray.push_back(pArray.size()-8);
+      viArray.push_back(pArray.size()-4);
+      viArray.push_back(pArray.size()-2);
+      vcArray.push_back(3);
+
+      viArray.push_back(pArray.size()-8);
+      viArray.push_back(pArray.size()-2);
+      viArray.push_back(pArray.size()-6);
+      vcArray.push_back(3);
+
+
+    }
+
+      // wedge ends
     if (dPhif != 2.0*M_PI && i==0)
       {
       //polulate vertices for the 4 corners of the wedge end
-      pArray.push_back(GfVec3f(xRMin1, yRMin1, -zf));
-      pArray.push_back(GfVec3f(xRMin1, yRMin1, zf));
-      pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));
-      pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf));
+      pArray.push_back(GfVec3f(xRMin1, yRMin1, zf));//4
+      pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));//3
+      pArray.push_back(GfVec3f(xRMin1, yRMin1, -zf));//2
+      pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf));//1
 
       // push back the 3 vertices to describe first polygon on wedge end
-      viArray.push_back(pArray.size() - 1);
+      viArray.push_back(pArray.size() - 4);
       viArray.push_back(pArray.size() - 2);
-      viArray.push_back(pArray.size() - 3);
+      viArray.push_back(pArray.size() - 1);
       //add polygon number of vertices
       vcArray.push_back(3);
 
       // push back the 3 vertices to describe 2nd polygon on wedge end
-      viArray.push_back(pArray.size() - 2);
-      viArray.push_back(pArray.size() - 3);
       viArray.push_back(pArray.size() - 4);
+      viArray.push_back(pArray.size() - 1);
+      viArray.push_back(pArray.size() - 3);
       //add polygon number of vertices
       vcArray.push_back(3);
 
       }
     if (dPhif != 2.0*M_PI && i==nslice-1)
       {
-       pArray.push_back(GfVec3f(xRMin2, yRMin2, -zf));
-       pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));
-       pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));
-       pArray.push_back(GfVec3f(xRMin2, yRMin2, zf));
+      pArray.push_back(GfVec3f(xRMin2, yRMin2, zf));//4
+      pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));//3
+      pArray.push_back(GfVec3f(xRMin2, yRMin2, -zf));//2
+      pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));//1
 
-        viArray.push_back(pArray.size() - 1);
-        viArray.push_back(pArray.size() - 2);
-        viArray.push_back(pArray.size() - 3);
-        vcArray.push_back(3);
+      // push back the 3 vertices to describe first polygon on wedge end
+      viArray.push_back(pArray.size() - 4);
+      viArray.push_back(pArray.size() - 2);
+      viArray.push_back(pArray.size() - 1);
+      //add polygon number of vertices
+      vcArray.push_back(3);
 
-        viArray.push_back(pArray.size() - 2);
-        viArray.push_back(pArray.size() - 3);
-        viArray.push_back(pArray.size() - 4);
-        vcArray.push_back(3);
+      // push back the 3 vertices to describe 2nd polygon on wedge end
+      viArray.push_back(pArray.size() - 4);
+      viArray.push_back(pArray.size() - 1);
+      viArray.push_back(pArray.size() - 3);
+      //add polygon number of vertices
+      vcArray.push_back(3);
       }
 
-    //tube ends
-    if (rMinf ==0)
-      {
-      //top and bottom without inner radius
+    //curved faces
 
-       pArray.push_back(GfVec3f(0, 0, -zf));
-       pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));
-       pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf));
-       viArray.push_back(pArray.size() - 1);
-       viArray.push_back(pArray.size() - 2);
-       viArray.push_back(pArray.size() - 3);
-       vcArray.push_back(3);
+    //outer face
 
-       pArray.push_back(GfVec3f(0, 0, zf));
-       pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));
-       pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));
-       viArray.push_back(pArray.size() - 1);
-       viArray.push_back(pArray.size() - 2);
-       viArray.push_back(pArray.size() - 3);
-       vcArray.push_back(3);
+    pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf)); //-4
+    pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));//-3
+    pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));//-2
+    pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));//-1
 
-       }
-      else
-      {
-       //top and bottom with inner radius
 
-       pArray.push_back(GfVec3f(xRMin1, yRMin1, -zf));
-       pArray.push_back(GfVec3f(xRMin2, yRMin2, -zf));
-       pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf));
-       pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));
-       viArray.push_back(pArray.size() - 1);
-       viArray.push_back(pArray.size() - 2);
-       viArray.push_back(pArray.size() - 3);
-       vcArray.push_back(3);
+    viArray.push_back(pArray.size()-3);
+    viArray.push_back(pArray.size()-4);//-4
+    viArray.push_back(pArray.size()-2);//-2
 
-       viArray.push_back(pArray.size() - 2);
-       viArray.push_back(pArray.size() - 3);
-       viArray.push_back(pArray.size() - 4);
-       vcArray.push_back(3);
+    vcArray.push_back(3);
 
-       pArray.push_back(GfVec3f(xRMin1, yRMin1, zf));
-       pArray.push_back(GfVec3f(xRMin2, yRMin2, zf));
-       pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));
-       pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));
-       viArray.push_back(pArray.size() - 1);
-       viArray.push_back(pArray.size() - 2);
-       viArray.push_back(pArray.size() - 3);
-       vcArray.push_back(3);
+    viArray.push_back(pArray.size()-3);//-3
+    viArray.push_back(pArray.size()-2);//-2
+    viArray.push_back(pArray.size()-1);//-1
+    vcArray.push_back(3);
 
-       viArray.push_back(pArray.size() - 2);
-       viArray.push_back(pArray.size() - 3);
-       viArray.push_back(pArray.size() - 4);
-       vcArray.push_back(3);
-      }
 
-      //curved faces
-      //inner face
-      pArray.push_back(GfVec3f(xRMin1, yRMin1, -zf));
-      pArray.push_back(GfVec3f(xRMin1, yRMin1, zf));
-      pArray.push_back(GfVec3f(xRMin2, yRMin2, -zf));
-      pArray.push_back(GfVec3f(xRMin2, yRMin2, zf));
-      viArray.push_back(pArray.size() - 1);
-      viArray.push_back(pArray.size() - 2);
-      viArray.push_back(pArray.size() - 3);
-      vcArray.push_back(3);
+  }
 
-      viArray.push_back(pArray.size() - 2);
-      viArray.push_back(pArray.size() - 3);
-      viArray.push_back(pArray.size() - 4);
-      vcArray.push_back(3);
-
-      //outer face
-
-      pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf));
-      pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));
-      pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));
-      pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));
-      viArray.push_back(pArray.size() - 1);
-      viArray.push_back(pArray.size() - 2);
-      viArray.push_back(pArray.size() - 3);
-      vcArray.push_back(3);
-
-      viArray.push_back(pArray.size() - 2);
-      viArray.push_back(pArray.size() - 3);
-      viArray.push_back(pArray.size() - 4);
-      vcArray.push_back(3);
-    }
 
   VtArray<GfVec3f> pArrayUpdate;
   VtIntArray viArrayUpdate;
+
   ReplaceDuplicateVertices(pArray,viArray,pArrayUpdate,viArrayUpdate);
 
   p.Set(pArray);
   vc.Set(vcArray);
-  vi.Set(viArrayUpdate);
+  vi.Set(viArray);
   // update parents
   auto parent = GetPrim().GetParent();
 }
+
+
 //// update these
 bool pxr::G4Tubs::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
     return notice.AffectedObject(this->GetRMinAttr()) ||
@@ -454,33 +477,3 @@ bool pxr::G4Tubs::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) 
            notice.AffectedObject(this->GetDPhiAttr());
 }
 
-void pxr::G4Tubs::ReplaceDuplicateVertices(VtArray<GfVec3f> &vertices, VtIntArray &indices, VtArray<GfVec3f> &newVertices, VtIntArray &newIndices)
-{
-    int count = 0;
-    std::unordered_map<std::string, int> hashMap;
-    for (auto it = vertices.begin(); it != vertices.end(); ++it)
-    {
-        std::string key1 = std::to_string(it->GetArray()[0]);
-        std::string key2 = std::to_string(it->GetArray()[1]);
-        std::string key3 = std::to_string(it->GetArray()[2]);
-
-        std::string key = key1 + key2 + key3;
-
-        if (hashMap.find(key) == hashMap.end())
-        {
-            hashMap[key] = count;
-            newVertices.push_back(GfVec3f(it->GetArray()[0], it->GetArray()[1], it->GetArray()[2]));
-        }
-        count++;
-    }
-
-    for (auto idx : indices) {
-        // Get the deduplicated index from the mapping
-        std::string key = std::to_string(vertices[idx].GetArray()[0]) +
-                          std::to_string(vertices[idx].GetArray()[1]) +
-                          std::to_string(vertices[idx].GetArray()[2]);
-
-        // Add the deduplicated index to the newIndices list
-        newIndices.push_back(hashMap[key]);
-    }
-}

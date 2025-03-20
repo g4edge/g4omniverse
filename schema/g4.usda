@@ -63,6 +63,23 @@ class Tubs "Tubs" (
     double dPhi = 0
 }
 
+class Cons "Cons" (
+    inherits = </VSolid>
+
+    customData = {
+        string className = "Cons"
+    }
+)  {
+    string g4type = "Cons"
+    double rMin1 = 0
+    double rMax1 = 0
+    double rMin2 = 0
+    double rMax2 = 0
+    double z = 0
+    double sPhi = 0
+    double dPhi = 0
+}
+
 class BooleanSolid "BooleanSolid" (
   inherits = </Scope>
 
