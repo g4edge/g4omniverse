@@ -23,6 +23,7 @@ pxr_plugin(${PXR_PACKAGE}
 		vSolid
 		box
 		tubs
+		cons
 		booleanSolid
 		subtraction
 		displacedSolid
@@ -58,8 +59,12 @@ pxr_plugin(${PXR_PACKAGE}
 		wrapPlacement.cpp
 		wrapTokens.cpp
 
-    RESOURCE_FILES
+	CPPFILES
+		surfaceMesh.cpp
+
+		RESOURCE_FILES
 		generatedSchema.usda
 		plugInfo.json
 		g4.usda:g4/schema.usda
+
 )
