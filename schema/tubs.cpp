@@ -289,7 +289,7 @@ void pxr::G4Tubs::Update() {
 
   VtIntArray vcArray;
   VtIntArray viArray;
-  float nslice = 6;// this needs to be thought about more
+  float nslice = 16;// this needs to be thought about more
 
   float pDPhi = dPhif / nslice;
 
@@ -460,9 +460,9 @@ void pxr::G4Tubs::Update() {
 
   ReplaceDuplicateVertices(pArray,viArray,pArrayUpdate,viArrayUpdate);
 
-  p.Set(pArray);
+  p.Set(pArrayUpdate);
   vc.Set(vcArray);
-  vi.Set(viArray);
+  vi.Set(viArrayUpdate);
   // update parents
   auto parent = GetPrim().GetParent();
 }
