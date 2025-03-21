@@ -49,6 +49,7 @@ pxr_plugin(${PXR_PACKAGE}
 		wrapVSolid.cpp
 		wrapBox.cpp
 		wrapTubs.cpp
+		wrapCons.cpp
 		wrapBooleanSolid.cpp
 		wrapDisplacedSolid.cpp
 		wrapIntersection.cpp
