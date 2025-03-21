@@ -9,15 +9,15 @@
 #include "pxr/usd/sdf/types.h"
 
 struct Vec3Key {
-    static constexpr float TOLERANCE = 1e6f;  // Scaling factor for precision
-    static constexpr float ROUND_TO_ZERO_THRESHOLD = 1e-11f; // Threshold for rounding to zero
+    static constexpr float Tolerance = 1e6f;  // Scaling factor for precision
+    static constexpr float RoundtoZeroThreshold = 1e-11f; // Threshold for rounding to zero
     int64_t x, y, z; // Integer representation of scaled coordinates
 
     // Constructor that converts GfVec3f to integer-scaled values
     Vec3Key(const pxr::GfVec3f& v) {
-        x = static_cast<int64_t>(std::round((std::abs(v[0]) < ROUND_TO_ZERO_THRESHOLD ? 0.0f : v[0]) * TOLERANCE));
-        y = static_cast<int64_t>(std::round((std::abs(v[1]) < ROUND_TO_ZERO_THRESHOLD ? 0.0f : v[1]) * TOLERANCE));
-        z = static_cast<int64_t>(std::round((std::abs(v[2]) < ROUND_TO_ZERO_THRESHOLD ? 0.0f : v[2]) * TOLERANCE));
+        x = static_cast<int64_t>(std::round((std::abs(v[0]) < RoundtoZeroThreshold ? 0.0f : v[0]) * Tolerance));
+        y = static_cast<int64_t>(std::round((std::abs(v[1]) < RoundtoZeroThreshold ? 0.0f : v[1]) * Tolerance));
+        z = static_cast<int64_t>(std::round((std::abs(v[2]) < RoundtoZeroThreshold ? 0.0f : v[2]) * Tolerance));
     }
 
     // Equality operator for unordered_map
