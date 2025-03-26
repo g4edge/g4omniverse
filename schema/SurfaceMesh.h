@@ -10,7 +10,7 @@
 
 struct Vec3Key {
     static constexpr float Tolerance = 1e6f;  // Scaling factor for precision
-    static constexpr float RoundtoZeroThreshold = 1e-11f; // Threshold for rounding to zero
+    static constexpr float RoundtoZeroThreshold = 1e-5f; // Threshold for rounding to zero
     int64_t x, y, z; // Integer representation of scaled coordinates
 
     // Constructor that converts GfVec3f to integer-scaled values
