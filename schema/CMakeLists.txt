@@ -24,6 +24,7 @@ pxr_plugin(${PXR_PACKAGE}
 		box
 		tubs
 		cons
+		orb
 		booleanSolid
 		subtraction
 		displacedSolid
@@ -50,6 +51,7 @@ pxr_plugin(${PXR_PACKAGE}
 		wrapBox.cpp
 		wrapTubs.cpp
 		wrapCons.cpp
+		wrapOrb.cpp
 		wrapBooleanSolid.cpp
 		wrapDisplacedSolid.cpp
 		wrapIntersection.cpp

@@ -9,15 +9,16 @@
 #include "pxr/usd/sdf/types.h"
 
 struct Vec3Key {
-    static constexpr float Tolerance = 1e6f;  // Scaling factor for precision
-    static constexpr float RoundtoZeroThreshold = 1e-5f; // Threshold for rounding to zero
+    static constexpr float tolerance = 1e6f;  // Scaling factor for precision
+    static constexpr float roundtoZeroThreshold = 1e-5f; // Threshold for rounding to zero
     int64_t x, y, z; // Integer representation of scaled coordinates
 
     // Constructor that converts GfVec3f to integer-scaled values
+    // as the rounding function has been added don't need to do the compare for the round to zero
     Vec3Key(const pxr::GfVec3f& v) {
-        x = static_cast<int64_t>(std::round((std::abs(v[0]) < RoundtoZeroThreshold ? 0.0f : v[0]) * Tolerance));
-        y = static_cast<int64_t>(std::round((std::abs(v[1]) < RoundtoZeroThreshold ? 0.0f : v[1]) * Tolerance));
-        z = static_cast<int64_t>(std::round((std::abs(v[2]) < RoundtoZeroThreshold ? 0.0f : v[2]) * Tolerance));
+        x = static_cast<int64_t>(std::round((std::abs(v[0]) < roundtoZeroThreshold ? 0.0f : v[0]) * tolerance));
+        y = static_cast<int64_t>(std::round((std::abs(v[1]) < roundtoZeroThreshold ? 0.0f : v[1]) * tolerance));
+        z = static_cast<int64_t>(std::round((std::abs(v[2]) < roundtoZeroThreshold ? 0.0f : v[2]) * tolerance));
     }
 
     // Equality operator for unordered_map
@@ -41,7 +42,32 @@ struct Vec3KeyHash {
     }
 };
 
+struct Edge {
+    int v1, v2;
+
+    // Ensure the smaller vertex comes first
+    Edge(int a, int b) {
+        v1 = std::min(a, b);
+        v2 = std::max(a, b);
+    }
+
+    // Hash function for unordered_set
+    bool operator==(const Edge& other) const {
+        return v1 == other.v1 && v2 == other.v2;
+    }
+};
+
+struct EdgeHash {
+    std::size_t operator()(const Edge& e) const {
+        return std::hash<int>()(e.v1) ^ std::hash<int>()(e.v2);
+    }
+};
+
+
 void ReplaceDuplicateVertices(pxr::VtArray<pxr::GfVec3f> &vertices, pxr::VtIntArray &indices, pxr::VtArray<pxr::GfVec3f> &newVertices, pxr::VtIntArray &newIndices);
 
+void RoundValues(pxr::GfVec3f& vertexIn, pxr::GfVec3f& vertexOut);
+
+int CountEdges(pxr::VtIntArray &indices);
 
 #endif //SURFACEMESH_H

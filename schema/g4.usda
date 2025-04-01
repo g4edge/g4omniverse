@@ -80,6 +80,18 @@ class Cons "Cons" (
     double dPhi = 0
 }
 
+
+class Orb "Orb" (
+    inherits = </VSolid>
+
+    customData = {
+        string className = "Orb"
+    }
+)  {
+    string g4type = "Orb"
+    double rMax = 0
+}
+
 class BooleanSolid "BooleanSolid" (
   inherits = </Scope>
 

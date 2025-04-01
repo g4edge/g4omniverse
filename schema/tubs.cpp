@@ -236,7 +236,6 @@ PXR_NAMESPACE_CLOSE_SCOPE
 
 #include <iostream>
 #include "pxr/usd/usd/notice.h"
-#include <unordered_map>
 #include "SurfaceMesh.h"
 
 class TubsChangeListener : public pxr::TfWeakBase {
@@ -289,7 +288,7 @@ void pxr::G4Tubs::Update() {
 
   VtIntArray vcArray;
   VtIntArray viArray;
-  float nslice = 16;// this needs to be thought about more
+  float nslice = 6;// this needs to be thought about more
 
   float pDPhi = dPhif / nslice;
 
@@ -459,6 +458,8 @@ void pxr::G4Tubs::Update() {
   VtIntArray viArrayUpdate;
 
   ReplaceDuplicateVertices(pArray,viArray,pArrayUpdate,viArrayUpdate);
+  int edges = CountEdges(
+      viArrayUpdate);
 
   p.Set(pArrayUpdate);
   vc.Set(vcArray);
