@@ -263,11 +263,11 @@ void pxr::G4Tubs::InstallUpdateListener() {
 }
 
 void pxr::G4Tubs::Update() {
-  double rMin;
-  double rMax;
-  double z;
-  double sPhi;
-  double dPhi;
+  double rMin=0;
+  double rMax=1;
+  double z=1;
+  double sPhi=0;
+  double dPhi=2.0*M_PI;
   GetRMinAttr().Get(&rMin);
   GetRMaxAttr().Get(&rMax);
   GetZAttr().Get(&z);
@@ -279,11 +279,12 @@ void pxr::G4Tubs::Update() {
   float zf = float(z);
   float sPhif = float(sPhi);
   float dPhif = float(dPhi);
-
+  float tolerance = 1e4;
+  float dPhifRounded = std::round(dPhif*tolerance);
+  float twoPiRounded = std::round(2.0*M_PI*tolerance);
   auto p = GetPointsAttr();
   auto vc = GetFaceVertexCountsAttr();
   auto vi = GetFaceVertexIndicesAttr();
-
   VtArray<GfVec3f> pArray;
 
   VtIntArray vcArray;
@@ -384,50 +385,55 @@ void pxr::G4Tubs::Update() {
     }
 
       // wedge ends
-    if (dPhif != 2.0*M_PI && i==0)
+    if (dPhifRounded != twoPiRounded)
+	{ if (i==0)
       {
-      //polulate vertices for the 4 corners of the wedge end
-      pArray.push_back(GfVec3f(xRMin1, yRMin1, zf));//4
-      pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));//3
-      pArray.push_back(GfVec3f(xRMin1, yRMin1, -zf));//2
-      pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf));//1
+        //polulate vertices for the 4 corners of the wedge end
+        pArray.push_back(GfVec3f(xRMin1, yRMin1, zf));//4
+        pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));//3
+        pArray.push_back(GfVec3f(xRMin1, yRMin1, -zf));//2
+        pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf));//1
 
-      // push back the 3 vertices to describe first polygon on wedge end
-      viArray.push_back(pArray.size() - 4);
-      viArray.push_back(pArray.size() - 2);
-      viArray.push_back(pArray.size() - 1);
-      //add polygon number of vertices
-      vcArray.push_back(3);
+        // push back the 3 vertices to describe first polygon on wedge end
+        viArray.push_back(pArray.size() - 4);
+        viArray.push_back(pArray.size() - 2);
+        viArray.push_back(pArray.size() - 1);
+        //add polygon number of vertices
+        vcArray.push_back(3);
 
-      // push back the 3 vertices to describe 2nd polygon on wedge end
-      viArray.push_back(pArray.size() - 4);
-      viArray.push_back(pArray.size() - 1);
-      viArray.push_back(pArray.size() - 3);
-      //add polygon number of vertices
-      vcArray.push_back(3);
+        // push back the 3 vertices to describe 2nd polygon on wedge end
+        viArray.push_back(pArray.size() - 4);
+        viArray.push_back(pArray.size() - 1);
+        viArray.push_back(pArray.size() - 3);
+        //add polygon number of vertices
+        vcArray.push_back(3);
+	  }
+    }
 
+    if (dPhifRounded != twoPiRounded)
+	{
+      if (i==nslice-1)
+      	{
+        pArray.push_back(GfVec3f(xRMin2, yRMin2, zf));//4
+        pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));//3
+        pArray.push_back(GfVec3f(xRMin2, yRMin2, -zf));//2
+        pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));//1
+
+        // push back the 3 vertices to describe first polygon on wedge end
+        viArray.push_back(pArray.size() - 4);
+        viArray.push_back(pArray.size() - 2);
+        viArray.push_back(pArray.size() - 1);
+        //add polygon number of vertices
+        vcArray.push_back(3);
+
+        // push back the 3 vertices to describe 2nd polygon on wedge end
+        viArray.push_back(pArray.size() - 4);
+        viArray.push_back(pArray.size() - 1);
+        viArray.push_back(pArray.size() - 3);
+        //add polygon number of vertices
+        vcArray.push_back(3);
       }
-    if (dPhif != 2.0*M_PI && i==nslice-1)
-      {
-      pArray.push_back(GfVec3f(xRMin2, yRMin2, zf));//4
-      pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));//3
-      pArray.push_back(GfVec3f(xRMin2, yRMin2, -zf));//2
-      pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));//1
-
-      // push back the 3 vertices to describe first polygon on wedge end
-      viArray.push_back(pArray.size() - 4);
-      viArray.push_back(pArray.size() - 2);
-      viArray.push_back(pArray.size() - 1);
-      //add polygon number of vertices
-      vcArray.push_back(3);
-
-      // push back the 3 vertices to describe 2nd polygon on wedge end
-      viArray.push_back(pArray.size() - 4);
-      viArray.push_back(pArray.size() - 1);
-      viArray.push_back(pArray.size() - 3);
-      //add polygon number of vertices
-      vcArray.push_back(3);
-      }
+    }
 
     //curved faces
 
@@ -453,14 +459,16 @@ void pxr::G4Tubs::Update() {
 
   }
 
-
   VtArray<GfVec3f> pArrayUpdate;
   VtIntArray viArrayUpdate;
 
   ReplaceDuplicateVertices(pArray,viArray,pArrayUpdate,viArrayUpdate);
-  int edges = CountEdges(
-      viArrayUpdate);
-
+  // edges can be removed once sure of meshes
+  int edges = CountEdges(viArrayUpdate);
+  std::cout <<"v = " << pArrayUpdate.size() << std::endl;
+  std::cout <<"f = " << vcArray.size() << std::endl;
+  std::cout <<"e = " << edges << std::endl;
+  std::cout << "euler characteristic = " << pArrayUpdate.size()-edges+vcArray.size() << std::endl;
   p.Set(pArrayUpdate);
   vc.Set(vcArray);
   vi.Set(viArrayUpdate);

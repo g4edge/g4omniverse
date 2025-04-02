@@ -182,7 +182,7 @@ public:
     ///
     /// | ||
     /// | -- | -- |
-    /// | Declaration | `double rMax = 0` |
+    /// | Declaration | `double rMax = 1` |
     /// | C++ Type | double |
     /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double |
     G4_API
@@ -204,7 +204,7 @@ public:
     ///
     /// | ||
     /// | -- | -- |
-    /// | Declaration | `double z = 0` |
+    /// | Declaration | `double z = 1` |
     /// | C++ Type | double |
     /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double |
     G4_API
@@ -248,7 +248,7 @@ public:
     ///
     /// | ||
     /// | -- | -- |
-    /// | Declaration | `double dPhi = 0` |
+    /// | Declaration | `double dPhi = 6.28318` |
     /// | C++ Type | double |
     /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double |
     G4_API
