@@ -37,3 +37,9 @@ via NVIDIA Omniverse.
 
 * `usdGenSchema g4.schema .`
 
+### Convert usd file to usdz
+
+Need to flatten custom schema file for conversion to USDZ
+
+* `usdcat -o INPUT_flatten.usda --flatten INPUT.usda`
+* `usdzip INPUT_flatten.usda INPUT_flatten.usdz`
