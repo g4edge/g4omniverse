@@ -677,7 +677,11 @@ void pxr::G4Cons::Update() {
   VtIntArray viArrayUpdate;
 
   ReplaceDuplicateVertices(pArray,viArray,pArrayUpdate,viArrayUpdate);
-
+  int edges = CountEdges(viArrayUpdate);
+  std::cout <<"v = " << pArrayUpdate.size() << std::endl;
+  std::cout <<"f = " << vcArray.size() << std::endl;
+  std::cout <<"e = " << edges << std::endl;
+  std::cout << "euler characteristic = " << pArrayUpdate.size()-edges+vcArray.size() << std::endl;
   p.Set(pArrayUpdate);
   vc.Set(vcArray);
   vi.Set(viArrayUpdate);

@@ -57,10 +57,10 @@ class Tubs "Tubs" (
 )  {
     string g4type = "Tubs"
     double rMin = 0
-    double rMax = 0
-    double z = 0
+    double rMax = 1
+    double z = 1
     double sPhi = 0
-    double dPhi = 0
+    double dPhi = 6.28318
 }
 
 class Cons "Cons" (
@@ -89,7 +89,7 @@ class Orb "Orb" (
     }
 )  {
     string g4type = "Orb"
-    double rMax = 0
+    double rMax = 1
 }
 
 class BooleanSolid "BooleanSolid" (
