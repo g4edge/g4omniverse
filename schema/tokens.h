@@ -85,6 +85,18 @@ struct G4TokensType {
     /// 
     /// G4VSolid
     const TfToken name;
+    /// \brief "nslice"
+    /// 
+    /// G4Tubs, G4Cons
+    const TfToken nslice;
+    /// \brief "nslicePhi"
+    /// 
+    /// G4Orb
+    const TfToken nslicePhi;
+    /// \brief "nsliceTheta"
+    /// 
+    /// G4Orb
+    const TfToken nsliceTheta;
     /// \brief "rMax"
     /// 
     /// G4Tubs, G4Orb

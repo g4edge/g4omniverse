@@ -222,6 +222,23 @@ G4Cons::CreateDPhiAttr(VtValue const &defaultValue, bool writeSparsely) const
                        writeSparsely);
 }
 
+UsdAttribute
+G4Cons::GetNsliceAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->nslice);
+}
+
+UsdAttribute
+G4Cons::CreateNsliceAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->nslice,
+                       SdfValueTypeNames->Int,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
 namespace {
 static inline TfTokenVector
 _ConcatenateAttributeNames(const TfTokenVector& left,const TfTokenVector& right)
@@ -247,6 +264,7 @@ G4Cons::GetSchemaAttributeNames(bool includeInherited)
         G4Tokens->z,
         G4Tokens->sPhi,
         G4Tokens->dPhi,
+        G4Tokens->nslice,
     };
     static TfTokenVector allNames =
         _ConcatenateAttributeNames(
@@ -319,7 +337,9 @@ void pxr::G4Cons::Update() {
   float zf = float(z);
   float sPhif = float(sPhi);
   float dPhif = float(dPhi);
-
+  float tolerance = 1e4;
+  float dPhifRounded = std::round(dPhif*tolerance);
+  float twoPiRounded = std::round(2.0*M_PI*tolerance);
   auto p = GetPointsAttr();
   auto vc = GetFaceVertexCountsAttr();
   auto vi = GetFaceVertexIndicesAttr();
@@ -328,7 +348,7 @@ void pxr::G4Cons::Update() {
 
   VtIntArray vcArray;
   VtIntArray viArray;
-  float nslice = 16;// this needs to be thought about more
+  float nslice = 6;// this needs to be thought about more
 
   float pDPhi = dPhif / nslice;
 
@@ -361,317 +381,626 @@ void pxr::G4Cons::Update() {
     float xR2Max2 = rMax2f*std::cos(phi2);
     float yR2Max2 = rMax2f*std::sin(phi2);
 
-
-    if(rMin1f == 0 && rMax1f == 0)
+    if(rMin1f == 0)
     {
-      if(rMin2f == 0)
+      if (rMax1f == 0)
       {
-      	//point of cone at bottom
-      	pArray.push_back(GfVec3f(0,0,-zf));//3
-
-      	pArray.push_back(GfVec3f(xR2Max1, yR2Max1, zf));//2
-      	pArray.push_back(GfVec3f(xR2Max2, yR2Max2, zf));//1
-
-      	//cone side face
-      	viArray.push_back(pArray.size()-3);
-      	viArray.push_back(pArray.size()-2);
-      	viArray.push_back(pArray.size()-1);
-      	vcArray.push_back(3);
-
-      	pArray.push_back(GfVec3f(0,0,zf));//3
-      	//cone flat face
-      	viArray.push_back(pArray.size()-3);
-      	viArray.push_back(pArray.size()-2);
-      	viArray.push_back(pArray.size()-1);
-      	vcArray.push_back(3);
-
-        if (dPhif != 2.0*M_PI && i==0)
+        if (rMin2f == 0)
         {
-      	  pArray.push_back(GfVec3f(0,0,-zf));//3
-          pArray.push_back(GfVec3f(0,0,zf));//3
-      	  pArray.push_back(GfVec3f(xR2Max1, yR2Max1, zf));//2
+          // 0001
+          std::cout << "0001" << std::endl;
+            pArray.push_back(GfVec3f(0,0,-zf));//3
+            pArray.push_back(GfVec3f(xR2Max1, yR2Max1, zf));//2
+            pArray.push_back(GfVec3f(xR2Max2, yR2Max2, zf));//1
 
-          viArray.push_back(pArray.size()-3);
-      	  viArray.push_back(pArray.size()-2);
-      	  viArray.push_back(pArray.size()-1);
-      	  vcArray.push_back(3);
+            //cone side face
+            viArray.push_back(pArray.size()-3);
+            viArray.push_back(pArray.size()-2);
+            viArray.push_back(pArray.size()-1);
+            vcArray.push_back(3);
 
-         }
-        if (dPhif != 2.0*M_PI && i==nslice-1)
-        {
-      	  pArray.push_back(GfVec3f(0,0,-zf));//3
-          pArray.push_back(GfVec3f(0,0,zf));//3
-      	  pArray.push_back(GfVec3f(xR2Max2, yR2Max2, zf));//1
+            pArray.push_back(GfVec3f(0,0,zf));//3
+            //cone flat face
+            viArray.push_back(pArray.size()-3);
+            viArray.push_back(pArray.size()-1);
+            viArray.push_back(pArray.size()-2);
+            vcArray.push_back(3);
 
-          viArray.push_back(pArray.size()-3);
-      	  viArray.push_back(pArray.size()-2);
-      	  viArray.push_back(pArray.size()-1);
-      	  vcArray.push_back(3);
-         }
-      }
-      else
-      {
-        //point at bottom of cone
-        pArray.push_back(GfVec3f(0,0,-zf));//3 or 5
-        //couter edge
-      	pArray.push_back(GfVec3f(xR2Max1, yR2Max1, zf));//2
-      	pArray.push_back(GfVec3f(xR2Max2, yR2Max2, zf));//1
+            if (dPhifRounded != twoPiRounded)
+            {
+                if (i==0)
+                {
+                    pArray.push_back(GfVec3f(0,0,-zf));//3
+                    pArray.push_back(GfVec3f(0,0,zf));//3
+                    pArray.push_back(GfVec3f(xR2Max1, yR2Max1, zf));//2
 
-        //cone side face
-      	viArray.push_back(pArray.size()-3);
-      	viArray.push_back(pArray.size()-2);
-      	viArray.push_back(pArray.size()-1);
-      	vcArray.push_back(3);
+                    viArray.push_back(pArray.size()-1);
+                    viArray.push_back(pArray.size()-2);
+                    viArray.push_back(pArray.size()-3);
+                    vcArray.push_back(3);
 
-        pArray.push_back(GfVec3f(xR2Min1, yR2Min1, zf));//2
-      	pArray.push_back(GfVec3f(xR2Min2, yR2Min2, zf));//1
+                }
+            }
 
-        //cone inside face
-      	viArray.push_back(pArray.size()-5);
-      	viArray.push_back(pArray.size()-2);
-      	viArray.push_back(pArray.size()-1);
-      	vcArray.push_back(3);
+            if (dPhifRounded != twoPiRounded)
+            {
+                if (i==nslice-1)
+                {
+                    pArray.push_back(GfVec3f(0,0,-zf));//3
+                    pArray.push_back(GfVec3f(0,0,zf));//3
+                    pArray.push_back(GfVec3f(xR2Max2, yR2Max2, zf));//1
 
-        //cone flat faces
-      	viArray.push_back(pArray.size()-2);
-      	viArray.push_back(pArray.size()-3);
-      	viArray.push_back(pArray.size()-1);
-      	vcArray.push_back(3);
-
-        viArray.push_back(pArray.size()-2);
-      	viArray.push_back(pArray.size()-4);
-      	viArray.push_back(pArray.size()-3);
-      	vcArray.push_back(3);
-
-        if (dPhif != 2.0*M_PI && i==0)
-        {
-          pArray.push_back(GfVec3f(0,0,-zf));//3 or 5
-      	  pArray.push_back(GfVec3f(xR2Max1, yR2Max1, zf));//2
-          pArray.push_back(GfVec3f(xR2Min1, yR2Min1, zf));//2
-          viArray.push_back(pArray.size()-3);
-      	  viArray.push_back(pArray.size()-2);
-      	  viArray.push_back(pArray.size()-1);
-      	  vcArray.push_back(3);
-         }
-        if (dPhif != 2.0*M_PI && i==nslice-1)
-        {
-          pArray.push_back(GfVec3f(0,0,-zf));//3 or 5
-      	  pArray.push_back(GfVec3f(xR2Min2, yR2Min2, zf));//1
-      	  pArray.push_back(GfVec3f(xR2Max2, yR2Max2, zf));//1
-          viArray.push_back(pArray.size()-3);
-      	  viArray.push_back(pArray.size()-2);
-      	  viArray.push_back(pArray.size()-1);
-      	  vcArray.push_back(3);
-         }
-
-      }
-    }
-
-    if(rMin2f == 0 && rMax2f == 0)
-      {
-        if(rMin1f == 0)
-        {
-          // point of cone at top
-          pArray.push_back(GfVec3f(0,0,zf));//4
-
-          // circle of cone centre
-
-          pArray.push_back(GfVec3f(xR1Max1, yR1Max1, -zf));//2
-          pArray.push_back(GfVec3f(xR1Max2, yR1Max2, -zf));//1
-
-          //cone side face
-          pArray.push_back(GfVec3f(0,0, -zf));//3
-
-          viArray.push_back(pArray.size()-3);
-          viArray.push_back(pArray.size()-2);
-          viArray.push_back(pArray.size()-1);
-          vcArray.push_back(3);
-
-          pArray.push_back(GfVec3f(0,0,zf));//3
-          //cone flat face
-          viArray.push_back(pArray.size()-3);
-          viArray.push_back(pArray.size()-2);
-          viArray.push_back(pArray.size()-1);
-          vcArray.push_back(3);
-
-        if (dPhif != 2.0*M_PI && i==0)
-        {
-      	  pArray.push_back(GfVec3f(0,0,-zf));//3
-          pArray.push_back(GfVec3f(0,0,zf));//3
-          pArray.push_back(GfVec3f(xR1Max1, yR1Max1, -zf));//2
-
-          viArray.push_back(pArray.size()-3);
-      	  viArray.push_back(pArray.size()-2);
-      	  viArray.push_back(pArray.size()-1);
-      	  vcArray.push_back(3);
-
-         }
-        if (dPhif != 2.0*M_PI && i==nslice-1)
-        {
-      	  pArray.push_back(GfVec3f(0,0,-zf));//3
-          pArray.push_back(GfVec3f(0,0,zf));//3
-          pArray.push_back(GfVec3f(xR1Max2, yR1Max2, -zf));//1
-
-          viArray.push_back(pArray.size()-3);
-      	  viArray.push_back(pArray.size()-2);
-      	  viArray.push_back(pArray.size()-1);
-      	  vcArray.push_back(3);
-         }
+                    viArray.push_back(pArray.size()-3);
+                    viArray.push_back(pArray.size()-2);
+                    viArray.push_back(pArray.size()-1);
+                    vcArray.push_back(3);
+                }
+            }
         }
         else
         {
-          // point of cone at top
-          pArray.push_back(GfVec3f(0,0,zf));//4
+          // 0011
+        	std::cout << "0011" << std::endl;
 
-          // circle of cone centre
-
-          pArray.push_back(GfVec3f(xR1Max1, yR1Max1, -zf));//2
-          pArray.push_back(GfVec3f(xR1Max2, yR1Max2, -zf));//1
-          //cone side face
-
-          viArray.push_back(pArray.size()-3);
-          viArray.push_back(pArray.size()-2);
-          viArray.push_back(pArray.size()-1);
-          vcArray.push_back(3);
-
-          pArray.push_back(GfVec3f(xR1Min1, yR1Min1, -zf));//2
-          pArray.push_back(GfVec3f(xR1Min2, yR1Min2, -zf));//1
-
-          //cone inside face
-      	  viArray.push_back(pArray.size()-5);
-      	  viArray.push_back(pArray.size()-2);
-      	  viArray.push_back(pArray.size()-1);
-      	  vcArray.push_back(3);
-
-          //cone flat faces
-      	  viArray.push_back(pArray.size()-2);
-      	  viArray.push_back(pArray.size()-3);
-      	  viArray.push_back(pArray.size()-1);
-      	  vcArray.push_back(3);
-
-          viArray.push_back(pArray.size()-2);
-      	  viArray.push_back(pArray.size()-4);
-      	  viArray.push_back(pArray.size()-3);
-      	  vcArray.push_back(3);
-
-          if (dPhif != 2.0*M_PI && i==0)
-          {
-            pArray.push_back(GfVec3f(0,0,zf));//4
-            pArray.push_back(GfVec3f(xR1Max1, yR1Max1, -zf));//2
-            pArray.push_back(GfVec3f(xR1Min1, yR1Min1, -zf));//2
+            pArray.push_back(GfVec3f(0,0,-zf));//3 or 5
+            pArray.push_back(GfVec3f(xR2Max1, yR2Max1, zf));//2
+            pArray.push_back(GfVec3f(xR2Max2, yR2Max2, zf));//1
 
             viArray.push_back(pArray.size()-3);
-      	    viArray.push_back(pArray.size()-2);
-      	    viArray.push_back(pArray.size()-1);
-      	    vcArray.push_back(3);
+            viArray.push_back(pArray.size()-2);
+            viArray.push_back(pArray.size()-1);
+            vcArray.push_back(3);
 
-          }
-          if (dPhif != 2.0*M_PI && i==nslice-1)
-          {
-      	    pArray.push_back(GfVec3f(0,0,zf));//4
-            pArray.push_back(GfVec3f(xR1Max2, yR1Max2, -zf));//2
-            pArray.push_back(GfVec3f(xR1Min2, yR1Min2, -zf));//2
+            pArray.push_back(GfVec3f(xR2Min1, yR2Min1, zf));//2
+            pArray.push_back(GfVec3f(xR2Min2, yR2Min2, zf));//1
+
+            viArray.push_back(pArray.size()-5);
+            viArray.push_back(pArray.size()-2);
+            viArray.push_back(pArray.size()-1);
+            vcArray.push_back(3);
+
+            viArray.push_back(pArray.size()-4);
+            viArray.push_back(pArray.size()-2);
+            viArray.push_back(pArray.size()-1);
+            vcArray.push_back(3);
 
             viArray.push_back(pArray.size()-3);
-      	    viArray.push_back(pArray.size()-2);
-      	    viArray.push_back(pArray.size()-1);
-      	    vcArray.push_back(3);
-          }
+            viArray.push_back(pArray.size()-2);
+            viArray.push_back(pArray.size()-4);
+            vcArray.push_back(3);
 
+            if (dPhifRounded != twoPiRounded)
+            {
+                if (i==0)
+                {
+                    pArray.push_back(GfVec3f(0,0,-zf));//3 or 5
+                    pArray.push_back(GfVec3f(xR2Max1, yR2Max1, zf));//2
+                    pArray.push_back(GfVec3f(xR2Min1, yR2Min1, zf));//2
+                    viArray.push_back(pArray.size()-3);
+                    viArray.push_back(pArray.size()-1);
+                    viArray.push_back(pArray.size()-2);
+                    vcArray.push_back(3);
+                }
+            }
+            if (dPhifRounded != twoPiRounded)
+            {
+                if (i==nslice-1)
+                {
+                    pArray.push_back(GfVec3f(0,0,-zf));//3 or 5
+                    pArray.push_back(GfVec3f(xR2Min2, yR2Min2, zf));//1
+                    pArray.push_back(GfVec3f(xR2Max2, yR2Max2, zf));//1
+                    viArray.push_back(pArray.size()-3);
+                    viArray.push_back(pArray.size()-2);
+                    viArray.push_back(pArray.size()-1);
+                    vcArray.push_back(3);
+                }
+            }
         }
       }
-      if(rMin1f == 0 && rMax1f == 0 && rMin2f == 0 && rMax2f == 0)
+      else
       {
-        //outer edge points for bottom
-        pArray.push_back(GfVec3f(xR1Max1, yR1Max1, -zf));//8 or 4
-        pArray.push_back(GfVec3f(xR1Max2, yR1Max2, -zf));//7 or 3
-        //inner edge points for bottom
-        pArray.push_back(GfVec3f(xR1Min1, yR1Min1, -zf));//6 or 2
-        pArray.push_back(GfVec3f(xR1Min2, yR1Min2, -zf));//5 or 1
-
-        //bottom faces
-        viArray.push_back(pArray.size()-2);
-        viArray.push_back(pArray.size()-4);
-        viArray.push_back(pArray.size()-3);
-		vcArray.push_back(3);
-
-        viArray.push_back(pArray.size()-2);
-        viArray.push_back(pArray.size()-3);
-        viArray.push_back(pArray.size()-1);
-		vcArray.push_back(3);
-
-        //outer edge points for top
-        pArray.push_back(GfVec3f(xR2Max1, yR2Max1, -zf));//4
-        pArray.push_back(GfVec3f(xR2Max2, yR2Max2, -zf));//3
-        //outer edge points for top
-        pArray.push_back(GfVec3f(xR2Min1, yR2Min1, -zf));//2
-        pArray.push_back(GfVec3f(xR2Min2, yR2Min2, -zf));//1
-
-        //top faces
-        viArray.push_back(pArray.size()-2);
-        viArray.push_back(pArray.size()-4);
-        viArray.push_back(pArray.size()-1);
-		vcArray.push_back(3);
-
-        viArray.push_back(pArray.size()-2);
-        viArray.push_back(pArray.size()-3);
-        viArray.push_back(pArray.size()-1);
-		vcArray.push_back(3);
-
-        //outer edges
-        viArray.push_back(pArray.size()-4);
-        viArray.push_back(pArray.size()-8);
-        viArray.push_back(pArray.size()-7);
-		vcArray.push_back(3);
-
-        viArray.push_back(pArray.size()-4);
-        viArray.push_back(pArray.size()-7);
-        viArray.push_back(pArray.size()-3);
-		vcArray.push_back(3);
-
-        //inner edges
-        viArray.push_back(pArray.size()-2);
-        viArray.push_back(pArray.size()-6);
-        viArray.push_back(pArray.size()-5);
-		vcArray.push_back(3);
-
-        viArray.push_back(pArray.size()-2);
-        viArray.push_back(pArray.size()-5);
-        viArray.push_back(pArray.size()-1);
-		vcArray.push_back(3);
-
-        if (dPhif != 2.0*M_PI && i==0)
+        if(rMin2f > 0)
         {
-          pArray.push_back(GfVec3f(xR1Max1, yR1Max1, -zf));//8 or 4
-          pArray.push_back(GfVec3f(xR1Min1, yR1Min1, -zf));//6 or 2
-          pArray.push_back(GfVec3f(xR2Max1, yR2Max1, -zf));//4
-          pArray.push_back(GfVec3f(xR2Min1, yR2Min1, -zf));//2
-          viArray.push_back(pArray.size()-4);
-          viArray.push_back(pArray.size()-2);
-          viArray.push_back(pArray.size()-1);
-		  vcArray.push_back(3);
-          viArray.push_back(pArray.size()-4);
-          viArray.push_back(pArray.size()-1);
-          viArray.push_back(pArray.size()-3);
-		  vcArray.push_back(3);
+      		std::cout << "0111" << std::endl;
+
+	        // 0111
+	        pArray.push_back(GfVec3f(0,0,-zf));//-7
+    		pArray.push_back(GfVec3f(xR1Max1, yR1Max1, -zf));//-6
+    		pArray.push_back(GfVec3f(xR2Max2, yR2Max2, zf));//-5
+    		//bottom
+
+    		viArray.push_back(pArray.size()-3);
+    		viArray.push_back(pArray.size()-2);
+    		viArray.push_back(pArray.size()-1);
+    		vcArray.push_back(3);
+
+    		pArray.push_back(GfVec3f(xR2Min1, yR2Min1, zf));//-4
+    		pArray.push_back(GfVec3f(xR2Max1, yR2Max1, zf));//-3
+    		pArray.push_back(GfVec3f(xR2Min2, yR2Min2, zf));//-2
+    		pArray.push_back(GfVec3f(xR2Max2, yR2Max2, zf));//-1
+
+    		//top
+    		viArray.push_back(pArray.size()-4);
+    		viArray.push_back(pArray.size()-1);
+    		viArray.push_back(pArray.size()-2);
+    		vcArray.push_back(3);
+
+    		viArray.push_back(pArray.size()-4);
+    		viArray.push_back(pArray.size()-3);
+    		viArray.push_back(pArray.size()-1);
+    		vcArray.push_back(3);
+
+	      // outer sides
+    		viArray.push_back(pArray.size()-6);
+    		viArray.push_back(pArray.size()-1);
+    		viArray.push_back(pArray.size()-3);
+    		vcArray.push_back(3);
+
+    		viArray.push_back(pArray.size()-6);
+    		viArray.push_back(pArray.size()-5);
+    		viArray.push_back(pArray.size()-1);
+    		vcArray.push_back(3);
+
+	      //innner sides
+    		viArray.push_back(pArray.size()-7);
+    		viArray.push_back(pArray.size()-4);
+    		viArray.push_back(pArray.size()-2);
+    		vcArray.push_back(3);
+
+	        if (dPhifRounded != twoPiRounded)
+	        {
+		        if (i==0)
+		        {
+    			  pArray.push_back(GfVec3f(0,0,-zf));//-4
+    			  pArray.push_back(GfVec3f(xR1Max1, yR1Max1, -zf));//-3
+    			  pArray.push_back(GfVec3f(xR2Min1, yR2Min1, zf));//-2
+    			  pArray.push_back(GfVec3f(xR2Max1, yR2Max1, zf));//-1
+    			  viArray.push_back(pArray.size()-4);
+    			  viArray.push_back(pArray.size()-1);
+    			  viArray.push_back(pArray.size()-2);
+    			  vcArray.push_back(3);
+    			  viArray.push_back(pArray.size()-4);
+    			  viArray.push_back(pArray.size()-3);
+    			  viArray.push_back(pArray.size()-1);
+    			  vcArray.push_back(3);
+		    }
+    		    }
+	        if (dPhifRounded != twoPiRounded)
+	        {
+		        if (i==nslice-1)
+		        {
+    			  pArray.push_back(GfVec3f(0,0,-zf));//-4
+    			  pArray.push_back(GfVec3f(xR1Max2, yR1Max2, -zf));//-3
+    	  		  pArray.push_back(GfVec3f(xR2Min2, yR2Min2, zf));//-2
+    			  pArray.push_back(GfVec3f(xR2Max2, yR2Max2, zf));//-1
+    			  viArray.push_back(pArray.size()-4);
+    			  viArray.push_back(pArray.size()-1);
+    			  viArray.push_back(pArray.size()-2);
+    			  vcArray.push_back(3);
+    			  viArray.push_back(pArray.size()-4);
+    			  viArray.push_back(pArray.size()-3);
+    			  viArray.push_back(pArray.size()-1);
+    			  vcArray.push_back(3);
+	            }
+    		}
         }
-        if (dPhif != 2.0*M_PI && i==nslice-1)
+
+      }
+    }
+    if (rMin2f == 0)
+    {
+      if (rMax2f == 0)
+      {
+        if (rMin1f == 0)
         {
-		  pArray.push_back(GfVec3f(xR1Max2, yR1Max2, -zf));//8 or 4
-          pArray.push_back(GfVec3f(xR1Min2, yR1Min2, -zf));//6 or 2
-          pArray.push_back(GfVec3f(xR2Max2, yR2Max2, -zf));//4
-          pArray.push_back(GfVec3f(xR2Min2, yR2Min2, -zf));//2
-          viArray.push_back(pArray.size()-4);
-          viArray.push_back(pArray.size()-2);
-          viArray.push_back(pArray.size()-1);
-		  vcArray.push_back(3);
-          viArray.push_back(pArray.size()-4);
-          viArray.push_back(pArray.size()-1);
-          viArray.push_back(pArray.size()-3);
-		  vcArray.push_back(3);
+          // 0100
+        	std::cout << "0100" << std::endl;
+
+            pArray.push_back(GfVec3f(0,0,zf));
+            pArray.push_back(GfVec3f(xR1Max1, yR1Max1, -zf));
+            pArray.push_back(GfVec3f(xR1Max2, yR1Max2, -zf));
+
+
+            viArray.push_back(pArray.size()-3);
+            viArray.push_back(pArray.size()-1);
+            viArray.push_back(pArray.size()-2);
+            vcArray.push_back(3);
+
+            pArray.push_back(GfVec3f(0,0, -zf));
+
+            //cone flat face
+            viArray.push_back(pArray.size()-3);
+            viArray.push_back(pArray.size()-2);
+            viArray.push_back(pArray.size()-1);
+            vcArray.push_back(3);
+
+            if (dPhifRounded != twoPiRounded)
+            {
+                if (i==0)
+                {
+                    pArray.push_back(GfVec3f(0,0,-zf));//3
+                    pArray.push_back(GfVec3f(0,0,zf));//3
+                    pArray.push_back(GfVec3f(xR1Max1, yR1Max1, -zf));//2
+
+                    viArray.push_back(pArray.size()-3);
+                    viArray.push_back(pArray.size()-1);
+                    viArray.push_back(pArray.size()-2);
+                    vcArray.push_back(3);
+                }
+            }
+            if (dPhifRounded != twoPiRounded)
+            {
+                if (i==nslice-1)
+                {
+                    pArray.push_back(GfVec3f(0,0,-zf));//3
+                    pArray.push_back(GfVec3f(0,0,zf));//3
+                    pArray.push_back(GfVec3f(xR1Max2, yR1Max2, -zf));//1
+
+                    viArray.push_back(pArray.size()-3);
+                    viArray.push_back(pArray.size()-2);
+                    viArray.push_back(pArray.size()-1);
+                    vcArray.push_back(3);
+                }
+            }
+
+        }
+        else
+        {
+          // 1100
+        	std::cout << "1100" << std::endl;
+
+            pArray.push_back(GfVec3f(0,0,zf));//4
+            pArray.push_back(GfVec3f(xR1Max1, yR1Max1, -zf));//2
+            pArray.push_back(GfVec3f(xR1Max2, yR1Max2, -zf));//1
+            //cone side face
+
+            viArray.push_back(pArray.size()-3);
+            viArray.push_back(pArray.size()-1);
+            viArray.push_back(pArray.size()-2);
+            vcArray.push_back(3);
+
+            pArray.push_back(GfVec3f(xR1Min1, yR1Min1, -zf));//2
+            pArray.push_back(GfVec3f(xR1Min2, yR1Min2, -zf));//1
+
+            //cone inside face
+            viArray.push_back(pArray.size()-5);
+            viArray.push_back(pArray.size()-1);
+            viArray.push_back(pArray.size()-2);
+            vcArray.push_back(3);
+
+            //cone flat faces
+            viArray.push_back(pArray.size()-4);
+            viArray.push_back(pArray.size()-3);
+            viArray.push_back(pArray.size()-1);
+            vcArray.push_back(3);
+
+            viArray.push_back(pArray.size()-4);
+            viArray.push_back(pArray.size()-1);
+            viArray.push_back(pArray.size()-2);
+            vcArray.push_back(3);
+
+            if (dPhifRounded != twoPiRounded)
+            {
+                if (i==0)
+                {
+                    pArray.push_back(GfVec3f(0,0,zf));//4
+                    pArray.push_back(GfVec3f(xR1Max1, yR1Max1, -zf));//2
+                    pArray.push_back(GfVec3f(xR1Min1, yR1Min1, -zf));//2
+
+                    viArray.push_back(pArray.size()-3);
+                    viArray.push_back(pArray.size()-1);
+                    viArray.push_back(pArray.size()-2);
+                    vcArray.push_back(3);
+                }
+            }
+            if (dPhifRounded != twoPiRounded)
+            {
+                if (i==nslice-1)
+                {
+                    pArray.push_back(GfVec3f(0,0,zf));//4
+                    pArray.push_back(GfVec3f(xR1Max2, yR1Max2, -zf));//2
+                    pArray.push_back(GfVec3f(xR1Min2, yR1Min2, -zf));//2
+
+                    viArray.push_back(pArray.size()-3);
+                    viArray.push_back(pArray.size()-2);
+                    viArray.push_back(pArray.size()-1);
+                    vcArray.push_back(3);
+                }
+            }
+        }
+      }
+      else
+      {
+        if (rMin1f > 0)
+        {
+      		std::cout << "1101" << std::endl;
+
+	        // 1101
+	        pArray.push_back(GfVec3f(0,0,zf));//-7
+      		pArray.push_back(GfVec3f(xR2Max1, yR2Max1, -zf));//-6
+      		pArray.push_back(GfVec3f(xR2Max2, yR2Max2, -zf));//-5
+      		viArray.push_back(pArray.size()-3);
+      		viArray.push_back(pArray.size()-2);
+      		viArray.push_back(pArray.size()-1);
+      		vcArray.push_back(3);
+
+      		pArray.push_back(GfVec3f(xR1Min1, yR1Min1, -zf));//-4
+      		pArray.push_back(GfVec3f(xR1Max1, yR1Max1, -zf));//-3
+      		pArray.push_back(GfVec3f(xR1Min2, yR1Min2, -zf));//-2
+      		pArray.push_back(GfVec3f(xR1Max2, yR1Max2, -zf));//-1
+      		viArray.push_back(pArray.size()-4);
+      		viArray.push_back(pArray.size()-1);
+      		viArray.push_back(pArray.size()-2);
+      		vcArray.push_back(3);
+
+      		viArray.push_back(pArray.size()-4);
+      		viArray.push_back(pArray.size()-3);
+      		viArray.push_back(pArray.size()-1);
+      		vcArray.push_back(3);
+
+      		viArray.push_back(pArray.size()-6);
+      		viArray.push_back(pArray.size()-3);
+      		viArray.push_back(pArray.size()-1);
+      		vcArray.push_back(3);
+
+      		viArray.push_back(pArray.size()-6);
+      		viArray.push_back(pArray.size()-1);
+      		viArray.push_back(pArray.size()-5);
+      		vcArray.push_back(3);
+
+
+      		viArray.push_back(pArray.size()-2);
+      		viArray.push_back(pArray.size()-4);
+      		viArray.push_back(pArray.size()-7);
+      		vcArray.push_back(3);
+
+			if (dPhifRounded != twoPiRounded)
+			{
+				if (i==0)
+				{
+      				pArray.push_back(GfVec3f(0,0,zf));//-4
+      				pArray.push_back(GfVec3f(xR2Max1, yR2Max1, -zf));//-3
+      				pArray.push_back(GfVec3f(xR1Min1, yR1Min1, -zf));//-2
+      				pArray.push_back(GfVec3f(xR1Max1, yR1Max1, -zf));//-1
+      				viArray.push_back(pArray.size()-3);
+      				viArray.push_back(pArray.size()-2);
+      				viArray.push_back(pArray.size()-1);
+      				vcArray.push_back(3);
+
+      				viArray.push_back(pArray.size()-4);
+      				viArray.push_back(pArray.size()-2);
+      				viArray.push_back(pArray.size()-3);
+      				vcArray.push_back(3);
+				}
+
+      		}
+			if (dPhifRounded != twoPiRounded)
+			{
+				if (i==nslice-1)
+				{
+      				pArray.push_back(GfVec3f(0,0,zf));//-4
+      				pArray.push_back(GfVec3f(xR2Max2, yR2Max2, -zf));//-3
+      				pArray.push_back(GfVec3f(xR1Min2, yR1Min2, -zf));//-2
+      				pArray.push_back(GfVec3f(xR1Max2, yR1Max2, -zf));//-1
+      				viArray.push_back(pArray.size()-3);
+      				viArray.push_back(pArray.size()-1);
+      				viArray.push_back(pArray.size()-2);
+      				vcArray.push_back(3);
+
+      				viArray.push_back(pArray.size()-3);
+      				viArray.push_back(pArray.size()-2);
+      				viArray.push_back(pArray.size()-4);
+      				vcArray.push_back(3);
+      			}
+      		}
         }
       }
     }
+    if (rMin1f < 0)
+    {
+      if(rMax1f < 0 )
+      {
+        if (rMin2f < 0)
+        {
+          if (rMax2f < 0)
+          {
+          	std::cout << "1111" << std::endl;
+
+            //1111
+            pArray.push_back(GfVec3f(xR1Max1, yR1Max1, -zf));//8 or 4
+      		pArray.push_back(GfVec3f(xR1Max2, yR1Max2, -zf));//7 or 3
+	        pArray.push_back(GfVec3f(xR1Min1, yR1Min1, -zf));//6 or 2
+	        pArray.push_back(GfVec3f(xR1Min2, yR1Min2, -zf));//5 or 1
+
+	        //bottom faces
+	        viArray.push_back(pArray.size()-4);
+	        viArray.push_back(pArray.size()-2);
+	        viArray.push_back(pArray.size()-1);
+ 			vcArray.push_back(3);
+
+	        viArray.push_back(pArray.size()-3);
+	        viArray.push_back(pArray.size()-4);
+	        viArray.push_back(pArray.size()-1);
+		    vcArray.push_back(3);
+
+	        //outer edge points for top
+	        pArray.push_back(GfVec3f(xR2Max1, yR2Max1, zf));//4
+	        pArray.push_back(GfVec3f(xR2Max2, yR2Max2, zf));//3
+	        //outer edge points for top
+	        pArray.push_back(GfVec3f(xR2Min1, yR2Min1, zf));//2
+	        pArray.push_back(GfVec3f(xR2Min2, yR2Min2, zf));//1
+
+	        //top faces
+	        viArray.push_back(pArray.size()-4);
+	        viArray.push_back(pArray.size()-3);
+	        viArray.push_back(pArray.size()-1);
+			vcArray.push_back(3);
+
+	        viArray.push_back(pArray.size()-4);
+	        viArray.push_back(pArray.size()-1);
+	        viArray.push_back(pArray.size()-2);
+		    vcArray.push_back(3);
+
+	        //outer edges
+	        viArray.push_back(pArray.size()-4);
+	        viArray.push_back(pArray.size()-8);
+	        viArray.push_back(pArray.size()-3);
+		    vcArray.push_back(3);
+
+	        viArray.push_back(pArray.size()-8);
+	        viArray.push_back(pArray.size()-7);
+	        viArray.push_back(pArray.size()-3);
+		    vcArray.push_back(3);
+
+	        //inner edges
+	        viArray.push_back(pArray.size()-2);
+	        viArray.push_back(pArray.size()-1);
+	        viArray.push_back(pArray.size()-6);
+		    vcArray.push_back(3);
+
+	        viArray.push_back(pArray.size()-1);
+	        viArray.push_back(pArray.size()-5);
+	        viArray.push_back(pArray.size()-6);
+		    vcArray.push_back(3);
+
+			if (dPhifRounded != twoPiRounded)
+			{
+				if (i==0)
+				{
+		            pArray.push_back(GfVec3f(xR1Max1, yR1Max1, -zf));//8 or 4
+		            pArray.push_back(GfVec3f(xR1Min1, yR1Min1, -zf));//6 or 2
+		            pArray.push_back(GfVec3f(xR2Max1, yR2Max1, zf));//4
+		            pArray.push_back(GfVec3f(xR2Min1, yR2Min1, zf));//2
+		            viArray.push_back(pArray.size()-2);
+		            viArray.push_back(pArray.size()-1);
+		            viArray.push_back(pArray.size()-3);
+       				vcArray.push_back(3);
+		            viArray.push_back(pArray.size()-2);
+		            viArray.push_back(pArray.size()-3);
+		            viArray.push_back(pArray.size()-4);
+      				vcArray.push_back(3);
+      			}
+		    }
+			if (dPhifRounded != twoPiRounded)
+			{
+				if (i==nslice-1)
+				{
+  					pArray.push_back(GfVec3f(xR1Max2, yR1Max2, -zf));//8 or 4
+        			pArray.push_back(GfVec3f(xR1Min2, yR1Min2, -zf));//6 or 2
+        			pArray.push_back(GfVec3f(xR2Max2, yR2Max2, zf));//4
+       				pArray.push_back(GfVec3f(xR2Min2, yR2Min2, zf));//2
+       				viArray.push_back(pArray.size()-1);
+        			viArray.push_back(pArray.size()-2);
+        			viArray.push_back(pArray.size()-4);
+  					vcArray.push_back(3);
+        			viArray.push_back(pArray.size()-1);
+        			viArray.push_back(pArray.size()-4);
+        			viArray.push_back(pArray.size()-3);
+  					vcArray.push_back(3);
+          		}
+      		}
+          }
+        }
+      }
+    }
+    if (rMin1f == 0)
+    {
+        if(rMin2f == 0 )
+        {
+              if (rMax1f < 0)
+              {
+                  if (rMax2f < 0)
+                  {
+                  	std::cout << "0101" << std::endl;
+
+                      //0101
+                    pArray.push_back(GfVec3f(xR1Min1, yR1Min1, -zf));//8
+					pArray.push_back(GfVec3f(xR1Max1, yR1Max1, -zf));//7
+					pArray.push_back(GfVec3f(xR1Min2, yR1Min2, zf));//6
+					pArray.push_back(GfVec3f(xR1Max2, yR1Max2, zf));//5
+					pArray.push_back(GfVec3f(xR2Min1, yR2Min1, -zf));//4
+					pArray.push_back(GfVec3f(xR2Max1, yR2Max1, -zf));//3
+					pArray.push_back(GfVec3f(xR2Min2, yR2Min2, zf));//2
+					pArray.push_back(GfVec3f(xR2Max2, yR2Max2, zf));//1
+
+					viArray.push_back(pArray.size()-5);
+					viArray.push_back(pArray.size()-6);
+					viArray.push_back(pArray.size()-8);
+					vcArray.push_back(3);
+					viArray.push_back(pArray.size()-5);
+					viArray.push_back(pArray.size()-8);
+					viArray.push_back(pArray.size()-7);
+					vcArray.push_back(3);
+
+					viArray.push_back(pArray.size()-1);
+					viArray.push_back(pArray.size()-2);
+					viArray.push_back(pArray.size()-4);
+					vcArray.push_back(3);
+					viArray.push_back(pArray.size()-1);
+					viArray.push_back(pArray.size()-4);
+					viArray.push_back(pArray.size()-3);
+					vcArray.push_back(3);
+
+					viArray.push_back(pArray.size()-3);
+					viArray.push_back(pArray.size()-7);
+					viArray.push_back(pArray.size()-1);
+					vcArray.push_back(3);
+					viArray.push_back(pArray.size()-7);
+					viArray.push_back(pArray.size()-5);
+					viArray.push_back(pArray.size()-1);
+					vcArray.push_back(3);
+
+					viArray.push_back(pArray.size()-2);
+					viArray.push_back(pArray.size()-6);
+					viArray.push_back(pArray.size()-8);
+					vcArray.push_back(3);
+					viArray.push_back(pArray.size()-2);
+					viArray.push_back(pArray.size()-8);
+					viArray.push_back(pArray.size()-4);
+					vcArray.push_back(3);
+
+				if (dPhifRounded != twoPiRounded)
+				{
+					if (i==0)
+					{
+						  pArray.push_back(GfVec3f(xR1Min1, yR1Min1, -zf));//4
+						  pArray.push_back(GfVec3f(xR1Max1, yR1Max1, -zf));//3
+						  pArray.push_back(GfVec3f(xR2Min1, yR2Min1, -zf));//2
+						  pArray.push_back(GfVec3f(xR2Max1, yR2Max1, -zf));//1
+						  viArray.push_back(pArray.size()-2);
+						  viArray.push_back(pArray.size()-4);
+						  viArray.push_back(pArray.size()-1);
+						  vcArray.push_back(3);
+						  viArray.push_back(pArray.size()-4);
+						  viArray.push_back(pArray.size()-3);
+						  viArray.push_back(pArray.size()-1);
+						  vcArray.push_back(3);
+					    }
+				    }
+				if (dPhifRounded != twoPiRounded)
+				{
+					if (i==nslice-1)
+					{
+						pArray.push_back(GfVec3f(xR1Min2, yR1Min2, zf));//4
+						pArray.push_back(GfVec3f(xR1Max2, yR1Max2, zf));//3
+						pArray.push_back(GfVec3f(xR2Min2, yR2Min2, zf));//2
+						pArray.push_back(GfVec3f(xR2Max2, yR2Max2, zf));//1
+						viArray.push_back(pArray.size()-1);
+						viArray.push_back(pArray.size()-4);
+						viArray.push_back(pArray.size()-2);
+						vcArray.push_back(3);
+						viArray.push_back(pArray.size()-1);
+						viArray.push_back(pArray.size()-3);
+						viArray.push_back(pArray.size()-4);
+						vcArray.push_back(3);
+				        }
+					}
+
+                  }
+              }
+        }
+    }
+  }
 
   VtArray<GfVec3f> pArrayUpdate;
   VtIntArray viArrayUpdate;
@@ -682,6 +1011,13 @@ void pxr::G4Cons::Update() {
   std::cout <<"f = " << vcArray.size() << std::endl;
   std::cout <<"e = " << edges << std::endl;
   std::cout << "euler characteristic = " << pArrayUpdate.size()-edges+vcArray.size() << std::endl;
+  Mesh cgalMesh;
+  ConvertToCGALMesh(pArrayUpdate, vcArray, viArrayUpdate, cgalMesh);
+  bool test =CGAL::is_closed(cgalMesh);
+  if (test){std::cout << "true" << std::endl;}
+  if (!test){std::cout << "false" << std::endl;}
+  std::cout << "points " << pArrayUpdate << std::endl;
+  std::cout << "vi " << viArrayUpdate << std::endl;
   p.Set(pArrayUpdate);
   vc.Set(vcArray);
   vi.Set(viArrayUpdate);
