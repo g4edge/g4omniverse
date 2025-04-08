@@ -625,7 +625,7 @@ class Tubs "Tubs"
         forward-facing normals on each side of the surface for lighting
         calculations."""
     )
-    double dPhi = 6.28318
+    double dPhi = 0
     float3[] extent (
         doc = """Extent is a three dimensional range measuring the geometric
         extent of the authored gprim in its own local space (i.e. its own
@@ -716,6 +716,7 @@ class Tubs "Tubs"
         . If 'normals' and 'primvars:normals'
         are both specified, the latter has precedence."""
     )
+    int nslice = 0
     uniform token orientation = "rightHanded" (
         allowedTokens = ["rightHanded", "leftHanded"]
         doc = """Orientation specifies whether the gprim's surface normal 
@@ -772,7 +773,7 @@ class Tubs "Tubs"
         See for more detail about how 
         purpose is computed and used."""
     )
-    double rMax = 1
+    double rMax = 0
     double rMin = 0
     double sPhi = 0
     uniform token subdivisionScheme = "catmullClark" (
@@ -839,7 +840,7 @@ class Tubs "Tubs"
         SetXformOpOrder(), and consulted by GetOrderedXformOps() and
         GetLocalTransformation()."""
     )
-    double z = 1
+    double z = 0
 }
 
 class Cons "Cons"
@@ -998,6 +999,7 @@ class Cons "Cons"
         . If 'normals' and 'primvars:normals'
         are both specified, the latter has precedence."""
     )
+    int nslice = 0
     uniform token orientation = "rightHanded" (
         allowedTokens = ["rightHanded", "leftHanded"]
         doc = """Orientation specifies whether the gprim's surface normal 
@@ -1281,6 +1283,8 @@ class Orb "Orb"
         . If 'normals' and 'primvars:normals'
         are both specified, the latter has precedence."""
     )
+    int nslicePhi = 0
+    int nsliceTheta = 0
     uniform token orientation = "rightHanded" (
         allowedTokens = ["rightHanded", "leftHanded"]
         doc = """Orientation specifies whether the gprim's surface normal 

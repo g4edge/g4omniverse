@@ -8,6 +8,21 @@
 #include "pxr/usd/usd/typed.h"
 #include "pxr/usd/sdf/types.h"
 
+#include <CGAL/Simple_cartesian.h>
+#include <CGAL/Surface_mesh.h>
+#include <CGAL/Polygon_mesh_processing/stitch_borders.h>
+#include <CGAL/Polygon_mesh_processing/polygon_soup_to_polygon_mesh.h>
+#include <CGAL/Polygon_mesh_processing/orientation.h>
+#include <CGAL/Polygon_mesh_processing/border.h>
+
+typedef CGAL::Simple_cartesian<double> Kernel;
+typedef Kernel::Point_3 Point;
+typedef CGAL::Surface_mesh<Point> Mesh;
+
+
+namespace PMP = CGAL::Polygon_mesh_processing;
+
+
 struct Vec3Key {
     static constexpr float tolerance = 1e6f;  // Scaling factor for precision
     static constexpr float roundtoZeroThreshold = 1e-5f; // Threshold for rounding to zero
@@ -68,6 +83,12 @@ void ReplaceDuplicateVertices(pxr::VtArray<pxr::GfVec3f> &vertices, pxr::VtIntAr
 
 void RoundValues(pxr::GfVec3f& vertexIn, pxr::GfVec3f& vertexOut);
 
+std::unordered_set<Edge, EdgeHash> EdgesSet(pxr::VtIntArray &indices);
+
 int CountEdges(pxr::VtIntArray &indices);
+
+void ConvertToCGALMesh(const pxr::VtArray<pxr::GfVec3f>& vertices, const pxr::VtIntArray& faceCounts, const pxr::VtIntArray& faceIndices, Mesh& mesh);
+
+std::unordered_map<Edge, int, EdgeHash> CheckEdgesUsedTwice(pxr::VtIntArray &indices);
 
 #endif //SURFACEMESH_H

@@ -57,10 +57,11 @@ class Tubs "Tubs" (
 )  {
     string g4type = "Tubs"
     double rMin = 0
-    double rMax = 1
-    double z = 1
+    double rMax = 0
+    double z = 0
     double sPhi = 0
-    double dPhi = 6.28318
+    double dPhi = 0
+    int nslice = 0
 }
 
 class Cons "Cons" (
@@ -78,6 +79,8 @@ class Cons "Cons" (
     double z = 0
     double sPhi = 0
     double dPhi = 0
+    int nslice = 0
+
 }
 
 
@@ -90,6 +93,9 @@ class Orb "Orb" (
 )  {
     string g4type = "Orb"
     double rMax = 1
+    int nslicePhi = 0
+    int nsliceTheta = 0
+
 }
 
 class BooleanSolid "BooleanSolid" (

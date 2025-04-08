@@ -188,6 +188,23 @@ G4Tubs::CreateDPhiAttr(VtValue const &defaultValue, bool writeSparsely) const
                        writeSparsely);
 }
 
+UsdAttribute
+G4Tubs::GetNsliceAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->nslice);
+}
+
+UsdAttribute
+G4Tubs::CreateNsliceAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->nslice,
+                       SdfValueTypeNames->Int,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
 namespace {
 static inline TfTokenVector
 _ConcatenateAttributeNames(const TfTokenVector& left,const TfTokenVector& right)
@@ -211,6 +228,7 @@ G4Tubs::GetSchemaAttributeNames(bool includeInherited)
         G4Tokens->z,
         G4Tokens->sPhi,
         G4Tokens->dPhi,
+        G4Tokens->nslice,
     };
     static TfTokenVector allNames =
         _ConcatenateAttributeNames(
@@ -237,6 +255,16 @@ PXR_NAMESPACE_CLOSE_SCOPE
 #include <iostream>
 #include "pxr/usd/usd/notice.h"
 #include "SurfaceMesh.h"
+
+
+#include <CGAL/Surface_mesh.h>
+#include <CGAL/Polygon_mesh_processing/stitch_borders.h>
+#include <CGAL/Polygon_mesh_processing/polygon_soup_to_polygon_mesh.h>
+#include <CGAL/Polygon_mesh_processing/orientation.h>
+#include <CGAL/Polygon_mesh_processing/border.h>
+#include <CGAL/Surface_mesh_approximation/approximate_triangle_mesh.h>
+
+namespace PMP = CGAL::Polygon_mesh_processing;
 
 class TubsChangeListener : public pxr::TfWeakBase {
 public:
@@ -319,8 +347,8 @@ void pxr::G4Tubs::Update() {
      pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));
 
      viArray.push_back(pArray.size()-3);
-     viArray.push_back(pArray.size()-2);
      viArray.push_back(pArray.size()-1);
+     viArray.push_back(pArray.size()-2);
 
      vcArray.push_back(3);
 
@@ -343,14 +371,14 @@ void pxr::G4Tubs::Update() {
       pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));//-5
 
       viArray.push_back(pArray.size()-4);
-      viArray.push_back(pArray.size()-3);
       viArray.push_back(pArray.size()-1);
+      viArray.push_back(pArray.size()-2);
       vcArray.push_back(3);
 
 
       viArray.push_back(pArray.size()-4);
+      viArray.push_back(pArray.size()-3);
       viArray.push_back(pArray.size()-1);
-      viArray.push_back(pArray.size()-2);
       vcArray.push_back(3);
 
       //bottom
@@ -360,25 +388,25 @@ void pxr::G4Tubs::Update() {
       pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));//-1
 
       viArray.push_back(pArray.size()-4);
-      viArray.push_back(pArray.size()-3);
+      viArray.push_back(pArray.size()-2);
       viArray.push_back(pArray.size()-1);
       vcArray.push_back(3);
 
       viArray.push_back(pArray.size()-4);
       viArray.push_back(pArray.size()-1);
-      viArray.push_back(pArray.size()-2);
+      viArray.push_back(pArray.size()-3);
       vcArray.push_back(3);
 
 
       //inner curved face
       viArray.push_back(pArray.size()-8);
-      viArray.push_back(pArray.size()-4);
+      viArray.push_back(pArray.size()-6);
       viArray.push_back(pArray.size()-2);
       vcArray.push_back(3);
 
       viArray.push_back(pArray.size()-8);
       viArray.push_back(pArray.size()-2);
-      viArray.push_back(pArray.size()-6);
+      viArray.push_back(pArray.size()-4);
       vcArray.push_back(3);
 
 
@@ -397,14 +425,14 @@ void pxr::G4Tubs::Update() {
         // push back the 3 vertices to describe first polygon on wedge end
         viArray.push_back(pArray.size() - 4);
         viArray.push_back(pArray.size() - 2);
-        viArray.push_back(pArray.size() - 1);
+        viArray.push_back(pArray.size() - 3);
         //add polygon number of vertices
         vcArray.push_back(3);
 
         // push back the 3 vertices to describe 2nd polygon on wedge end
-        viArray.push_back(pArray.size() - 4);
-        viArray.push_back(pArray.size() - 1);
         viArray.push_back(pArray.size() - 3);
+        viArray.push_back(pArray.size() - 2);
+        viArray.push_back(pArray.size() - 1);
         //add polygon number of vertices
         vcArray.push_back(3);
 	  }
@@ -420,16 +448,16 @@ void pxr::G4Tubs::Update() {
         pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));//1
 
         // push back the 3 vertices to describe first polygon on wedge end
-        viArray.push_back(pArray.size() - 4);
-        viArray.push_back(pArray.size() - 2);
+        viArray.push_back(pArray.size() - 3);
         viArray.push_back(pArray.size() - 1);
+        viArray.push_back(pArray.size() - 2);
         //add polygon number of vertices
         vcArray.push_back(3);
 
         // push back the 3 vertices to describe 2nd polygon on wedge end
         viArray.push_back(pArray.size() - 4);
-        viArray.push_back(pArray.size() - 1);
         viArray.push_back(pArray.size() - 3);
+        viArray.push_back(pArray.size() - 2);
         //add polygon number of vertices
         vcArray.push_back(3);
       }
@@ -438,16 +466,15 @@ void pxr::G4Tubs::Update() {
     //curved faces
 
     //outer face
+    pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));//-4
+    pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));//-3
+    pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf)); //-2
+    pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));//-1
 
-    pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf)); //-4
-    pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));//-3
-    pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));//-2
-    pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));//-1
 
-
+    viArray.push_back(pArray.size()-4);
+    viArray.push_back(pArray.size()-2);
     viArray.push_back(pArray.size()-3);
-    viArray.push_back(pArray.size()-4);//-4
-    viArray.push_back(pArray.size()-2);//-2
 
     vcArray.push_back(3);
 
@@ -469,6 +496,14 @@ void pxr::G4Tubs::Update() {
   std::cout <<"f = " << vcArray.size() << std::endl;
   std::cout <<"e = " << edges << std::endl;
   std::cout << "euler characteristic = " << pArrayUpdate.size()-edges+vcArray.size() << std::endl;
+  Mesh cgalMesh;
+  ConvertToCGALMesh(pArrayUpdate, vcArray, viArrayUpdate, cgalMesh);
+  bool test =CGAL::is_closed(cgalMesh);
+  if (test){std::cout << "true" << std::endl;}
+  if (!test){std::cout << "false" << std::endl;}
+  std::cout << "p " << pArrayUpdate << std::endl;
+  std::cout << "vi " << viArrayUpdate << std::endl;
+
   p.Set(pArrayUpdate);
   vc.Set(vcArray);
   vi.Set(viArrayUpdate);
