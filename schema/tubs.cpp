@@ -493,19 +493,7 @@ void pxr::G4Tubs::Update() {
   VtIntArray viArrayUpdate;
 
   ReplaceDuplicateVertices(pArray,viArray,pArrayUpdate,viArrayUpdate);
-  // edges can be removed once sure of meshes
-  int edges = CountEdges(viArrayUpdate);
-  std::cout <<"v = " << pArrayUpdate.size() << std::endl;
-  std::cout <<"f = " << vcArray.size() << std::endl;
-  std::cout <<"e = " << edges << std::endl;
-  std::cout << "euler characteristic = " << pArrayUpdate.size()-edges+vcArray.size() << std::endl;
-  Mesh cgalMesh;
-  ConvertToCGALMesh(pArrayUpdate, vcArray, viArrayUpdate, cgalMesh);
-  bool test =CGAL::is_closed(cgalMesh);
-  if (test){std::cout << "true" << std::endl;}
-  if (!test){std::cout << "false" << std::endl;}
-  std::cout << "p " << pArrayUpdate << std::endl;
-  std::cout << "vi " << viArrayUpdate << std::endl;
+
 
   p.Set(pArrayUpdate);
   vc.Set(vcArray);
