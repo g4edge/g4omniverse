@@ -4,10 +4,10 @@
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#ifndef G4_GENERATED_TUBS_H
-#define G4_GENERATED_TUBS_H
+#ifndef G4_GENERATED_CONS_H
+#define G4_GENERATED_CONS_H
 
-/// \file G4/tubs.h
+/// \file G4/cons.h
 
 #include "pxr/pxr.h"
 #include ".//api.h"
@@ -30,13 +30,13 @@ PXR_NAMESPACE_OPEN_SCOPE
 class SdfAssetPath;
 
 // -------------------------------------------------------------------------- //
-// TUBS                                                                       //
+// CONS                                                                       //
 // -------------------------------------------------------------------------- //
 
-/// \class G4Tubs
+/// \class G4Cons
 ///
 ///
-class G4Tubs : public G4VSolid
+class G4Cons : public G4VSolid
 {
 public:
     /// Compile time constant representing what kind of schema this class is.
@@ -44,26 +44,26 @@ public:
     /// \sa UsdSchemaKind
     static const UsdSchemaKind schemaKind = UsdSchemaKind::ConcreteTyped;
 
-    /// Construct a G4Tubs on UsdPrim \p prim .
-    /// Equivalent to G4Tubs::Get(prim.GetStage(), prim.GetPath())
+    /// Construct a G4Cons on UsdPrim \p prim .
+    /// Equivalent to G4Cons::Get(prim.GetStage(), prim.GetPath())
     /// for a \em valid \p prim, but will not immediately throw an error for
     /// an invalid \p prim
-    explicit G4Tubs(const UsdPrim& prim=UsdPrim())
+    explicit G4Cons(const UsdPrim& prim=UsdPrim())
         : G4VSolid(prim)
     {
     }
 
-    /// Construct a G4Tubs on the prim held by \p schemaObj .
-    /// Should be preferred over G4Tubs(schemaObj.GetPrim()),
+    /// Construct a G4Cons on the prim held by \p schemaObj .
+    /// Should be preferred over G4Cons(schemaObj.GetPrim()),
     /// as it preserves SchemaBase state.
-    explicit G4Tubs(const UsdSchemaBase& schemaObj)
+    explicit G4Cons(const UsdSchemaBase& schemaObj)
         : G4VSolid(schemaObj)
     {
     }
 
     /// Destructor.
     G4_API
-    virtual ~G4Tubs();
+    virtual ~G4Cons();
 
     /// Return a vector of names of all pre-declared attributes for this schema
     /// class and all its ancestor classes.  Does not include attributes that
@@ -72,17 +72,17 @@ public:
     static const TfTokenVector &
     GetSchemaAttributeNames(bool includeInherited=true);
 
-    /// Return a G4Tubs holding the prim adhering to this
+    /// Return a G4Cons holding the prim adhering to this
     /// schema at \p path on \p stage.  If no prim exists at \p path on
     /// \p stage, or if the prim at that path does not adhere to this schema,
     /// return an invalid schema object.  This is shorthand for the following:
     ///
     /// \code
-    /// G4Tubs(stage->GetPrimAtPath(path));
+    /// G4Cons(stage->GetPrimAtPath(path));
     /// \endcode
     ///
     G4_API
-    static G4Tubs
+    static G4Cons
     Get(const UsdStagePtr &stage, const SdfPath &path);
 
     /// Attempt to ensure a \a UsdPrim adhering to this schema at \p path
@@ -108,7 +108,7 @@ public:
     /// the opinion at the current EditTarget.
     ///
     G4_API
-    static G4Tubs
+    static G4Cons
     Define(const UsdStagePtr &stage, const SdfPath &path);
 
 protected:
@@ -138,7 +138,7 @@ public:
     ///
     /// | ||
     /// | -- | -- |
-    /// | Declaration | `string g4type = "Tubs"` |
+    /// | Declaration | `string g4type = "Cons"` |
     /// | C++ Type | std::string |
     /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->String |
     G4_API
@@ -154,47 +154,91 @@ public:
 
 public:
     // --------------------------------------------------------------------- //
-    // RMIN 
+    // RMIN1 
     // --------------------------------------------------------------------- //
     /// 
     ///
     /// | ||
     /// | -- | -- |
-    /// | Declaration | `double rMin = 0` |
+    /// | Declaration | `double rMin1 = 0` |
     /// | C++ Type | double |
     /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double |
     G4_API
-    UsdAttribute GetRMinAttr() const;
+    UsdAttribute GetRMin1Attr() const;
 
-    /// See GetRMinAttr(), and also 
+    /// See GetRMin1Attr(), and also 
     /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
     /// If specified, author \p defaultValue as the attribute's default,
     /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
     /// the default for \p writeSparsely is \c false.
     G4_API
-    UsdAttribute CreateRMinAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+    UsdAttribute CreateRMin1Attr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
 
 public:
     // --------------------------------------------------------------------- //
-    // RMAX 
+    // RMAX1 
     // --------------------------------------------------------------------- //
     /// 
     ///
     /// | ||
     /// | -- | -- |
-    /// | Declaration | `double rMax = 0` |
+    /// | Declaration | `double rMax1 = 0` |
     /// | C++ Type | double |
     /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double |
     G4_API
-    UsdAttribute GetRMaxAttr() const;
+    UsdAttribute GetRMax1Attr() const;
 
-    /// See GetRMaxAttr(), and also 
+    /// See GetRMax1Attr(), and also 
     /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
     /// If specified, author \p defaultValue as the attribute's default,
     /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
     /// the default for \p writeSparsely is \c false.
     G4_API
-    UsdAttribute CreateRMaxAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+    UsdAttribute CreateRMax1Attr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+
+public:
+    // --------------------------------------------------------------------- //
+    // RMIN2 
+    // --------------------------------------------------------------------- //
+    /// 
+    ///
+    /// | ||
+    /// | -- | -- |
+    /// | Declaration | `double rMin2 = 0` |
+    /// | C++ Type | double |
+    /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double |
+    G4_API
+    UsdAttribute GetRMin2Attr() const;
+
+    /// See GetRMin2Attr(), and also 
+    /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
+    /// If specified, author \p defaultValue as the attribute's default,
+    /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
+    /// the default for \p writeSparsely is \c false.
+    G4_API
+    UsdAttribute CreateRMin2Attr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+
+public:
+    // --------------------------------------------------------------------- //
+    // RMAX2 
+    // --------------------------------------------------------------------- //
+    /// 
+    ///
+    /// | ||
+    /// | -- | -- |
+    /// | Declaration | `double rMax2 = 0` |
+    /// | C++ Type | double |
+    /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double |
+    G4_API
+    UsdAttribute GetRMax2Attr() const;
+
+    /// See GetRMax2Attr(), and also 
+    /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
+    /// If specified, author \p defaultValue as the attribute's default,
+    /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
+    /// the default for \p writeSparsely is \c false.
+    G4_API
+    UsdAttribute CreateRMax2Attr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
 
 public:
     // --------------------------------------------------------------------- //
@@ -298,6 +342,13 @@ public:
     void InstallUpdateListener();
     void Update();
     virtual bool IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) override;
+inline uint8_t encodeRadii(float rMin1f, float rMax1f, float rMin2f, float rMax2f) {
+    return
+        ((rMin1f > 0.0f) << 3) |
+        ((rMax1f > 0.0f) << 2) |
+        ((rMin2f > 0.0f) << 1) |
+        ((rMax2f > 0.0f) << 0);
+    }
 
 };
 

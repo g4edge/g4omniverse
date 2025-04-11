@@ -4,10 +4,10 @@
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#ifndef G4_GENERATED_TUBS_H
-#define G4_GENERATED_TUBS_H
+#ifndef G4_GENERATED_ORB_H
+#define G4_GENERATED_ORB_H
 
-/// \file G4/tubs.h
+/// \file G4/orb.h
 
 #include "pxr/pxr.h"
 #include ".//api.h"
@@ -30,13 +30,13 @@ PXR_NAMESPACE_OPEN_SCOPE
 class SdfAssetPath;
 
 // -------------------------------------------------------------------------- //
-// TUBS                                                                       //
+// ORB                                                                        //
 // -------------------------------------------------------------------------- //
 
-/// \class G4Tubs
+/// \class G4Orb
 ///
 ///
-class G4Tubs : public G4VSolid
+class G4Orb : public G4VSolid
 {
 public:
     /// Compile time constant representing what kind of schema this class is.
@@ -44,26 +44,26 @@ public:
     /// \sa UsdSchemaKind
     static const UsdSchemaKind schemaKind = UsdSchemaKind::ConcreteTyped;
 
-    /// Construct a G4Tubs on UsdPrim \p prim .
-    /// Equivalent to G4Tubs::Get(prim.GetStage(), prim.GetPath())
+    /// Construct a G4Orb on UsdPrim \p prim .
+    /// Equivalent to G4Orb::Get(prim.GetStage(), prim.GetPath())
     /// for a \em valid \p prim, but will not immediately throw an error for
     /// an invalid \p prim
-    explicit G4Tubs(const UsdPrim& prim=UsdPrim())
+    explicit G4Orb(const UsdPrim& prim=UsdPrim())
         : G4VSolid(prim)
     {
     }
 
-    /// Construct a G4Tubs on the prim held by \p schemaObj .
-    /// Should be preferred over G4Tubs(schemaObj.GetPrim()),
+    /// Construct a G4Orb on the prim held by \p schemaObj .
+    /// Should be preferred over G4Orb(schemaObj.GetPrim()),
     /// as it preserves SchemaBase state.
-    explicit G4Tubs(const UsdSchemaBase& schemaObj)
+    explicit G4Orb(const UsdSchemaBase& schemaObj)
         : G4VSolid(schemaObj)
     {
     }
 
     /// Destructor.
     G4_API
-    virtual ~G4Tubs();
+    virtual ~G4Orb();
 
     /// Return a vector of names of all pre-declared attributes for this schema
     /// class and all its ancestor classes.  Does not include attributes that
@@ -72,17 +72,17 @@ public:
     static const TfTokenVector &
     GetSchemaAttributeNames(bool includeInherited=true);
 
-    /// Return a G4Tubs holding the prim adhering to this
+    /// Return a G4Orb holding the prim adhering to this
     /// schema at \p path on \p stage.  If no prim exists at \p path on
     /// \p stage, or if the prim at that path does not adhere to this schema,
     /// return an invalid schema object.  This is shorthand for the following:
     ///
     /// \code
-    /// G4Tubs(stage->GetPrimAtPath(path));
+    /// G4Orb(stage->GetPrimAtPath(path));
     /// \endcode
     ///
     G4_API
-    static G4Tubs
+    static G4Orb
     Get(const UsdStagePtr &stage, const SdfPath &path);
 
     /// Attempt to ensure a \a UsdPrim adhering to this schema at \p path
@@ -108,7 +108,7 @@ public:
     /// the opinion at the current EditTarget.
     ///
     G4_API
-    static G4Tubs
+    static G4Orb
     Define(const UsdStagePtr &stage, const SdfPath &path);
 
 protected:
@@ -138,7 +138,7 @@ public:
     ///
     /// | ||
     /// | -- | -- |
-    /// | Declaration | `string g4type = "Tubs"` |
+    /// | Declaration | `string g4type = "Orb"` |
     /// | C++ Type | std::string |
     /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->String |
     G4_API
@@ -154,35 +154,13 @@ public:
 
 public:
     // --------------------------------------------------------------------- //
-    // RMIN 
-    // --------------------------------------------------------------------- //
-    /// 
-    ///
-    /// | ||
-    /// | -- | -- |
-    /// | Declaration | `double rMin = 0` |
-    /// | C++ Type | double |
-    /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double |
-    G4_API
-    UsdAttribute GetRMinAttr() const;
-
-    /// See GetRMinAttr(), and also 
-    /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
-    /// If specified, author \p defaultValue as the attribute's default,
-    /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
-    /// the default for \p writeSparsely is \c false.
-    G4_API
-    UsdAttribute CreateRMinAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
-
-public:
-    // --------------------------------------------------------------------- //
     // RMAX 
     // --------------------------------------------------------------------- //
     /// 
     ///
     /// | ||
     /// | -- | -- |
-    /// | Declaration | `double rMax = 0` |
+    /// | Declaration | `double rMax = 1` |
     /// | C++ Type | double |
     /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double |
     G4_API
@@ -198,91 +176,47 @@ public:
 
 public:
     // --------------------------------------------------------------------- //
-    // Z 
+    // NSLICEPHI 
     // --------------------------------------------------------------------- //
     /// 
     ///
     /// | ||
     /// | -- | -- |
-    /// | Declaration | `double z = 0` |
-    /// | C++ Type | double |
-    /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double |
-    G4_API
-    UsdAttribute GetZAttr() const;
-
-    /// See GetZAttr(), and also 
-    /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
-    /// If specified, author \p defaultValue as the attribute's default,
-    /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
-    /// the default for \p writeSparsely is \c false.
-    G4_API
-    UsdAttribute CreateZAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
-
-public:
-    // --------------------------------------------------------------------- //
-    // SPHI 
-    // --------------------------------------------------------------------- //
-    /// 
-    ///
-    /// | ||
-    /// | -- | -- |
-    /// | Declaration | `double sPhi = 0` |
-    /// | C++ Type | double |
-    /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double |
-    G4_API
-    UsdAttribute GetSPhiAttr() const;
-
-    /// See GetSPhiAttr(), and also 
-    /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
-    /// If specified, author \p defaultValue as the attribute's default,
-    /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
-    /// the default for \p writeSparsely is \c false.
-    G4_API
-    UsdAttribute CreateSPhiAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
-
-public:
-    // --------------------------------------------------------------------- //
-    // DPHI 
-    // --------------------------------------------------------------------- //
-    /// 
-    ///
-    /// | ||
-    /// | -- | -- |
-    /// | Declaration | `double dPhi = 0` |
-    /// | C++ Type | double |
-    /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Double |
-    G4_API
-    UsdAttribute GetDPhiAttr() const;
-
-    /// See GetDPhiAttr(), and also 
-    /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
-    /// If specified, author \p defaultValue as the attribute's default,
-    /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
-    /// the default for \p writeSparsely is \c false.
-    G4_API
-    UsdAttribute CreateDPhiAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
-
-public:
-    // --------------------------------------------------------------------- //
-    // NSLICE 
-    // --------------------------------------------------------------------- //
-    /// 
-    ///
-    /// | ||
-    /// | -- | -- |
-    /// | Declaration | `int nslice = 0` |
+    /// | Declaration | `int nslicePhi = 0` |
     /// | C++ Type | int |
     /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Int |
     G4_API
-    UsdAttribute GetNsliceAttr() const;
+    UsdAttribute GetNslicePhiAttr() const;
 
-    /// See GetNsliceAttr(), and also 
+    /// See GetNslicePhiAttr(), and also 
     /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
     /// If specified, author \p defaultValue as the attribute's default,
     /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
     /// the default for \p writeSparsely is \c false.
     G4_API
-    UsdAttribute CreateNsliceAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+    UsdAttribute CreateNslicePhiAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
+
+public:
+    // --------------------------------------------------------------------- //
+    // NSLICETHETA 
+    // --------------------------------------------------------------------- //
+    /// 
+    ///
+    /// | ||
+    /// | -- | -- |
+    /// | Declaration | `int nsliceTheta = 0` |
+    /// | C++ Type | int |
+    /// | \ref Usd_Datatypes "Usd Type" | SdfValueTypeNames->Int |
+    G4_API
+    UsdAttribute GetNsliceThetaAttr() const;
+
+    /// See GetNsliceThetaAttr(), and also 
+    /// \ref Usd_Create_Or_Get_Property for when to use Get vs Create.
+    /// If specified, author \p defaultValue as the attribute's default,
+    /// sparsely (when it makes sense to do so) if \p writeSparsely is \c true -
+    /// the default for \p writeSparsely is \c false.
+    G4_API
+    UsdAttribute CreateNsliceThetaAttr(VtValue const &defaultValue = VtValue(), bool writeSparsely=false) const;
 
 public:
     // ===================================================================== //
