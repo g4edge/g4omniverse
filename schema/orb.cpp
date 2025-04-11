@@ -202,13 +202,6 @@ PXR_NAMESPACE_CLOSE_SCOPE
 #include "pxr/usd/usd/notice.h"
 #include "SurfaceMesh.h"
 
-#include <CGAL/Surface_mesh.h>
-#include <CGAL/Polygon_mesh_processing/stitch_borders.h>
-#include <CGAL/Polygon_mesh_processing/polygon_soup_to_polygon_mesh.h>
-#include <CGAL/Polygon_mesh_processing/orientation.h>
-#include <CGAL/Polygon_mesh_processing/border.h>
-#include <CGAL/Surface_mesh_approximation/approximate_triangle_mesh.h>
-
 namespace PMP = CGAL::Polygon_mesh_processing;
 class OrbChangeListener : public pxr::TfWeakBase {
 public:
@@ -249,9 +242,6 @@ void pxr::G4Orb::Update() {
 	auto vc = GetFaceVertexCountsAttr();
 	auto vi = GetFaceVertexIndicesAttr();
 	VtArray<GfVec3f> pArray;
-	std::cout << "nphi = " << nslicePhii << std::endl;
-    std::cout << "ntheta = " << nsliceThetai << std::endl;
-	std::cout << "rMax = " << rMaxf << std::endl;
 
 	VtIntArray vcArray;
 	VtIntArray viArray;
@@ -325,28 +315,7 @@ void pxr::G4Orb::Update() {
 
   VtArray<GfVec3f> pArrayUpdate;
   VtIntArray viArrayUpdate;
-
   ReplaceDuplicateVertices(pArray,viArray,pArrayUpdate,viArrayUpdate);
-  int edges = CountEdges(viArrayUpdate);
-  std::cout << "p " << pArrayUpdate << std::endl;
-  std::cout << "vi " << viArrayUpdate << std::endl;
-
-  std::cout <<"v = " << pArrayUpdate.size() << std::endl;
-  std::cout <<"f = " << vcArray.size() << std::endl;
-  std::cout <<"e = " << edges << std::endl;
-  std::cout << "euler characteristic = " << pArrayUpdate.size()-edges+vcArray.size() << std::endl;
-
-  std::unordered_map<Edge, int, EdgeHash> testDuplicates = CheckEdgesUsedTwice(viArrayUpdate);
-  for (auto value : testDuplicates)
-    {if (value.second!=2.0)
-  	{
-      std::cout << value.second << std::endl;
-  	}}
-  Mesh cgalMesh;
-  ConvertToCGALMesh(pArrayUpdate, vcArray, viArrayUpdate, cgalMesh);
-  bool test =CGAL::is_closed(cgalMesh);
-  if (test){std::cout << "true" << std::endl;}
-  if (!test){std::cout << "false" << std::endl;}
   p.Set(pArrayUpdate);
   vc.Set(vcArray);
   vi.Set(viArrayUpdate);
