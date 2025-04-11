@@ -291,22 +291,26 @@ void pxr::G4Tubs::InstallUpdateListener() {
 }
 
 void pxr::G4Tubs::Update() {
-  double rMin=0;
-  double rMax=1;
-  double z=1;
-  double sPhi=0;
-  double dPhi=2.0*M_PI;
+  double rMin;
+  double rMax;
+  double z;
+  double sPhi;
+  double dPhi;
+  int nslice;
   GetRMinAttr().Get(&rMin);
   GetRMaxAttr().Get(&rMax);
   GetZAttr().Get(&z);
   GetSPhiAttr().Get(&sPhi);
   GetDPhiAttr().Get(&dPhi);
-
+  GetNsliceAttr().Get(&nslice);
   float rMinf = float(rMin);
   float rMaxf = float(rMax);
   float zf = float(z);
   float sPhif = float(sPhi);
   float dPhif = float(dPhi);
+  int nslicei = int(nslice);
+  std::cout << "nslice " << nslicei << std::endl;
+
   float tolerance = 1e4;
   float dPhifRounded = std::round(dPhif*tolerance);
   float twoPiRounded = std::round(2.0*M_PI*tolerance);
@@ -317,11 +321,10 @@ void pxr::G4Tubs::Update() {
 
   VtIntArray vcArray;
   VtIntArray viArray;
-  float nslice = 6;// this needs to be thought about more
 
-  float pDPhi = dPhif / nslice;
+  float pDPhi = dPhif / nslicei;
 
-  for (int i = 0; i <= nslice-1; ++i)
+  for (int i = 0; i <= nslicei-1; ++i)
   {
     float phi1 = sPhif + i * pDPhi;
     float phi2 = sPhif + (i + 1) * pDPhi;
@@ -339,7 +342,7 @@ void pxr::G4Tubs::Update() {
 
     //tube ends
 
-    //tpo and bottom with inner radius
+    //top and bottom with inner radius
     if(rMin==0)
       {      //top and bottom without inner radius
      pArray.push_back(GfVec3f(0, 0, -zf));
@@ -440,7 +443,7 @@ void pxr::G4Tubs::Update() {
 
     if (dPhifRounded != twoPiRounded)
 	{
-      if (i==nslice-1)
+      if (i==nslicei-1)
       	{
         pArray.push_back(GfVec3f(xRMin2, yRMin2, zf));//4
         pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));//3
