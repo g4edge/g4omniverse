@@ -4,7 +4,7 @@
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#include ".//tubs.h"
+#include ".//cons.h"
 #include "pxr/usd/usd/schemaBase.h"
 
 #include "pxr/usd/sdf/primSpec.h"
@@ -33,71 +33,85 @@ WRAP_CUSTOM;
 
         
 static UsdAttribute
-_CreateG4typeAttr(G4Tubs &self,
+_CreateG4typeAttr(G4Cons &self,
                                       object defaultVal, bool writeSparsely) {
     return self.CreateG4typeAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
 }
         
 static UsdAttribute
-_CreateRMinAttr(G4Tubs &self,
+_CreateRMin1Attr(G4Cons &self,
                                       object defaultVal, bool writeSparsely) {
-    return self.CreateRMinAttr(
+    return self.CreateRMin1Attr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double), writeSparsely);
 }
         
 static UsdAttribute
-_CreateRMaxAttr(G4Tubs &self,
+_CreateRMax1Attr(G4Cons &self,
                                       object defaultVal, bool writeSparsely) {
-    return self.CreateRMaxAttr(
+    return self.CreateRMax1Attr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double), writeSparsely);
 }
         
 static UsdAttribute
-_CreateZAttr(G4Tubs &self,
+_CreateRMin2Attr(G4Cons &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateRMin2Attr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double), writeSparsely);
+}
+        
+static UsdAttribute
+_CreateRMax2Attr(G4Cons &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateRMax2Attr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double), writeSparsely);
+}
+        
+static UsdAttribute
+_CreateZAttr(G4Cons &self,
                                       object defaultVal, bool writeSparsely) {
     return self.CreateZAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double), writeSparsely);
 }
         
 static UsdAttribute
-_CreateSPhiAttr(G4Tubs &self,
+_CreateSPhiAttr(G4Cons &self,
                                       object defaultVal, bool writeSparsely) {
     return self.CreateSPhiAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double), writeSparsely);
 }
         
 static UsdAttribute
-_CreateDPhiAttr(G4Tubs &self,
+_CreateDPhiAttr(G4Cons &self,
                                       object defaultVal, bool writeSparsely) {
     return self.CreateDPhiAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double), writeSparsely);
 }
         
 static UsdAttribute
-_CreateNsliceAttr(G4Tubs &self,
+_CreateNsliceAttr(G4Cons &self,
                                       object defaultVal, bool writeSparsely) {
     return self.CreateNsliceAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Int), writeSparsely);
 }
 
 static std::string
-_Repr(const G4Tubs &self)
+_Repr(const G4Cons &self)
 {
     std::string primRepr = TfPyRepr(self.GetPrim());
     return TfStringPrintf(
-        "G4.Tubs(%s)",
+        "G4.Cons(%s)",
         primRepr.c_str());
 }
 
 } // anonymous namespace
 
-void wrapG4Tubs()
+void wrapG4Cons()
 {
-    typedef G4Tubs This;
+    typedef G4Cons This;
 
     class_<This, bases<G4VSolid> >
-        cls("Tubs");
+        cls("Cons");
 
     cls
         .def(init<UsdPrim>(arg("prim")))
@@ -130,17 +144,31 @@ void wrapG4Tubs()
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
         
-        .def("GetRMinAttr",
-             &This::GetRMinAttr)
-        .def("CreateRMinAttr",
-             &_CreateRMinAttr,
+        .def("GetRMin1Attr",
+             &This::GetRMin1Attr)
+        .def("CreateRMin1Attr",
+             &_CreateRMin1Attr,
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
         
-        .def("GetRMaxAttr",
-             &This::GetRMaxAttr)
-        .def("CreateRMaxAttr",
-             &_CreateRMaxAttr,
+        .def("GetRMax1Attr",
+             &This::GetRMax1Attr)
+        .def("CreateRMax1Attr",
+             &_CreateRMax1Attr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetRMin2Attr",
+             &This::GetRMin2Attr)
+        .def("CreateRMin2Attr",
+             &_CreateRMin2Attr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetRMax2Attr",
+             &This::GetRMax2Attr)
+        .def("CreateRMax2Attr",
+             &_CreateRMax2Attr,
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
         
@@ -200,9 +228,9 @@ void wrapG4Tubs()
 namespace {
 
 WRAP_CUSTOM {
-    _class
-    .def("Update",&G4Tubs::Update)
-    .def("InstallUpdateListener",&G4Tubs::InstallUpdateListener);
+     _class
+     .def("Update",&G4Cons::Update)
+     .def("InstallUpdateListener",&G4Cons::InstallUpdateListener);
 }
 
 }

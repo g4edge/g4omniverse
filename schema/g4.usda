@@ -56,9 +56,46 @@ class Tubs "Tubs" (
     }
 )  {
     string g4type = "Tubs"
-    double r1 = 0
-    double r2 = 0
-    double z = 0 
+    double rMin = 0
+    double rMax = 0
+    double z = 0
+    double sPhi = 0
+    double dPhi = 0
+    int nslice = 0
+}
+
+class Cons "Cons" (
+    inherits = </VSolid>
+
+    customData = {
+        string className = "Cons"
+    }
+)  {
+    string g4type = "Cons"
+    double rMin1 = 0
+    double rMax1 = 0
+    double rMin2 = 0
+    double rMax2 = 0
+    double z = 0
+    double sPhi = 0
+    double dPhi = 0
+    int nslice = 0
+
+}
+
+
+class Orb "Orb" (
+    inherits = </VSolid>
+
+    customData = {
+        string className = "Orb"
+    }
+)  {
+    string g4type = "Orb"
+    double rMax = 1
+    int nslicePhi = 0
+    int nsliceTheta = 0
+
 }
 
 class BooleanSolid "BooleanSolid" (

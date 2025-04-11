@@ -4,7 +4,7 @@
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#include ".//displacedSolid.h"
+#include ".//orb.h"
 #include "pxr/usd/usd/schemaBase.h"
 
 #include "pxr/usd/sdf/primSpec.h"
@@ -33,43 +33,50 @@ WRAP_CUSTOM;
 
         
 static UsdAttribute
-_CreateG4typeAttr(G4DisplacedSolid &self,
+_CreateG4typeAttr(G4Orb &self,
                                       object defaultVal, bool writeSparsely) {
     return self.CreateG4typeAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
 }
         
 static UsdAttribute
-_CreateTranslationAttr(G4DisplacedSolid &self,
+_CreateRMaxAttr(G4Orb &self,
                                       object defaultVal, bool writeSparsely) {
-    return self.CreateTranslationAttr(
-        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double3), writeSparsely);
+    return self.CreateRMaxAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double), writeSparsely);
 }
         
 static UsdAttribute
-_CreateRotationAttr(G4DisplacedSolid &self,
+_CreateNslicePhiAttr(G4Orb &self,
                                       object defaultVal, bool writeSparsely) {
-    return self.CreateRotationAttr(
-        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double3), writeSparsely);
+    return self.CreateNslicePhiAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Int), writeSparsely);
+}
+        
+static UsdAttribute
+_CreateNsliceThetaAttr(G4Orb &self,
+                                      object defaultVal, bool writeSparsely) {
+    return self.CreateNsliceThetaAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Int), writeSparsely);
 }
 
 static std::string
-_Repr(const G4DisplacedSolid &self)
+_Repr(const G4Orb &self)
 {
     std::string primRepr = TfPyRepr(self.GetPrim());
     return TfStringPrintf(
-        "G4.DisplacedSolid(%s)",
+        "G4.Orb(%s)",
         primRepr.c_str());
 }
 
 } // anonymous namespace
 
-void wrapG4DisplacedSolid()
+void wrapG4Orb()
 {
-    typedef G4DisplacedSolid This;
+    typedef G4Orb This;
 
-    class_<This, bases<UsdGeomXform> >
-        cls("DisplacedSolid");
+    class_<This, bases<G4VSolid> >
+        cls("Orb");
 
     cls
         .def(init<UsdPrim>(arg("prim")))
@@ -102,17 +109,24 @@ void wrapG4DisplacedSolid()
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
         
-        .def("GetTranslationAttr",
-             &This::GetTranslationAttr)
-        .def("CreateTranslationAttr",
-             &_CreateTranslationAttr,
+        .def("GetRMaxAttr",
+             &This::GetRMaxAttr)
+        .def("CreateRMaxAttr",
+             &_CreateRMaxAttr,
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
         
-        .def("GetRotationAttr",
-             &This::GetRotationAttr)
-        .def("CreateRotationAttr",
-             &_CreateRotationAttr,
+        .def("GetNslicePhiAttr",
+             &This::GetNslicePhiAttr)
+        .def("CreateNslicePhiAttr",
+             &_CreateNslicePhiAttr,
+             (arg("defaultValue")=object(),
+              arg("writeSparsely")=false))
+        
+        .def("GetNsliceThetaAttr",
+             &This::GetNsliceThetaAttr)
+        .def("CreateNsliceThetaAttr",
+             &_CreateNsliceThetaAttr,
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
 
@@ -144,9 +158,9 @@ void wrapG4DisplacedSolid()
 namespace {
 
 WRAP_CUSTOM {
-  _class
-      .def("Update",&G4DisplacedSolid::Update)
-      .def("InstallUpdateListener",&G4DisplacedSolid::InstallUpdateListener);
+   _class
+  .def("Update",&G4Orb::Update)
+  .def("InstallUpdateListener",&G4Orb::InstallUpdateListener);
 }
 
 }
