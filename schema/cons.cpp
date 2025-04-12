@@ -702,6 +702,7 @@ bool pxr::G4Cons::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) 
            notice.AffectedObject(this->GetRMax2Attr()) ||
            notice.AffectedObject(this->GetZAttr())    ||
            notice.AffectedObject(this->GetSPhiAttr()) ||
-           notice.AffectedObject(this->GetDPhiAttr());
+           notice.AffectedObject(this->GetDPhiAttr()) ||
+           notice.AffectedObject(this->GetNsliceAttr());
 }
 

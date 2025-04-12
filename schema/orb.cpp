@@ -326,6 +326,8 @@ void pxr::G4Orb::Update() {
 
 //// update these
 bool pxr::G4Orb::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
-    return notice.AffectedObject(this->GetRMaxAttr());
+    return notice.AffectedObject(this->GetRMaxAttr()) ||
+           notice.AffectedObject(this->GetNslicePhiAttr()) ||
+           notice.AffectedObject(this->GetNsliceThetaAttr());
 }
 

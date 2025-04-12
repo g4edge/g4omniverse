@@ -11,6 +11,10 @@ def add_listeners(stage) :
             G4.Box(x).InstallUpdateListener()
         elif x.GetTypeName() == "Tubs" :
             G4.Tubs(x).InstallUpdateListener()
+        elif x.GetTypeName() == "Cons" :
+            G4.Cons(x).InstallUpdateListener()
+        elif x.GetTypeName() == "Orb" :
+            G4.Orb(x).InstallUpdateListener()
         elif x.GetTypeName() == "Union"  :
             G4.Union(x).InstallUpdateListener()
         elif x.GetTypeName() == "Subtraction" :
