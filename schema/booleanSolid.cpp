@@ -203,6 +203,7 @@ PXR_NAMESPACE_CLOSE_SCOPE
 #include "pxr/usd/usd/primRange.h"
 #include "vSolid.h"
 #include "box.h"
+#include "tubs.h"
 #include "displacedSolid.h"
 #include "union.h"
 #include "intersection.h"
@@ -254,6 +255,10 @@ public:
       for(auto prim : notice.GetStage()->Traverse()) {
         if(prim.GetTypeName() == "Box") {
           auto p = G4Box(prim);
+          if(p.IsInputAffected(notice)) p.Update();
+        }
+        else if(prim.GetTypeName() == "Tubs") {
+          auto p = G4Tubs(prim);
           if(p.IsInputAffected(notice)) p.Update();
         }
         else if(prim.GetTypeName() == "DisplacedSolid") {
