@@ -9,6 +9,8 @@ def add_listeners(stage) :
             G4.DisplacedSolid(x).InstallUpdateListener()
         elif x.GetTypeName() == "Box" :
             G4.Box(x).InstallUpdateListener()
+        elif x.GetTypeName() == "Tubs" :
+            G4.Tubs(x).InstallUpdateListener()
         elif x.GetTypeName() == "Union"  :
             G4.Union(x).InstallUpdateListener()
         elif x.GetTypeName() == "Subtraction" :
