@@ -509,6 +509,7 @@ bool pxr::G4Tubs::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) 
            notice.AffectedObject(this->GetRMaxAttr()) ||
            notice.AffectedObject(this->GetZAttr())    ||
            notice.AffectedObject(this->GetSPhiAttr()) ||
-           notice.AffectedObject(this->GetDPhiAttr());
+           notice.AffectedObject(this->GetDPhiAttr()) ||
+           notice.AffectedObject(this->GetNsliceAttr());
 }
 
