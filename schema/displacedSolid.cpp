@@ -229,10 +229,10 @@ void pxr::G4DisplacedSolid::Update() {
   bool resetsXformStack = false;
   if (xformable.GetOrderedXformOps(&resetsXformStack).size() == 0) {
     xformable.AddTranslateOp().Set(translation);
-    xformable.AddRotateXYZOp().Set(rotation_float);
+    xformable.AddRotateZYXOp().Set(rotation_float);
   }
   else {
-    this->GetPrim().GetAttribute(pxr::TfToken("xformOp:rotateXYZ")).Set(rotation_float);
+    this->GetPrim().GetAttribute(pxr::TfToken("xformOp:rotateZYX")).Set(rotation_float);
     this->GetPrim().GetAttribute(pxr::TfToken("xformOp:translate")).Set(translation);
   }
 }
@@ -254,7 +254,7 @@ bool pxr::G4DisplacedSolid::IsInputAffected(const pxr::UsdNotice::ObjectsChanged
 }
 
 bool pxr::G4DisplacedSolid::IsOutputAffected(const UsdNotice::ObjectsChanged& notice) {
-  return notice.AffectedObject(this->GetPrim().GetAttribute(pxr::TfToken("xformOp:rotateXYZ"))) ||
+  return notice.AffectedObject(this->GetPrim().GetAttribute(pxr::TfToken("xformOp:rotateZYX"))) ||
          notice.AffectedObject(this->GetPrim().GetAttribute(pxr::TfToken("xformOp:translate"))) ||
          this->IsInputAffected(notice);
 }
