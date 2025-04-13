@@ -83,7 +83,6 @@ class Cons "Cons" (
 
 }
 
-
 class Orb "Orb" (
     inherits = </VSolid>
 
@@ -181,6 +180,18 @@ class Logical "Logical" (
     string limitsprim = "none"
     string[] daughters = []
 }
+
+class Assembly "Assembly" (
+    inherits = </Scope>
+
+    customData = {
+         string className = "Assembly"
+    }
+) {
+    string g4type = "Assembly"
+    string[] daughters = []
+}
+
 
 class Placement "Placement" (
     inherits = </Xform>

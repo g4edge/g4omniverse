@@ -78,6 +78,7 @@ void wrapG4Tokens()
     _AddToken(cls, "x", G4Tokens->x);
     _AddToken(cls, "y", G4Tokens->y);
     _AddToken(cls, "z", G4Tokens->z);
+    _AddToken(cls, "Assembly", G4Tokens->Assembly);
     _AddToken(cls, "BooleanSolid", G4Tokens->BooleanSolid);
     _AddToken(cls, "Box", G4Tokens->Box);
     _AddToken(cls, "Cons", G4Tokens->Cons);

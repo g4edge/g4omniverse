@@ -30,7 +30,8 @@ via NVIDIA Omniverse.
   * `terminal> python build_scripts/build_usd.py ../openusd-build/`
 * add plugin directory to python path
   * `terminal> export $PYTHONPATH=$PYTHONPATH:<PATH_TO_USD_BUILD>/lib/python`
-* test in python 
+* test in python
+  * `python> import pxr.UsdGeom`
   * `python> from pxr import G4`
 
 ### Regenerate schema

@@ -51,7 +51,7 @@ struct G4TokensType {
     const TfToken angle_unit;
     /// \brief "daughters"
     /// 
-    /// G4Logical
+    /// G4Logical, G4Assembly
     const TfToken daughters;
     /// \brief "dPhi"
     /// 
@@ -63,7 +63,7 @@ struct G4TokensType {
     const TfToken fieldprim;
     /// \brief "g4type"
     /// 
-    /// G4VSolid, G4Box, G4Tubs, G4Cons, G4Orb, G4BooleanSolid, G4DisplacedSolid, G4Subtraction, G4Union, G4Intersection, G4MultiUnion, G4Logical, G4Placement
+    /// G4VSolid, G4Box, G4Tubs, G4Cons, G4Orb, G4BooleanSolid, G4DisplacedSolid, G4Subtraction, G4Union, G4Intersection, G4MultiUnion, G4Logical, G4Assembly, G4Placement
     const TfToken g4type;
     /// \brief "length_unit"
     /// 
@@ -169,6 +169,10 @@ struct G4TokensType {
     /// 
     /// G4Box, G4Tubs, G4Cons
     const TfToken z;
+    /// \brief "Assembly"
+    /// 
+    /// Schema identifer and family for G4Assembly
+    const TfToken Assembly;
     /// \brief "BooleanSolid"
     /// 
     /// Schema identifer and family for G4BooleanSolid
