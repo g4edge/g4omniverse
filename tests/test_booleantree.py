@@ -57,3 +57,5 @@ def test_booleantree(stage = None) :
 
     sub1_solid1.Update()
     sub1.Update()
+
+    stage.GetRootLayer().Save()
