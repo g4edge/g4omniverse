@@ -37,6 +37,12 @@ via NVIDIA Omniverse.
 
 * `usdGenSchema g4.schema .`
 
+### Add listeners in usdview
+
+* `from pxr.G4 import utils`
+* `utils.add_listeners()`
+* `pxr.G4.BooleanSolid.InstallUpdateListeners()`
+
 ### Convert usd file to usdz
 
 Need to flatten custom schema file for conversion to USDZ
