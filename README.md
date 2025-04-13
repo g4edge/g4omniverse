@@ -39,9 +39,12 @@ via NVIDIA Omniverse.
 
 ### Add listeners in usdview
 
-* `from pxr.G4 import utils`
-* `utils.add_listeners()`
-* `pxr.G4.BooleanSolid.InstallUpdateListeners()`
+1. usdview -> window -> interpreter
+1. `from pxr.G4 import utils`
+1. `utils.add_listeners( usdviewApi.stage )`
+1. `import pxr.G4`
+1. `pxr.G4.BooleanSolid.InstallStageBooleanListener()`
+1. `pxr.G4.BooleanSolid.InstallUpdateListeners()`
 
 ### Convert usd file to usdz
 
