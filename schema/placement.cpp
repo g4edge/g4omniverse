@@ -231,7 +231,7 @@ void pxr::G4Placement::Update() {
 
   // Convert to float
   pxr::GfVec3f translation_float = GfVec3f(float(translation[0]), float(translation[1]), float(translation[2]));
-  pxr::GfVec3f rotation_float = GfVec3f(float(rotation[0]), float(rotation[1]), float(rotation[2]));
+  pxr::GfVec3f rotation_float = GfVec3f(-float(rotation[0]),-float(rotation[1]), -float(rotation[2]));
 
   // Add or update xform operators
   pxr::UsdGeomXform xformable(*this);

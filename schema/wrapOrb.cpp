@@ -4,7 +4,7 @@
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#include ".//tubs.h"
+#include ".//orb.h"
 #include "pxr/usd/usd/schemaBase.h"
 
 #include "pxr/usd/sdf/primSpec.h"
@@ -33,71 +33,50 @@ WRAP_CUSTOM;
 
         
 static UsdAttribute
-_CreateG4typeAttr(G4Tubs &self,
+_CreateG4typeAttr(G4Orb &self,
                                       object defaultVal, bool writeSparsely) {
     return self.CreateG4typeAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->String), writeSparsely);
 }
         
 static UsdAttribute
-_CreateRMinAttr(G4Tubs &self,
-                                      object defaultVal, bool writeSparsely) {
-    return self.CreateRMinAttr(
-        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double), writeSparsely);
-}
-        
-static UsdAttribute
-_CreateRMaxAttr(G4Tubs &self,
+_CreateRMaxAttr(G4Orb &self,
                                       object defaultVal, bool writeSparsely) {
     return self.CreateRMaxAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double), writeSparsely);
 }
         
 static UsdAttribute
-_CreateZAttr(G4Tubs &self,
+_CreateNslicePhiAttr(G4Orb &self,
                                       object defaultVal, bool writeSparsely) {
-    return self.CreateZAttr(
-        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double), writeSparsely);
+    return self.CreateNslicePhiAttr(
+        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Int), writeSparsely);
 }
         
 static UsdAttribute
-_CreateSPhiAttr(G4Tubs &self,
+_CreateNsliceThetaAttr(G4Orb &self,
                                       object defaultVal, bool writeSparsely) {
-    return self.CreateSPhiAttr(
-        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double), writeSparsely);
-}
-        
-static UsdAttribute
-_CreateDPhiAttr(G4Tubs &self,
-                                      object defaultVal, bool writeSparsely) {
-    return self.CreateDPhiAttr(
-        UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Double), writeSparsely);
-}
-        
-static UsdAttribute
-_CreateNsliceAttr(G4Tubs &self,
-                                      object defaultVal, bool writeSparsely) {
-    return self.CreateNsliceAttr(
+    return self.CreateNsliceThetaAttr(
         UsdPythonToSdfType(defaultVal, SdfValueTypeNames->Int), writeSparsely);
 }
 
 static std::string
-_Repr(const G4Tubs &self)
+_Repr(const G4Orb &self)
 {
     std::string primRepr = TfPyRepr(self.GetPrim());
     return TfStringPrintf(
-        "G4.Tubs(%s)",
+        "G4.Orb(%s)",
         primRepr.c_str());
 }
 
 } // anonymous namespace
 
-void wrapG4Tubs()
+void wrapG4Orb()
 {
-    typedef G4Tubs This;
+    typedef G4Orb This;
 
     class_<This, bases<G4VSolid> >
-        cls("Tubs");
+        cls("Orb");
 
     cls
         .def(init<UsdPrim>(arg("prim")))
@@ -130,13 +109,6 @@ void wrapG4Tubs()
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
         
-        .def("GetRMinAttr",
-             &This::GetRMinAttr)
-        .def("CreateRMinAttr",
-             &_CreateRMinAttr,
-             (arg("defaultValue")=object(),
-              arg("writeSparsely")=false))
-        
         .def("GetRMaxAttr",
              &This::GetRMaxAttr)
         .def("CreateRMaxAttr",
@@ -144,31 +116,17 @@ void wrapG4Tubs()
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
         
-        .def("GetZAttr",
-             &This::GetZAttr)
-        .def("CreateZAttr",
-             &_CreateZAttr,
+        .def("GetNslicePhiAttr",
+             &This::GetNslicePhiAttr)
+        .def("CreateNslicePhiAttr",
+             &_CreateNslicePhiAttr,
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
         
-        .def("GetSPhiAttr",
-             &This::GetSPhiAttr)
-        .def("CreateSPhiAttr",
-             &_CreateSPhiAttr,
-             (arg("defaultValue")=object(),
-              arg("writeSparsely")=false))
-        
-        .def("GetDPhiAttr",
-             &This::GetDPhiAttr)
-        .def("CreateDPhiAttr",
-             &_CreateDPhiAttr,
-             (arg("defaultValue")=object(),
-              arg("writeSparsely")=false))
-        
-        .def("GetNsliceAttr",
-             &This::GetNsliceAttr)
-        .def("CreateNsliceAttr",
-             &_CreateNsliceAttr,
+        .def("GetNsliceThetaAttr",
+             &This::GetNsliceThetaAttr)
+        .def("CreateNsliceThetaAttr",
+             &_CreateNsliceThetaAttr,
              (arg("defaultValue")=object(),
               arg("writeSparsely")=false))
 
@@ -200,9 +158,9 @@ void wrapG4Tubs()
 namespace {
 
 WRAP_CUSTOM {
-    _class
-    .def("Update",&G4Tubs::Update)
-    .def("InstallUpdateListener",&G4Tubs::InstallUpdateListener);
+   _class
+  .def("Update",&G4Orb::Update)
+  .def("InstallUpdateListener",&G4Orb::InstallUpdateListener);
 }
 
 }

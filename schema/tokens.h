@@ -53,13 +53,17 @@ struct G4TokensType {
     /// 
     /// G4Logical
     const TfToken daughters;
+    /// \brief "dPhi"
+    /// 
+    /// G4Tubs, G4Cons
+    const TfToken dPhi;
     /// \brief "fieldprim"
     /// 
     /// G4Logical
     const TfToken fieldprim;
     /// \brief "g4type"
     /// 
-    /// G4VSolid, G4Box, G4Tubs, G4BooleanSolid, G4DisplacedSolid, G4Subtraction, G4Union, G4Intersection, G4MultiUnion, G4Logical, G4Placement
+    /// G4VSolid, G4Box, G4Tubs, G4Cons, G4Orb, G4BooleanSolid, G4DisplacedSolid, G4Subtraction, G4Union, G4Intersection, G4MultiUnion, G4Logical, G4Placement
     const TfToken g4type;
     /// \brief "length_unit"
     /// 
@@ -81,14 +85,42 @@ struct G4TokensType {
     /// 
     /// G4VSolid
     const TfToken name;
-    /// \brief "r1"
+    /// \brief "nslice"
+    /// 
+    /// G4Tubs, G4Cons
+    const TfToken nslice;
+    /// \brief "nslicePhi"
+    /// 
+    /// G4Orb
+    const TfToken nslicePhi;
+    /// \brief "nsliceTheta"
+    /// 
+    /// G4Orb
+    const TfToken nsliceTheta;
+    /// \brief "rMax"
+    /// 
+    /// G4Tubs, G4Orb
+    const TfToken rMax;
+    /// \brief "rMax1"
+    /// 
+    /// G4Cons
+    const TfToken rMax1;
+    /// \brief "rMax2"
+    /// 
+    /// G4Cons
+    const TfToken rMax2;
+    /// \brief "rMin"
     /// 
     /// G4Tubs
-    const TfToken r1;
-    /// \brief "r2"
+    const TfToken rMin;
+    /// \brief "rMin1"
     /// 
-    /// G4Tubs
-    const TfToken r2;
+    /// G4Cons
+    const TfToken rMin1;
+    /// \brief "rMin2"
+    /// 
+    /// G4Cons
+    const TfToken rMin2;
     /// \brief "rotation"
     /// 
     /// G4DisplacedSolid, G4Placement
@@ -117,6 +149,10 @@ struct G4TokensType {
     /// 
     /// G4MultiUnion
     const TfToken solidprims;
+    /// \brief "sPhi"
+    /// 
+    /// G4Tubs, G4Cons
+    const TfToken sPhi;
     /// \brief "translation"
     /// 
     /// G4DisplacedSolid, G4Placement
@@ -131,7 +167,7 @@ struct G4TokensType {
     const TfToken y;
     /// \brief "z"
     /// 
-    /// G4Box, G4Tubs
+    /// G4Box, G4Tubs, G4Cons
     const TfToken z;
     /// \brief "BooleanSolid"
     /// 
@@ -141,6 +177,10 @@ struct G4TokensType {
     /// 
     /// Schema identifer and family for G4Box
     const TfToken Box;
+    /// \brief "Cons"
+    /// 
+    /// Schema identifer and family for G4Cons
+    const TfToken Cons;
     /// \brief "DisplacedSolid"
     /// 
     /// Schema identifer and family for G4DisplacedSolid
@@ -157,6 +197,10 @@ struct G4TokensType {
     /// 
     /// Schema identifer and family for G4MultiUnion
     const TfToken MultiUnion;
+    /// \brief "Orb"
+    /// 
+    /// Schema identifer and family for G4Orb
+    const TfToken Orb;
     /// \brief "Placement"
     /// 
     /// Schema identifer and family for G4Placement

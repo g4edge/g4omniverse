@@ -104,15 +104,15 @@ G4Tubs::CreateG4typeAttr(VtValue const &defaultValue, bool writeSparsely) const
 }
 
 UsdAttribute
-G4Tubs::GetR1Attr() const
+G4Tubs::GetRMinAttr() const
 {
-    return GetPrim().GetAttribute(G4Tokens->r1);
+    return GetPrim().GetAttribute(G4Tokens->rMin);
 }
 
 UsdAttribute
-G4Tubs::CreateR1Attr(VtValue const &defaultValue, bool writeSparsely) const
+G4Tubs::CreateRMinAttr(VtValue const &defaultValue, bool writeSparsely) const
 {
-    return UsdSchemaBase::_CreateAttr(G4Tokens->r1,
+    return UsdSchemaBase::_CreateAttr(G4Tokens->rMin,
                        SdfValueTypeNames->Double,
                        /* custom = */ false,
                        SdfVariabilityVarying,
@@ -121,15 +121,15 @@ G4Tubs::CreateR1Attr(VtValue const &defaultValue, bool writeSparsely) const
 }
 
 UsdAttribute
-G4Tubs::GetR2Attr() const
+G4Tubs::GetRMaxAttr() const
 {
-    return GetPrim().GetAttribute(G4Tokens->r2);
+    return GetPrim().GetAttribute(G4Tokens->rMax);
 }
 
 UsdAttribute
-G4Tubs::CreateR2Attr(VtValue const &defaultValue, bool writeSparsely) const
+G4Tubs::CreateRMaxAttr(VtValue const &defaultValue, bool writeSparsely) const
 {
-    return UsdSchemaBase::_CreateAttr(G4Tokens->r2,
+    return UsdSchemaBase::_CreateAttr(G4Tokens->rMax,
                        SdfValueTypeNames->Double,
                        /* custom = */ false,
                        SdfVariabilityVarying,
@@ -154,6 +154,57 @@ G4Tubs::CreateZAttr(VtValue const &defaultValue, bool writeSparsely) const
                        writeSparsely);
 }
 
+UsdAttribute
+G4Tubs::GetSPhiAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->sPhi);
+}
+
+UsdAttribute
+G4Tubs::CreateSPhiAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->sPhi,
+                       SdfValueTypeNames->Double,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
+UsdAttribute
+G4Tubs::GetDPhiAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->dPhi);
+}
+
+UsdAttribute
+G4Tubs::CreateDPhiAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->dPhi,
+                       SdfValueTypeNames->Double,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
+UsdAttribute
+G4Tubs::GetNsliceAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->nslice);
+}
+
+UsdAttribute
+G4Tubs::CreateNsliceAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->nslice,
+                       SdfValueTypeNames->Int,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
 namespace {
 static inline TfTokenVector
 _ConcatenateAttributeNames(const TfTokenVector& left,const TfTokenVector& right)
@@ -172,9 +223,12 @@ G4Tubs::GetSchemaAttributeNames(bool includeInherited)
 {
     static TfTokenVector localNames = {
         G4Tokens->g4type,
-        G4Tokens->r1,
-        G4Tokens->r2,
+        G4Tokens->rMin,
+        G4Tokens->rMax,
         G4Tokens->z,
+        G4Tokens->sPhi,
+        G4Tokens->dPhi,
+        G4Tokens->nslice,
     };
     static TfTokenVector allNames =
         _ConcatenateAttributeNames(
@@ -197,3 +251,265 @@ PXR_NAMESPACE_CLOSE_SCOPE
 // 'PXR_NAMESPACE_OPEN_SCOPE', 'PXR_NAMESPACE_CLOSE_SCOPE'.
 // ===================================================================== //
 // --(BEGIN CUSTOM CODE)--
+
+#include <iostream>
+#include "pxr/usd/usd/notice.h"
+#include "SurfaceMesh.h"
+
+
+#include <CGAL/Surface_mesh.h>
+#include <CGAL/Polygon_mesh_processing/stitch_borders.h>
+#include <CGAL/Polygon_mesh_processing/polygon_soup_to_polygon_mesh.h>
+#include <CGAL/Polygon_mesh_processing/orientation.h>
+#include <CGAL/Polygon_mesh_processing/border.h>
+#include <CGAL/Surface_mesh_approximation/approximate_triangle_mesh.h>
+
+namespace PMP = CGAL::Polygon_mesh_processing;
+
+class TubsChangeListener : public pxr::TfWeakBase {
+public:
+  TubsChangeListener(pxr::G4Tubs tubs) : _tubs(tubs) {
+    // Register the listener for object changes
+    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<TubsChangeListener>(this),
+                            &TubsChangeListener::Update);
+  }
+
+  void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
+    if (_tubs.IsInputAffected(notice)) {
+      _tubs.Update();
+    }
+  }
+
+private:
+  pxr::G4Tubs _tubs;
+};
+
+
+void pxr::G4Tubs::InstallUpdateListener() {
+  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<TubsChangeListener>(new TubsChangeListener(*this)),
+                          &TubsChangeListener::Update);
+}
+
+void pxr::G4Tubs::Update() {
+  double rMin;
+  double rMax;
+  double z;
+  double sPhi;
+  double dPhi;
+  int nslice;
+  GetRMinAttr().Get(&rMin);
+  GetRMaxAttr().Get(&rMax);
+  GetZAttr().Get(&z);
+  GetSPhiAttr().Get(&sPhi);
+  GetDPhiAttr().Get(&dPhi);
+  GetNsliceAttr().Get(&nslice);
+  float rMinf = float(rMin);
+  float rMaxf = float(rMax);
+  float zf = float(z);
+  float sPhif = float(sPhi);
+  float dPhif = float(dPhi);
+  int nslicei = int(nslice);
+  std::cout << "nslice " << nslicei << std::endl;
+
+  float tolerance = 1e4;
+  float dPhifRounded = std::round(dPhif*tolerance);
+  float twoPiRounded = std::round(2.0*M_PI*tolerance);
+  auto p = GetPointsAttr();
+  auto vc = GetFaceVertexCountsAttr();
+  auto vi = GetFaceVertexIndicesAttr();
+  VtArray<GfVec3f> pArray;
+
+  VtIntArray vcArray;
+  VtIntArray viArray;
+
+  float pDPhi = dPhif / nslicei;
+
+  for (int i = 0; i <= nslicei-1; ++i)
+  {
+    float phi1 = sPhif + i * pDPhi;
+    float phi2 = sPhif + (i + 1) * pDPhi;
+    float xRMin1 = rMinf * std::cos(phi1);
+    float yRMin1 = rMinf * std::sin(phi1);
+    float xRMin2 = rMinf * std::cos(phi2);
+    float yRMin2 = rMinf * std::sin(phi2);
+
+    float xRMax1 = rMaxf * std::cos(phi1);
+    float yRMax1 = rMaxf * std::sin(phi1);
+    float xRMax2 = rMaxf * std::cos(phi2);
+    float yRMax2 = rMaxf * std::sin(phi2);
+
+    // wedge ends
+
+    //tube ends
+
+    //top and bottom with inner radius
+    if(rMin==0)
+      {      //top and bottom without inner radius
+     pArray.push_back(GfVec3f(0, 0, -zf));
+     pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf));
+     pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));
+
+     viArray.push_back(pArray.size()-3);
+     viArray.push_back(pArray.size()-1);
+     viArray.push_back(pArray.size()-2);
+
+     vcArray.push_back(3);
+
+     pArray.push_back(GfVec3f(0, 0, zf));
+     pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));
+     pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));
+
+     viArray.push_back(pArray.size()-3);
+     viArray.push_back(pArray.size()-2);
+     viArray.push_back(pArray.size()-1);
+
+     vcArray.push_back(3);
+     }
+    else
+    {
+      //top
+      pArray.push_back(GfVec3f(xRMin1, yRMin1, zf));//-8
+      pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));//-7
+      pArray.push_back(GfVec3f(xRMin2, yRMin2, zf));//-6
+      pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));//-5
+
+      viArray.push_back(pArray.size()-4);
+      viArray.push_back(pArray.size()-1);
+      viArray.push_back(pArray.size()-2);
+      vcArray.push_back(3);
+
+
+      viArray.push_back(pArray.size()-4);
+      viArray.push_back(pArray.size()-3);
+      viArray.push_back(pArray.size()-1);
+      vcArray.push_back(3);
+
+      //bottom
+      pArray.push_back(GfVec3f(xRMin1, yRMin1, -zf));//-4
+      pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf));//-3
+      pArray.push_back(GfVec3f(xRMin2, yRMin2, -zf));//-2
+      pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));//-1
+
+      viArray.push_back(pArray.size()-4);
+      viArray.push_back(pArray.size()-2);
+      viArray.push_back(pArray.size()-1);
+      vcArray.push_back(3);
+
+      viArray.push_back(pArray.size()-4);
+      viArray.push_back(pArray.size()-1);
+      viArray.push_back(pArray.size()-3);
+      vcArray.push_back(3);
+
+
+      //inner curved face
+      viArray.push_back(pArray.size()-8);
+      viArray.push_back(pArray.size()-6);
+      viArray.push_back(pArray.size()-2);
+      vcArray.push_back(3);
+
+      viArray.push_back(pArray.size()-8);
+      viArray.push_back(pArray.size()-2);
+      viArray.push_back(pArray.size()-4);
+      vcArray.push_back(3);
+
+
+    }
+
+      // wedge ends
+    if (dPhifRounded != twoPiRounded)
+	{ if (i==0)
+      {
+        //polulate vertices for the 4 corners of the wedge end
+        pArray.push_back(GfVec3f(xRMin1, yRMin1, zf));//4
+        pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));//3
+        pArray.push_back(GfVec3f(xRMin1, yRMin1, -zf));//2
+        pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf));//1
+
+        // push back the 3 vertices to describe first polygon on wedge end
+        viArray.push_back(pArray.size() - 4);
+        viArray.push_back(pArray.size() - 2);
+        viArray.push_back(pArray.size() - 3);
+        //add polygon number of vertices
+        vcArray.push_back(3);
+
+        // push back the 3 vertices to describe 2nd polygon on wedge end
+        viArray.push_back(pArray.size() - 3);
+        viArray.push_back(pArray.size() - 2);
+        viArray.push_back(pArray.size() - 1);
+        //add polygon number of vertices
+        vcArray.push_back(3);
+	  }
+    }
+
+    if (dPhifRounded != twoPiRounded)
+	{
+      if (i==nslicei-1)
+      	{
+        pArray.push_back(GfVec3f(xRMin2, yRMin2, zf));//4
+        pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));//3
+        pArray.push_back(GfVec3f(xRMin2, yRMin2, -zf));//2
+        pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));//1
+
+        // push back the 3 vertices to describe first polygon on wedge end
+        viArray.push_back(pArray.size() - 3);
+        viArray.push_back(pArray.size() - 1);
+        viArray.push_back(pArray.size() - 2);
+        //add polygon number of vertices
+        vcArray.push_back(3);
+
+        // push back the 3 vertices to describe 2nd polygon on wedge end
+        viArray.push_back(pArray.size() - 4);
+        viArray.push_back(pArray.size() - 3);
+        viArray.push_back(pArray.size() - 2);
+        //add polygon number of vertices
+        vcArray.push_back(3);
+      }
+    }
+
+    //curved faces
+
+    //outer face
+    pArray.push_back(GfVec3f(xRMax1, yRMax1, zf));//-4
+    pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));//-3
+    pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf)); //-2
+    pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));//-1
+
+
+    viArray.push_back(pArray.size()-4);
+    viArray.push_back(pArray.size()-2);
+    viArray.push_back(pArray.size()-3);
+
+    vcArray.push_back(3);
+
+    viArray.push_back(pArray.size()-3);//-3
+    viArray.push_back(pArray.size()-2);//-2
+    viArray.push_back(pArray.size()-1);//-1
+    vcArray.push_back(3);
+
+
+  }
+
+  VtArray<GfVec3f> pArrayUpdate;
+  VtIntArray viArrayUpdate;
+
+  ReplaceDuplicateVertices(pArray,viArray,pArrayUpdate,viArrayUpdate);
+
+
+  p.Set(pArrayUpdate);
+  vc.Set(vcArray);
+  vi.Set(viArrayUpdate);
+  // update parents
+  auto parent = GetPrim().GetParent();
+}
+
+
+//// update these
+bool pxr::G4Tubs::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
+    return notice.AffectedObject(this->GetRMinAttr()) ||
+           notice.AffectedObject(this->GetRMaxAttr()) ||
+           notice.AffectedObject(this->GetZAttr())    ||
+           notice.AffectedObject(this->GetSPhiAttr()) ||
+           notice.AffectedObject(this->GetDPhiAttr()) ||
+           notice.AffectedObject(this->GetNsliceAttr());
+}
+
