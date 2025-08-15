@@ -411,13 +411,12 @@ void pxr::G4Tubs::Update() {
       viArray.push_back(pArray.size()-2);
       viArray.push_back(pArray.size()-4);
       vcArray.push_back(3);
-
-
     }
 
-      // wedge ends
+    // wedge ends
     if (dPhifRounded != twoPiRounded)
-	{ if (i==0)
+    {
+      if (i==0)
       {
         //polulate vertices for the 4 corners of the wedge end
         pArray.push_back(GfVec3f(xRMin1, yRMin1, zf));//4
@@ -438,13 +437,13 @@ void pxr::G4Tubs::Update() {
         viArray.push_back(pArray.size() - 1);
         //add polygon number of vertices
         vcArray.push_back(3);
-	  }
+      }
     }
 
     if (dPhifRounded != twoPiRounded)
 	{
       if (i==nslicei-1)
-      	{
+      {
         pArray.push_back(GfVec3f(xRMin2, yRMin2, zf));//4
         pArray.push_back(GfVec3f(xRMax2, yRMax2, zf));//3
         pArray.push_back(GfVec3f(xRMin2, yRMin2, -zf));//2
@@ -474,7 +473,6 @@ void pxr::G4Tubs::Update() {
     pArray.push_back(GfVec3f(xRMax1, yRMax1, -zf)); //-2
     pArray.push_back(GfVec3f(xRMax2, yRMax2, -zf));//-1
 
-
     viArray.push_back(pArray.size()-4);
     viArray.push_back(pArray.size()-2);
     viArray.push_back(pArray.size()-3);
@@ -485,15 +483,12 @@ void pxr::G4Tubs::Update() {
     viArray.push_back(pArray.size()-2);//-2
     viArray.push_back(pArray.size()-1);//-1
     vcArray.push_back(3);
-
-
   }
 
   VtArray<GfVec3f> pArrayUpdate;
   VtIntArray viArrayUpdate;
 
   ReplaceDuplicateVertices(pArray,viArray,pArrayUpdate,viArrayUpdate);
-
 
   p.Set(pArrayUpdate);
   vc.Set(vcArray);
@@ -505,11 +500,11 @@ void pxr::G4Tubs::Update() {
 
 //// update these
 bool pxr::G4Tubs::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
-    return notice.AffectedObject(this->GetRMinAttr()) ||
-           notice.AffectedObject(this->GetRMaxAttr()) ||
-           notice.AffectedObject(this->GetZAttr())    ||
-           notice.AffectedObject(this->GetSPhiAttr()) ||
-           notice.AffectedObject(this->GetDPhiAttr()) ||
-           notice.AffectedObject(this->GetNsliceAttr());
+  return notice.AffectedObject(this->GetRMinAttr()) ||
+         notice.AffectedObject(this->GetRMaxAttr()) ||
+         notice.AffectedObject(this->GetZAttr())    ||
+         notice.AffectedObject(this->GetSPhiAttr()) ||
+         notice.AffectedObject(this->GetDPhiAttr()) ||
+         notice.AffectedObject(this->GetNsliceAttr());
 }
 

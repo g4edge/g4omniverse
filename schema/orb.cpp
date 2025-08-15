@@ -228,91 +228,81 @@ void pxr::G4Orb::InstallUpdateListener() {
 }
 
 void pxr::G4Orb::Update() {
-	double rMax;
-    int nslicePhi;
-    int nsliceTheta;
-    GetRMaxAttr().Get(&rMax);
-    GetNslicePhiAttr().Get(&nslicePhi);
-    GetNsliceThetaAttr().Get(&nsliceTheta);
-	float rMaxf = float(rMax);
-    int nslicePhii = int(nslicePhi);
-    int nsliceThetai = int(nsliceTheta);
+  double rMax;
+  int nslicePhi;
+  int nsliceTheta;
+  GetRMaxAttr().Get(&rMax);
+  GetNslicePhiAttr().Get(&nslicePhi);
+  GetNsliceThetaAttr().Get(&nsliceTheta);
+    float rMaxf = float(rMax);
+  int nslicePhii = int(nslicePhi);
+  int nsliceThetai = int(nsliceTheta);
 
-	auto p = GetPointsAttr();
-	auto vc = GetFaceVertexCountsAttr();
-	auto vi = GetFaceVertexIndicesAttr();
-	VtArray<GfVec3f> pArray;
+  auto p = GetPointsAttr();
+  auto vc = GetFaceVertexCountsAttr();
+  auto vi = GetFaceVertexIndicesAttr();
+  VtArray<GfVec3f> pArray;
 
-	VtIntArray vcArray;
-	VtIntArray viArray;
-	float pDPhi = 2.0*M_PI / nslicePhii;
-	float pDTheta = M_PI/nsliceThetai;
-	for (int i = 0; i < nsliceThetai; ++i) {
-    	float theta1 = i*pDTheta;
-    	float theta2 = (i+1)*pDTheta;
+  VtIntArray vcArray;
+  VtIntArray viArray;
+  float pDPhi = 2.0*M_PI / nslicePhii;
+  float pDTheta = M_PI/nsliceThetai;
+  for (int i = 0; i < nsliceThetai; ++i) {
+    float theta1 = i * pDTheta;
+    float theta2 = (i + 1) * pDTheta;
 
-	    float z1 = rMaxf * std::cos(theta1);
-   		float z2 = rMaxf * std::cos(theta2);
+    float z1 = rMaxf * std::cos(theta1);
+    float z2 = rMaxf * std::cos(theta2);
 
-    	for (int j = 0; j <= nslicePhii-1; ++j)
-   		{
-      		float phi1 = j * pDPhi;
-      		float phi2 = (j + 1) * pDPhi;
+    for (int j = 0; j <= nslicePhii - 1; ++j) {
+      float phi1 = j * pDPhi;
+      float phi2 = (j + 1) * pDPhi;
 
-      		float x11 = rMaxf * std::sin(theta1) * std::cos(phi1);
-      		float y11 = rMaxf * std::sin(theta1) * std::sin(phi1);
-
-
-      		float x12 = rMaxf * std::sin(theta1) * std::cos(phi2);
-      		float y12 = rMaxf * std::sin(theta1) * std::sin(phi2);
-
-            float x21 = rMaxf * std::sin(theta2) * std::cos(phi1);
-      		float y21 = rMaxf * std::sin(theta2) * std::sin(phi1);
-
-            float x22 = rMaxf * std::sin(theta2) * std::cos(phi2);
-      		float y22 = rMaxf * std::sin(theta2) * std::sin(phi2);
-
-      		if (i==0)
-      		{
-          		pArray.push_back(GfVec3f(0, 0, rMaxf));
-          		pArray.push_back(GfVec3f(x21, y21, z2));
-          		pArray.push_back(GfVec3f(x22, y22, z2));
-          		viArray.push_back(pArray.size()-3);
-          		viArray.push_back(pArray.size()-2);
-          		viArray.push_back(pArray.size()-1);
-          		vcArray.push_back(3);
-      		}
-      		else if	 (i==(nsliceThetai-1))
-      		{
-          		pArray.push_back(GfVec3f(0, 0, -rMaxf));
-          		pArray.push_back(GfVec3f(x11, y11, z1));
-          		pArray.push_back(GfVec3f(x12, y12, z1));
-          		viArray.push_back(pArray.size()-3);
-          		viArray.push_back(pArray.size()-1);
-          		viArray.push_back(pArray.size()-2);
-          		vcArray.push_back(3);
-      		}
-      		else
-      		{
-          		pArray.push_back(GfVec3f(x11, y11, z1));
-          		pArray.push_back(GfVec3f(x21, y21, z2));
-          		pArray.push_back(GfVec3f(x12, y12, z1));
-		        pArray.push_back(GfVec3f(x22, y22, z2));
-        		viArray.push_back(pArray.size()-4);
-          		viArray.push_back(pArray.size()-3);
-          		viArray.push_back(pArray.size()-1);
-          		vcArray.push_back(3);
-          		viArray.push_back(pArray.size()-4);
-          		viArray.push_back(pArray.size()-1);
-          		viArray.push_back(pArray.size()-2);
-          		vcArray.push_back(3);
-      		}
-
-   		 }
-
-	}
+      float x11 = rMaxf * std::sin(theta1) * std::cos(phi1);
+      float y11 = rMaxf * std::sin(theta1) * std::sin(phi1);
 
 
+      float x12 = rMaxf * std::sin(theta1) * std::cos(phi2);
+      float y12 = rMaxf * std::sin(theta1) * std::sin(phi2);
+
+      float x21 = rMaxf * std::sin(theta2) * std::cos(phi1);
+      float y21 = rMaxf * std::sin(theta2) * std::sin(phi1);
+
+      float x22 = rMaxf * std::sin(theta2) * std::cos(phi2);
+      float y22 = rMaxf * std::sin(theta2) * std::sin(phi2);
+
+      if (i == 0) {
+        pArray.push_back(GfVec3f(0, 0, rMaxf));
+        pArray.push_back(GfVec3f(x21, y21, z2));
+        pArray.push_back(GfVec3f(x22, y22, z2));
+        viArray.push_back(pArray.size() - 3);
+        viArray.push_back(pArray.size() - 2);
+        viArray.push_back(pArray.size() - 1);
+        vcArray.push_back(3);
+      } else if (i == (nsliceThetai - 1)) {
+        pArray.push_back(GfVec3f(0, 0, -rMaxf));
+        pArray.push_back(GfVec3f(x11, y11, z1));
+        pArray.push_back(GfVec3f(x12, y12, z1));
+        viArray.push_back(pArray.size() - 3);
+        viArray.push_back(pArray.size() - 1);
+        viArray.push_back(pArray.size() - 2);
+        vcArray.push_back(3);
+      } else {
+        pArray.push_back(GfVec3f(x11, y11, z1));
+        pArray.push_back(GfVec3f(x21, y21, z2));
+        pArray.push_back(GfVec3f(x12, y12, z1));
+        pArray.push_back(GfVec3f(x22, y22, z2));
+        viArray.push_back(pArray.size() - 4);
+        viArray.push_back(pArray.size() - 3);
+        viArray.push_back(pArray.size() - 1);
+        vcArray.push_back(3);
+        viArray.push_back(pArray.size() - 4);
+        viArray.push_back(pArray.size() - 1);
+        viArray.push_back(pArray.size() - 2);
+        vcArray.push_back(3);
+      }
+    }
+  }
   VtArray<GfVec3f> pArrayUpdate;
   VtIntArray viArrayUpdate;
   ReplaceDuplicateVertices(pArray,viArray,pArrayUpdate,viArrayUpdate);

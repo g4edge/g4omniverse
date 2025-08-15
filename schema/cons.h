@@ -342,14 +342,12 @@ public:
     void InstallUpdateListener();
     void Update();
     virtual bool IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) override;
-inline uint8_t encodeRadii(float rMin1f, float rMax1f, float rMin2f, float rMax2f) {
-    return
-        ((rMin1f > 0.0f) << 3) |
+    inline uint8_t encodeRadii(float rMin1f, float rMax1f, float rMin2f, float rMax2f) {
+      return ((rMin1f > 0.0f) << 3) |
         ((rMax1f > 0.0f) << 2) |
         ((rMin2f > 0.0f) << 1) |
         ((rMax2f > 0.0f) << 0);
     }
-
 };
 
 PXR_NAMESPACE_CLOSE_SCOPE
