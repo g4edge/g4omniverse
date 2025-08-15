@@ -205,3 +205,23 @@ class Placement "Placement" (
     double3 translation = (0,0,0)
     double3 rotation = (0,0,0)
 }
+
+class Replica "Replica" (
+    inherits = </Scope>
+
+    customData = {
+        string className = "Replica"
+    }
+) {
+    string g4type = "Replica"
+    string logicalprim = "none"
+    string motherprim = "none"
+    token axis = "kXAxis" (
+        customData = {
+            token[] allowedTokens = ["kXAxis","kYAxis","kZAxis","kRho","kRadial3D","kPhi","kUndefined"]
+        }
+    )
+    int nreplicas
+    double width
+    double offset
+}

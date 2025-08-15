@@ -33,8 +33,9 @@ pxr_plugin(${PXR_PACKAGE}
 		subtraction
 		multiUnion
 		logical
-		placement
 		assembly
+		placement
+		replica
 		tokens
 		VSolidAdapter
 		cgal_boolean
@@ -60,8 +61,9 @@ pxr_plugin(${PXR_PACKAGE}
 		wrapSubtraction.cpp
 		wrapMultiUnion.cpp
 		wrapLogical.cpp
-		wrapPlacement.cpp
 		wrapAssembly.cpp
+		wrapPlacement.cpp
+		wrapReplica.cpp
 		wrapTokens.cpp
 
 	CPPFILES

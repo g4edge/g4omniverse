@@ -48,18 +48,23 @@ void wrapG4Tokens()
     boost::python::class_<G4TokensType, boost::noncopyable>
         cls("Tokens", boost::python::no_init);
     _AddToken(cls, "angle_unit", G4Tokens->angle_unit);
+    _AddToken(cls, "axis", G4Tokens->axis);
     _AddToken(cls, "daughters", G4Tokens->daughters);
     _AddToken(cls, "dPhi", G4Tokens->dPhi);
     _AddToken(cls, "fieldprim", G4Tokens->fieldprim);
     _AddToken(cls, "g4type", G4Tokens->g4type);
+    _AddToken(cls, "kXAxis", G4Tokens->kXAxis);
     _AddToken(cls, "length_unit", G4Tokens->length_unit);
     _AddToken(cls, "limitsprim", G4Tokens->limitsprim);
     _AddToken(cls, "logicalprim", G4Tokens->logicalprim);
     _AddToken(cls, "materialprim", G4Tokens->materialprim);
+    _AddToken(cls, "motherprim", G4Tokens->motherprim);
     _AddToken(cls, "name", G4Tokens->name);
+    _AddToken(cls, "nreplicas", G4Tokens->nreplicas);
     _AddToken(cls, "nslice", G4Tokens->nslice);
     _AddToken(cls, "nslicePhi", G4Tokens->nslicePhi);
     _AddToken(cls, "nsliceTheta", G4Tokens->nsliceTheta);
+    _AddToken(cls, "offset", G4Tokens->offset);
     _AddToken(cls, "rMax", G4Tokens->rMax);
     _AddToken(cls, "rMax1", G4Tokens->rMax1);
     _AddToken(cls, "rMax2", G4Tokens->rMax2);
@@ -75,6 +80,7 @@ void wrapG4Tokens()
     _AddToken(cls, "solidprims", G4Tokens->solidprims);
     _AddToken(cls, "sPhi", G4Tokens->sPhi);
     _AddToken(cls, "translation", G4Tokens->translation);
+    _AddToken(cls, "width", G4Tokens->width);
     _AddToken(cls, "x", G4Tokens->x);
     _AddToken(cls, "y", G4Tokens->y);
     _AddToken(cls, "z", G4Tokens->z);
@@ -88,6 +94,7 @@ void wrapG4Tokens()
     _AddToken(cls, "MultiUnion", G4Tokens->MultiUnion);
     _AddToken(cls, "Orb", G4Tokens->Orb);
     _AddToken(cls, "Placement", G4Tokens->Placement);
+    _AddToken(cls, "Replica", G4Tokens->Replica);
     _AddToken(cls, "Subtraction", G4Tokens->Subtraction);
     _AddToken(cls, "Tubs", G4Tokens->Tubs);
     _AddToken(cls, "Union", G4Tokens->Union);

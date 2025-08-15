@@ -49,6 +49,10 @@ struct G4TokensType {
     /// 
     /// G4VSolid
     const TfToken angle_unit;
+    /// \brief "axis"
+    /// 
+    /// G4Replica
+    const TfToken axis;
     /// \brief "daughters"
     /// 
     /// G4Logical, G4Assembly
@@ -63,8 +67,12 @@ struct G4TokensType {
     const TfToken fieldprim;
     /// \brief "g4type"
     /// 
-    /// G4VSolid, G4Box, G4Tubs, G4Cons, G4Orb, G4BooleanSolid, G4DisplacedSolid, G4Subtraction, G4Union, G4Intersection, G4MultiUnion, G4Logical, G4Assembly, G4Placement
+    /// G4VSolid, G4Box, G4Tubs, G4Cons, G4Orb, G4BooleanSolid, G4DisplacedSolid, G4Subtraction, G4Union, G4Intersection, G4MultiUnion, G4Logical, G4Assembly, G4Placement, G4Replica
     const TfToken g4type;
+    /// \brief "kXAxis"
+    /// 
+    /// Fallback value for G4Replica::GetAxisAttr()
+    const TfToken kXAxis;
     /// \brief "length_unit"
     /// 
     /// G4VSolid
@@ -75,16 +83,24 @@ struct G4TokensType {
     const TfToken limitsprim;
     /// \brief "logicalprim"
     /// 
-    /// G4Placement
+    /// G4Placement, G4Replica
     const TfToken logicalprim;
     /// \brief "materialprim"
     /// 
     /// G4Logical
     const TfToken materialprim;
+    /// \brief "motherprim"
+    /// 
+    /// G4Replica
+    const TfToken motherprim;
     /// \brief "name"
     /// 
     /// G4VSolid
     const TfToken name;
+    /// \brief "nreplicas"
+    /// 
+    /// G4Replica
+    const TfToken nreplicas;
     /// \brief "nslice"
     /// 
     /// G4Tubs, G4Cons
@@ -97,6 +113,10 @@ struct G4TokensType {
     /// 
     /// G4Orb
     const TfToken nsliceTheta;
+    /// \brief "offset"
+    /// 
+    /// G4Replica
+    const TfToken offset;
     /// \brief "rMax"
     /// 
     /// G4Tubs, G4Orb
@@ -157,6 +177,10 @@ struct G4TokensType {
     /// 
     /// G4DisplacedSolid, G4Placement
     const TfToken translation;
+    /// \brief "width"
+    /// 
+    /// G4Replica
+    const TfToken width;
     /// \brief "x"
     /// 
     /// G4Box
@@ -209,6 +233,10 @@ struct G4TokensType {
     /// 
     /// Schema identifer and family for G4Placement
     const TfToken Placement;
+    /// \brief "Replica"
+    /// 
+    /// Schema identifer and family for G4Replica
+    const TfToken Replica;
     /// \brief "Subtraction"
     /// 
     /// Schema identifer and family for G4Subtraction

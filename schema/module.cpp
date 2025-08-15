@@ -18,6 +18,7 @@ TF_WRAP_MODULE
     TF_WRAP(G4Subtraction);
     TF_WRAP(G4MultiUnion);
     TF_WRAP(G4Logical);
-    TF_WRAP(G4Placement);
     TF_WRAP(G4Assembly);
+    TF_WRAP(G4Placement);
+    TF_WRAP(G4Replica);
 }
