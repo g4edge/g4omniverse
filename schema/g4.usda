@@ -80,7 +80,6 @@ class Cons "Cons" (
     double sPhi = 0
     double dPhi = 0
     int nslice = 0
-
 }
 
 class Orb "Orb" (
@@ -94,7 +93,6 @@ class Orb "Orb" (
     double rMax = 1
     int nslicePhi = 0
     int nsliceTheta = 0
-
 }
 
 class BooleanSolid "BooleanSolid" (
