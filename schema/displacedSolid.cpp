@@ -190,71 +190,70 @@ PXR_NAMESPACE_CLOSE_SCOPE
 
 class DisplacedSolidChangeListener : public pxr::TfWeakBase {
 public:
-  DisplacedSolidChangeListener(pxr::G4DisplacedSolid displaced) : _displaced(displaced) {
-    // Register the listener for object changes
-    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<DisplacedSolidChangeListener>(this),
-                            &DisplacedSolidChangeListener::Update);
-  }
-
-  void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
-    if (_displaced.IsInputAffected(notice)) {
-      _displaced.Update();
+    DisplacedSolidChangeListener(pxr::G4DisplacedSolid displaced) : _displaced(displaced) {
+        // Register the listener for object changes
+        pxr::TfNotice::Register(pxr::TfCreateWeakPtr<DisplacedSolidChangeListener>(this),
+                                &DisplacedSolidChangeListener::Update);
     }
-  }
+
+    void Update(const pxr::UsdNotice::ObjectsChanged &notice) {
+        if (_displaced.IsInputAffected(notice)) {
+            _displaced.Update();
+        }
+    }
 
 private:
-  pxr::G4DisplacedSolid _displaced;
+    pxr::G4DisplacedSolid _displaced;
 };
 
 void pxr::G4DisplacedSolid::InstallUpdateListener() {
-  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<DisplacedSolidChangeListener>(new DisplacedSolidChangeListener(*this)),
-                          &DisplacedSolidChangeListener::Update,
-                          this->GetPrim().GetStage());
+    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<DisplacedSolidChangeListener>(new DisplacedSolidChangeListener(*this)),
+                            &DisplacedSolidChangeListener::Update,
+                            this->GetPrim().GetStage());
 }
 
 void pxr::G4DisplacedSolid::Update() {
-  // Get DisplacedSolid position and rotation attributes
-  pxr::GfVec3d translation;
-  pxr::GfVec3d rotation;
-  this->GetTranslationAttr().Get(&translation);
-  this->GetRotationAttr().Get(&rotation);
+    // Get DisplacedSolid position and rotation attributes
+    pxr::GfVec3d translation;
+    pxr::GfVec3d rotation;
+    this->GetTranslationAttr().Get(&translation);
+    this->GetRotationAttr().Get(&rotation);
 
-  // Convert to float
-  pxr::GfVec3f translation_float = GfVec3f(float(translation[0]), float(translation[1]), float(translation[2]));
-  pxr::GfVec3f rotation_float = GfVec3f(float(rotation[0]), float(rotation[1]), float(rotation[2]));
+    // Convert to float
+    pxr::GfVec3f translation_float = GfVec3f(float(translation[0]), float(translation[1]), float(translation[2]));
+    pxr::GfVec3f rotation_float = GfVec3f(float(rotation[0]), float(rotation[1]), float(rotation[2]));
 
-  // Add or update xform operators
-  pxr::UsdGeomXform xformable(*this);
+    // Add or update xform operators
+    pxr::UsdGeomXform xformable(*this);
 
-  bool resetsXformStack = false;
-  if (xformable.GetOrderedXformOps(&resetsXformStack).size() == 0) {
-    xformable.AddTranslateOp().Set(translation);
-    xformable.AddRotateZYXOp().Set(rotation_float);
-  }
-  else {
-    this->GetPrim().GetAttribute(pxr::TfToken("xformOp:rotateZYX")).Set(rotation_float);
-    this->GetPrim().GetAttribute(pxr::TfToken("xformOp:translate")).Set(translation);
-  }
+    bool resetsXformStack = false;
+    if (xformable.GetOrderedXformOps(&resetsXformStack).size() == 0) {
+        xformable.AddTranslateOp().Set(translation);
+        xformable.AddRotateZYXOp().Set(rotation_float);
+    } else {
+        this->GetPrim().GetAttribute(pxr::TfToken("xformOp:rotateZYX")).Set(rotation_float);
+        this->GetPrim().GetAttribute(pxr::TfToken("xformOp:translate")).Set(translation);
+    }
 }
 
-bool pxr::G4DisplacedSolid::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
+bool pxr::G4DisplacedSolid::IsInputAffected(const pxr::UsdNotice::ObjectsChanged &notice) {
 
-  auto solidprim = *this->GetPrim().GetChildren().begin();
+    auto solidprim = *this->GetPrim().GetChildren().begin();
 
-  bool solidbool = false;
-  if(solidprim.GetTypeName() == "Subtraction") solidbool = G4Subtraction(solidprim).IsOutputAffected(notice);
-  else if(solidprim.GetTypeName() == "Union")  solidbool = G4Union(solidprim).IsOutputAffected(notice);
-  else if(solidprim.GetTypeName() == "Intersection") solidbool = G4Subtraction(solidprim).IsOutputAffected(notice);
-  else if(solidprim.GetTypeName() == "MultiUnion") solidbool = G4MultiUnion(solidprim).IsOutputAffected(notice);
-  else solidbool = G4VSolid(solidprim).IsOutputAffected(notice);
+    bool solidbool = false;
+    if (solidprim.GetTypeName() == "Subtraction") solidbool = G4Subtraction(solidprim).IsOutputAffected(notice);
+    else if (solidprim.GetTypeName() == "Union") solidbool = G4Union(solidprim).IsOutputAffected(notice);
+    else if (solidprim.GetTypeName() == "Intersection") solidbool = G4Subtraction(solidprim).IsOutputAffected(notice);
+    else if (solidprim.GetTypeName() == "MultiUnion") solidbool = G4MultiUnion(solidprim).IsOutputAffected(notice);
+    else solidbool = G4VSolid(solidprim).IsOutputAffected(notice);
 
-  return notice.AffectedObject(this->GetTranslationAttr()) ||
-         notice.AffectedObject(this->GetRotationAttr()) ||
-         solidbool;
+    return notice.AffectedObject(this->GetTranslationAttr()) ||
+           notice.AffectedObject(this->GetRotationAttr()) ||
+           solidbool;
 }
 
-bool pxr::G4DisplacedSolid::IsOutputAffected(const UsdNotice::ObjectsChanged& notice) {
-  return notice.AffectedObject(this->GetPrim().GetAttribute(pxr::TfToken("xformOp:rotateZYX"))) ||
-         notice.AffectedObject(this->GetPrim().GetAttribute(pxr::TfToken("xformOp:translate"))) ||
-         this->IsInputAffected(notice);
+bool pxr::G4DisplacedSolid::IsOutputAffected(const UsdNotice::ObjectsChanged &notice) {
+    return notice.AffectedObject(this->GetPrim().GetAttribute(pxr::TfToken("xformOp:rotateZYX"))) ||
+           notice.AffectedObject(this->GetPrim().GetAttribute(pxr::TfToken("xformOp:translate"))) ||
+           this->IsInputAffected(notice);
 }

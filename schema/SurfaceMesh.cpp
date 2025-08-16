@@ -6,39 +6,34 @@
 #include "pxr/usd/usd/typed.h"
 #include "pxr/usd/sdf/types.h"
 
-void ReplaceDuplicateVertices(pxr::VtArray<pxr::GfVec3f> &vertices, pxr::VtIntArray &indices,
-                                           pxr::VtArray<pxr::GfVec3f> &newVertices, pxr::VtIntArray &newIndices)
-{
+void ReplaceDuplicateVertices(pxr::VtArray <pxr::GfVec3f> &vertices, pxr::VtIntArray &indices,
+                              pxr::VtArray <pxr::GfVec3f> &newVertices, pxr::VtIntArray &newIndices) {
     std::unordered_map<Vec3Key, int, Vec3KeyHash> vertexMap;
 
-    int count=0;
-    pxr::VtArray<pxr::GfVec3f> roundVertices;
-    for (size_t i = 0; i < vertices.size(); ++i)
-    {
+    int count = 0;
+    pxr::VtArray <pxr::GfVec3f> roundVertices;
+    for (size_t i = 0; i < vertices.size(); ++i) {
         pxr::GfVec3f v;
         RoundValues(vertices[i], v);
         roundVertices.push_back(v);
         Vec3Key key(v);
         // Check if key exists before inserting
-        if (vertexMap.find(key) == vertexMap.end())
-        {
+        if (vertexMap.find(key) == vertexMap.end()) {
             vertexMap[key] = static_cast<int>(count);
             newVertices.push_back(v);
             ++count; // Only increment count for unique keys
         }
     }
 
-    for (size_t i = 0; i < indices.size(); ++i)
-    {
-        int index=indices[i];
+    for (size_t i = 0; i < indices.size(); ++i) {
+        int index = indices[i];
         Vec3Key point(roundVertices[index]);
         int newIndex = vertexMap[point];
         newIndices.push_back(newIndex);
     }
 }
 
-void RoundValues(pxr::GfVec3f& vertexIn, pxr::GfVec3f& vertexOut)
-{
+void RoundValues(pxr::GfVec3f &vertexIn, pxr::GfVec3f &vertexOut) {
     static constexpr float Tolerance = 1e4f;  // Scaling factor for precision floating point errors
     static constexpr float RoundtoZeroThreshold = 1e-5f; // Threshold for rounding to zero
 
@@ -56,46 +51,40 @@ void RoundValues(pxr::GfVec3f& vertexIn, pxr::GfVec3f& vertexOut)
     vertexOut = pxr::GfVec3f(xOut, yOut, zOut);
 }
 
-std::unordered_set<Edge, EdgeHash> EdgesSet(pxr::VtIntArray &indices)
-{
-  std::unordered_set<Edge, EdgeHash> edgeSet;
+std::unordered_set<Edge, EdgeHash> EdgesSet(pxr::VtIntArray &indices) {
+    std::unordered_set<Edge, EdgeHash> edgeSet;
 
-  for (size_t i = 0; i < indices.size(); i += 3)
-  {
-    edgeSet.insert(Edge(indices[i], indices[i + 1]));
-    edgeSet.insert(Edge(indices[i + 1], indices[i + 2]));
-    edgeSet.insert(Edge(indices[i + 2], indices[i]));
-  }
+    for (size_t i = 0; i < indices.size(); i += 3) {
+        edgeSet.insert(Edge(indices[i], indices[i + 1]));
+        edgeSet.insert(Edge(indices[i + 1], indices[i + 2]));
+        edgeSet.insert(Edge(indices[i + 2], indices[i]));
+    }
 
-  return edgeSet;
+    return edgeSet;
 }
 
-int CountEdges(pxr::VtIntArray &indices)
-{
-  if (indices.size() % 3 != 0)
-  {
-    std::cerr << "Error: faces list is not a multiple of 3!" << std::endl;
-    return -1;
-  }
-  std::unordered_set<Edge, EdgeHash> edgeSet;
+int CountEdges(pxr::VtIntArray &indices) {
+    if (indices.size() % 3 != 0) {
+        std::cerr << "Error: faces list is not a multiple of 3!" << std::endl;
+        return -1;
+    }
+    std::unordered_set<Edge, EdgeHash> edgeSet;
 
-  for (size_t i = 0; i < indices.size(); i += 3)
-  {
-    edgeSet.insert(Edge(indices[i], indices[i + 1]));
-    edgeSet.insert(Edge(indices[i + 1], indices[i + 2]));
-    edgeSet.insert(Edge(indices[i + 2], indices[i]));
-  }
+    for (size_t i = 0; i < indices.size(); i += 3) {
+        edgeSet.insert(Edge(indices[i], indices[i + 1]));
+        edgeSet.insert(Edge(indices[i + 1], indices[i + 2]));
+        edgeSet.insert(Edge(indices[i + 2], indices[i]));
+    }
 
-  return edgeSet.size();
+    return edgeSet.size();
 }
 
-
-
-void ConvertToCGALMesh(const pxr::VtArray<pxr::GfVec3f>& vertices, const pxr::VtIntArray& faceCounts, const pxr::VtIntArray& faceIndices, Mesh& mesh) {
+void ConvertToCGALMesh(const pxr::VtArray <pxr::GfVec3f> &vertices, const pxr::VtIntArray &faceCounts,
+                       const pxr::VtIntArray &faceIndices, Mesh &mesh) {
     std::vector<Mesh::Vertex_index> vertexHandles;
 
     // Add vertices to CGAL Mesh
-    for (const auto& v : vertices) {
+    for (const auto &v: vertices) {
         vertexHandles.push_back(mesh.add_vertex(Point(v[0], v[1], v[2])));
     }
 
@@ -116,25 +105,19 @@ void ConvertToCGALMesh(const pxr::VtArray<pxr::GfVec3f>& vertices, const pxr::Vt
     }
 }
 
-std::unordered_map<Edge, int, EdgeHash> CheckEdgesUsedTwice(pxr::VtIntArray &indices)
-{
+std::unordered_map<Edge, int, EdgeHash> CheckEdgesUsedTwice(pxr::VtIntArray &indices) {
     std::unordered_map<Edge, int, EdgeHash> edgeMap;
 
-    for (size_t i = 0; i < indices.size(); i += 3)
-    {
+    for (size_t i = 0; i < indices.size(); i += 3) {
         std::vector<Edge> faceEdges;
         faceEdges.push_back(Edge(indices[i], indices[i + 1]));
         faceEdges.push_back(Edge(indices[i + 1], indices[i + 2]));
         faceEdges.push_back(Edge(indices[i + 2], indices[i]));
 
-        for (const Edge &edge : faceEdges)
-        {
-            if (edgeMap.find(edge) == edgeMap.end())
-            {
+        for (const Edge &edge: faceEdges) {
+            if (edgeMap.find(edge) == edgeMap.end()) {
                 edgeMap[edge] = 1;
-            }
-            else
-            {
+            } else {
                 edgeMap[edge] += 1;
             }
         }

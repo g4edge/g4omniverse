@@ -187,53 +187,53 @@ PXR_NAMESPACE_CLOSE_SCOPE
 
 class MultiUnionChangeListener : public pxr::TfWeakBase {
 public:
-  MultiUnionChangeListener(pxr::G4MultiUnion un1on) : _union(un1on) {
-    // Register the listener for object changes
-    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<MultiUnionChangeListener>(this),
-                            &MultiUnionChangeListener::Update);
-  }
-
-  void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
-    std::cout << "updated" << " " << std::endl;
-    if(_union.IsInputAffected(notice)) {
-      _union.Update();
+    MultiUnionChangeListener(pxr::G4MultiUnion un1on) : _union(un1on) {
+        // Register the listener for object changes
+        pxr::TfNotice::Register(pxr::TfCreateWeakPtr<MultiUnionChangeListener>(this),
+                                &MultiUnionChangeListener::Update);
     }
-  }
+
+    void Update(const pxr::UsdNotice::ObjectsChanged &notice) {
+        std::cout << "updated" << " " << std::endl;
+        if (_union.IsInputAffected(notice)) {
+            _union.Update();
+        }
+    }
 
 private:
-  pxr::G4MultiUnion _union;
+    pxr::G4MultiUnion _union;
 };
 
 void pxr::G4MultiUnion::InstallUpdateListener() {
-  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<MultiUnionChangeListener>(new MultiUnionChangeListener(*this)),
-                          &MultiUnionChangeListener::Update);
+    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<MultiUnionChangeListener>(new MultiUnionChangeListener(*this)),
+                            &MultiUnionChangeListener::Update);
 }
 
 void pxr::G4MultiUnion::Update() {
-  g4usdboolean_multiunion(this->GetPrim());
+    g4usdboolean_multiunion(this->GetPrim());
 }
 
-bool pxr::G4MultiUnion::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
-  bool update = false;
-  // check if displaced solids are updated
-  for(auto it = this->GetPrim().GetChildren().begin(); it != this->GetPrim().GetChildren().end(); it++) {
-    if (it->GetTypeName() == "DisplacedSolid") {
-      update = update || G4DisplacedSolid(*it).IsOutputAffected(notice);
+bool pxr::G4MultiUnion::IsInputAffected(const pxr::UsdNotice::ObjectsChanged &notice) {
+    bool update = false;
+    // check if displaced solids are updated
+    for (auto it = this->GetPrim().GetChildren().begin(); it != this->GetPrim().GetChildren().end(); it++) {
+        if (it->GetTypeName() == "DisplacedSolid") {
+            update = update || G4DisplacedSolid(*it).IsOutputAffected(notice);
+        }
     }
-  }
 
-  return update;
+    return update;
 }
 
-bool pxr::G4MultiUnion::IsOutputAffected(const UsdNotice::ObjectsChanged& notice) {
-  std::string solid3name;
-  this->GetSolid3primAttr().Get(&solid3name);
+bool pxr::G4MultiUnion::IsOutputAffected(const UsdNotice::ObjectsChanged &notice) {
+    std::string solid3name;
+    this->GetSolid3primAttr().Get(&solid3name);
 
-  auto solid3prim = this->GetPrim().GetChild(pxr::TfToken(solid3name));
+    auto solid3prim = this->GetPrim().GetChild(pxr::TfToken(solid3name));
 
-  return notice.AffectedObject(solid3prim.GetAttribute(pxr::TfToken("Points"))) ||
-         notice.AffectedObject(solid3prim.GetAttribute(pxr::TfToken("FaceVertexCounts"))) ||
-         notice.AffectedObject(solid3prim.GetAttribute(pxr::TfToken("FaceVertexIndices")));
+    return notice.AffectedObject(solid3prim.GetAttribute(pxr::TfToken("Points"))) ||
+           notice.AffectedObject(solid3prim.GetAttribute(pxr::TfToken("FaceVertexCounts"))) ||
+           notice.AffectedObject(solid3prim.GetAttribute(pxr::TfToken("FaceVertexIndices")));
 }
 
 

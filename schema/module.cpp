@@ -9,6 +9,7 @@ TF_WRAP_MODULE
     TF_WRAP(G4VSolid);  
     TF_WRAP(G4Box);
     TF_WRAP(G4Tubs);
+    TF_WRAP(G4CutTubs);
     TF_WRAP(G4Cons);
     TF_WRAP(G4Orb);
     TF_WRAP(G4BooleanSolid);

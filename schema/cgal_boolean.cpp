@@ -397,32 +397,31 @@ void g4usdboolean_multiunion(UsdPrim const& prim) {
 PXR_NAMESPACE_CLOSE_SCOPE
 
 Surface_mesh_3* cgal_subtraction(Surface_mesh_3 *sm1, Surface_mesh_3 *sm2) {
+    // create CGAL surface mesh
+    Surface_mesh_3 *sm = new Surface_mesh_3();
 
-  // create CGAL surface mesh
-  Surface_mesh_3 *sm = new Surface_mesh_3();
+    // union
+    CGAL::Polygon_mesh_processing::corefine_and_compute_difference(*sm1, *sm2, *sm);
 
-  // union
-  CGAL::Polygon_mesh_processing::corefine_and_compute_difference(*sm1, *sm2, *sm);
-
-  return sm;
+    return sm;
 }
 
-Surface_mesh_3* cgal_union(Surface_mesh_3 *sm1, Surface_mesh_3 *sm2) {
-  // create CGAL surface mesh
-  Surface_mesh_3 *sm = new Surface_mesh_3();
+Surface_mesh_3 *cgal_union(Surface_mesh_3 * sm1, Surface_mesh_3 * sm2) {
+    // create CGAL surface mesh
+    Surface_mesh_3 * sm = new Surface_mesh_3();
 
-  // union
-  CGAL::Polygon_mesh_processing::corefine_and_compute_union(*sm1, *sm2, *sm);
+    // union
+    CGAL::Polygon_mesh_processing::corefine_and_compute_union(*sm1, *sm2, *sm);
 
-  return sm;
+    return sm;
 }
 
-Surface_mesh_3* cgal_intersection(Surface_mesh_3 *sm1, Surface_mesh_3 *sm2) {
-  // create CGAL surface mesh
-  Surface_mesh_3 *sm = new Surface_mesh_3();
+Surface_mesh_3 *cgal_intersection(Surface_mesh_3 * sm1, Surface_mesh_3 * sm2) {
+    // create CGAL surface mesh
+    Surface_mesh_3 * sm = new Surface_mesh_3();
 
-  // union
-  CGAL::Polygon_mesh_processing::corefine_and_compute_intersection(*sm1, *sm2, *sm);
+    // union
+    CGAL::Polygon_mesh_processing::corefine_and_compute_intersection(*sm1, *sm2, *sm);
 
-  return sm;
+    return sm;
 }

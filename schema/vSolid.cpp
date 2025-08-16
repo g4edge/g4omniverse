@@ -181,12 +181,11 @@ PXR_NAMESPACE_CLOSE_SCOPE
 
 #include <iostream>
 
-bool pxr::G4VSolid::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
-  return true;
+bool pxr::G4VSolid::IsInputAffected(const pxr::UsdNotice::ObjectsChanged &notice) {
+    return true;
 }
 
-bool pxr::G4VSolid::IsOutputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
-
+bool pxr::G4VSolid::IsOutputAffected(const pxr::UsdNotice::ObjectsChanged &notice) {
     return notice.AffectedObject(this->GetPointsAttr()) ||
            notice.AffectedObject(this->GetFaceVertexCountsAttr()) ||
            notice.AffectedObject(this->GetFaceVertexIndicesAttr());

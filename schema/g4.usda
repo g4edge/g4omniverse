@@ -64,6 +64,18 @@ class Tubs "Tubs" (
     int nslice = 0
 }
 
+class CutTubs "CutTubs" (
+    inherits = </Tubs>
+
+    customData = {
+        string className = "CutTubs"
+    }
+)   {
+    string g4type = "CutTubs"
+    double3 pLowNorm = (0,0,-1)
+    double3 pHighNorm = (0,0,1)
+}
+
 class Cons "Cons" (
     inherits = </VSolid>
 

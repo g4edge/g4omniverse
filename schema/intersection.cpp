@@ -149,26 +149,26 @@ PXR_NAMESPACE_CLOSE_SCOPE
 
 class IntersectionChangeListener : public pxr::TfWeakBase {
 public:
-  IntersectionChangeListener(pxr::G4Intersection intersection) : _intersection(intersection) {
-    // Register the listener for object changes
-    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<IntersectionChangeListener>(this),
-                            &IntersectionChangeListener::Update);
-  }
+    IntersectionChangeListener(pxr::G4Intersection intersection) : _intersection(intersection) {
+        // Register the listener for object changes
+        pxr::TfNotice::Register(pxr::TfCreateWeakPtr<IntersectionChangeListener>(this),
+                                &IntersectionChangeListener::Update);
+    }
 
-  void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
-    if(_intersection.IsInputAffected(notice))
-      _intersection.Update();
-  }
+    void Update(const pxr::UsdNotice::ObjectsChanged &notice) {
+        if (_intersection.IsInputAffected(notice))
+            _intersection.Update();
+    }
 
 private:
-  pxr::G4Intersection _intersection;
+    pxr::G4Intersection _intersection;
 };
 
 void pxr::G4Intersection::Update() {
-  g4usdboolean(this->GetPrim(), INTERSECTION);
+    g4usdboolean(this->GetPrim(), INTERSECTION);
 }
 
 void pxr::G4Intersection::InstallUpdateListener() {
-  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<IntersectionChangeListener>(new IntersectionChangeListener(*this)),
-                          &IntersectionChangeListener::Update);
+    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<IntersectionChangeListener>(new IntersectionChangeListener(*this)),
+                            &IntersectionChangeListener::Update);
 }

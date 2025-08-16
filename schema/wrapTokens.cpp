@@ -60,6 +60,8 @@ void wrapG4Tokens()
     _AddToken(cls, "nslice", G4Tokens->nslice);
     _AddToken(cls, "nslicePhi", G4Tokens->nslicePhi);
     _AddToken(cls, "nsliceTheta", G4Tokens->nsliceTheta);
+    _AddToken(cls, "pHighNorm", G4Tokens->pHighNorm);
+    _AddToken(cls, "pLowNorm", G4Tokens->pLowNorm);
     _AddToken(cls, "rMax", G4Tokens->rMax);
     _AddToken(cls, "rMax1", G4Tokens->rMax1);
     _AddToken(cls, "rMax2", G4Tokens->rMax2);
@@ -82,6 +84,7 @@ void wrapG4Tokens()
     _AddToken(cls, "BooleanSolid", G4Tokens->BooleanSolid);
     _AddToken(cls, "Box", G4Tokens->Box);
     _AddToken(cls, "Cons", G4Tokens->Cons);
+    _AddToken(cls, "CutTubs", G4Tokens->CutTubs);
     _AddToken(cls, "DisplacedSolid", G4Tokens->DisplacedSolid);
     _AddToken(cls, "Intersection", G4Tokens->Intersection);
     _AddToken(cls, "Logical", G4Tokens->Logical);

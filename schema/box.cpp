@@ -203,78 +203,78 @@ PXR_NAMESPACE_CLOSE_SCOPE
 
 class BoxChangeListener : public pxr::TfWeakBase {
 public:
-  BoxChangeListener(pxr::G4Box box) : _box(box) {
-    // Register the listener for object changes
-    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<BoxChangeListener>(this),
-                            &BoxChangeListener::Update);
-  }
-
-  void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
-    if (_box.IsInputAffected(notice)) {
-      _box.Update();
+    BoxChangeListener(pxr::G4Box box) : _box(box) {
+        // Register the listener for object changes
+        pxr::TfNotice::Register(pxr::TfCreateWeakPtr<BoxChangeListener>(this),
+                                &BoxChangeListener::Update);
     }
-  }
+
+    void Update(const pxr::UsdNotice::ObjectsChanged &notice) {
+        if (_box.IsInputAffected(notice)) {
+            _box.Update();
+        }
+    }
 
 private:
-  pxr::G4Box _box;
+    pxr::G4Box _box;
 };
 
 
 void pxr::G4Box::InstallUpdateListener() {
-  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<BoxChangeListener>(new BoxChangeListener(*this)),
-                          &BoxChangeListener::Update);
+    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<BoxChangeListener>(new BoxChangeListener(*this)),
+                            &BoxChangeListener::Update);
 }
 
 void pxr::G4Box::Update() {
-  double x;
-  double y;
-  double z;
-  GetXAttr().Get(&x);
-  GetYAttr().Get(&y);
-  GetZAttr().Get(&z);
+    double x;
+    double y;
+    double z;
+    GetXAttr().Get(&x);
+    GetYAttr().Get(&y);
+    GetZAttr().Get(&z);
 
-  float xf = (float)x;
-  float yf = (float)y;
-  float zf = (float)z;
+    float xf = (float) x;
+    float yf = (float) y;
+    float zf = (float) z;
 
-  auto p = GetPointsAttr();
-  auto vc = GetFaceVertexCountsAttr();
-  auto vi = GetFaceVertexIndicesAttr();
+    auto p = GetPointsAttr();
+    auto vc = GetFaceVertexCountsAttr();
+    auto vi = GetFaceVertexIndicesAttr();
 
-  VtArray<GfVec3f> pArray = {GfVec3f(-xf, -yf, -zf),
-                             GfVec3f(-xf,  yf, -zf),
-                             GfVec3f( xf,  yf, -zf),
-                             GfVec3f( xf, -yf, -zf),
-                             GfVec3f(-xf, -yf,  zf),
-                             GfVec3f(-xf,  yf,  zf),
-                             GfVec3f( xf,  yf,  zf),
-                             GfVec3f( xf, -yf,  zf)};
+    VtArray <GfVec3f> pArray = {GfVec3f(-xf, -yf, -zf),
+                                GfVec3f(-xf, yf, -zf),
+                                GfVec3f(xf, yf, -zf),
+                                GfVec3f(xf, -yf, -zf),
+                                GfVec3f(-xf, -yf, zf),
+                                GfVec3f(-xf, yf, zf),
+                                GfVec3f(xf, yf, zf),
+                                GfVec3f(xf, -yf, zf)};
 
-  VtIntArray vcArray = {3,3,3,3,3,3,3,3,3,3,3,3};
-  VtIntArray viArray = {0,1,2,
-                        0,2,3,
-                        0,4,5,
-                        0,5,1,
-                        1,5,6,
-                        1,6,2,
-                        3,6,7,
-                        3,2,6,
-                        0,3,7,
-                        0,7,4,
-                        4,6,5,
-                        4,7,6
-  };
+    VtIntArray vcArray = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
+    VtIntArray viArray = {0, 1, 2,
+                          0, 2, 3,
+                          0, 4, 5,
+                          0, 5, 1,
+                          1, 5, 6,
+                          1, 6, 2,
+                          3, 6, 7,
+                          3, 2, 6,
+                          0, 3, 7,
+                          0, 7, 4,
+                          4, 6, 5,
+                          4, 7, 6
+    };
 
-  p.Set(pArray);
-  vc.Set(vcArray);
-  vi.Set(viArray);
+    p.Set(pArray);
+    vc.Set(vcArray);
+    vi.Set(viArray);
 
-  // update parents
-  auto parent = GetPrim().GetParent();
+    // update parents
+    auto parent = GetPrim().GetParent();
 }
 
-bool pxr::G4Box::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
-  return notice.AffectedObject(this->GetXAttr()) ||
-         notice.AffectedObject(this->GetYAttr()) ||
-         notice.AffectedObject(this->GetZAttr());
+bool pxr::G4Box::IsInputAffected(const pxr::UsdNotice::ObjectsChanged &notice) {
+    return notice.AffectedObject(this->GetXAttr()) ||
+           notice.AffectedObject(this->GetYAttr()) ||
+           notice.AffectedObject(this->GetZAttr());
 }

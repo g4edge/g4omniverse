@@ -63,7 +63,7 @@ struct G4TokensType {
     const TfToken fieldprim;
     /// \brief "g4type"
     /// 
-    /// G4VSolid, G4Box, G4Tubs, G4Cons, G4Orb, G4BooleanSolid, G4DisplacedSolid, G4Subtraction, G4Union, G4Intersection, G4MultiUnion, G4Logical, G4Assembly, G4Placement
+    /// G4VSolid, G4Box, G4Tubs, G4CutTubs, G4Cons, G4Orb, G4BooleanSolid, G4DisplacedSolid, G4Subtraction, G4Union, G4Intersection, G4MultiUnion, G4Logical, G4Assembly, G4Placement
     const TfToken g4type;
     /// \brief "length_unit"
     /// 
@@ -97,6 +97,14 @@ struct G4TokensType {
     /// 
     /// G4Orb
     const TfToken nsliceTheta;
+    /// \brief "pHighNorm"
+    /// 
+    /// G4CutTubs
+    const TfToken pHighNorm;
+    /// \brief "pLowNorm"
+    /// 
+    /// G4CutTubs
+    const TfToken pLowNorm;
     /// \brief "rMax"
     /// 
     /// G4Tubs, G4Orb
@@ -185,6 +193,10 @@ struct G4TokensType {
     /// 
     /// Schema identifer and family for G4Cons
     const TfToken Cons;
+    /// \brief "CutTubs"
+    /// 
+    /// Schema identifer and family for G4CutTubs
+    const TfToken CutTubs;
     /// \brief "DisplacedSolid"
     /// 
     /// Schema identifer and family for G4DisplacedSolid

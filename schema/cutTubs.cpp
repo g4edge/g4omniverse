@@ -4,7 +4,7 @@
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#include ".//subtraction.h"
+#include ".//cutTubs.h"
 #include "pxr/usd/usd/schemaRegistry.h"
 #include "pxr/usd/usd/typed.h"
 
@@ -16,64 +16,64 @@ PXR_NAMESPACE_OPEN_SCOPE
 // Register the schema with the TfType system.
 TF_REGISTRY_FUNCTION(TfType)
 {
-    TfType::Define<G4Subtraction,
-        TfType::Bases< G4BooleanSolid > >();
+    TfType::Define<G4CutTubs,
+        TfType::Bases< G4Tubs > >();
     
     // Register the usd prim typename as an alias under UsdSchemaBase. This
     // enables one to call
-    // TfType::Find<UsdSchemaBase>().FindDerivedByName("Subtraction")
-    // to find TfType<G4Subtraction>, which is how IsA queries are
+    // TfType::Find<UsdSchemaBase>().FindDerivedByName("CutTubs")
+    // to find TfType<G4CutTubs>, which is how IsA queries are
     // answered.
-    TfType::AddAlias<UsdSchemaBase, G4Subtraction>("Subtraction");
+    TfType::AddAlias<UsdSchemaBase, G4CutTubs>("CutTubs");
 }
 
 /* virtual */
-G4Subtraction::~G4Subtraction()
+G4CutTubs::~G4CutTubs()
 {
 }
 
 /* static */
-G4Subtraction
-G4Subtraction::Get(const UsdStagePtr &stage, const SdfPath &path)
+G4CutTubs
+G4CutTubs::Get(const UsdStagePtr &stage, const SdfPath &path)
 {
     if (!stage) {
         TF_CODING_ERROR("Invalid stage");
-        return G4Subtraction();
+        return G4CutTubs();
     }
-    return G4Subtraction(stage->GetPrimAtPath(path));
+    return G4CutTubs(stage->GetPrimAtPath(path));
 }
 
 /* static */
-G4Subtraction
-G4Subtraction::Define(
+G4CutTubs
+G4CutTubs::Define(
     const UsdStagePtr &stage, const SdfPath &path)
 {
-    static TfToken usdPrimTypeName("Subtraction");
+    static TfToken usdPrimTypeName("CutTubs");
     if (!stage) {
         TF_CODING_ERROR("Invalid stage");
-        return G4Subtraction();
+        return G4CutTubs();
     }
-    return G4Subtraction(
+    return G4CutTubs(
         stage->DefinePrim(path, usdPrimTypeName));
 }
 
 /* virtual */
-UsdSchemaKind G4Subtraction::_GetSchemaKind() const
+UsdSchemaKind G4CutTubs::_GetSchemaKind() const
 {
-    return G4Subtraction::schemaKind;
+    return G4CutTubs::schemaKind;
 }
 
 /* static */
 const TfType &
-G4Subtraction::_GetStaticTfType()
+G4CutTubs::_GetStaticTfType()
 {
-    static TfType tfType = TfType::Find<G4Subtraction>();
+    static TfType tfType = TfType::Find<G4CutTubs>();
     return tfType;
 }
 
 /* static */
 bool 
-G4Subtraction::_IsTypedSchema()
+G4CutTubs::_IsTypedSchema()
 {
     static bool isTyped = _GetStaticTfType().IsA<UsdTyped>();
     return isTyped;
@@ -81,22 +81,56 @@ G4Subtraction::_IsTypedSchema()
 
 /* virtual */
 const TfType &
-G4Subtraction::_GetTfType() const
+G4CutTubs::_GetTfType() const
 {
     return _GetStaticTfType();
 }
 
 UsdAttribute
-G4Subtraction::GetG4typeAttr() const
+G4CutTubs::GetG4typeAttr() const
 {
     return GetPrim().GetAttribute(G4Tokens->g4type);
 }
 
 UsdAttribute
-G4Subtraction::CreateG4typeAttr(VtValue const &defaultValue, bool writeSparsely) const
+G4CutTubs::CreateG4typeAttr(VtValue const &defaultValue, bool writeSparsely) const
 {
     return UsdSchemaBase::_CreateAttr(G4Tokens->g4type,
                        SdfValueTypeNames->String,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
+UsdAttribute
+G4CutTubs::GetPLowNormAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->pLowNorm);
+}
+
+UsdAttribute
+G4CutTubs::CreatePLowNormAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->pLowNorm,
+                       SdfValueTypeNames->Double3,
+                       /* custom = */ false,
+                       SdfVariabilityVarying,
+                       defaultValue,
+                       writeSparsely);
+}
+
+UsdAttribute
+G4CutTubs::GetPHighNormAttr() const
+{
+    return GetPrim().GetAttribute(G4Tokens->pHighNorm);
+}
+
+UsdAttribute
+G4CutTubs::CreatePHighNormAttr(VtValue const &defaultValue, bool writeSparsely) const
+{
+    return UsdSchemaBase::_CreateAttr(G4Tokens->pHighNorm,
+                       SdfValueTypeNames->Double3,
                        /* custom = */ false,
                        SdfVariabilityVarying,
                        defaultValue,
@@ -117,14 +151,16 @@ _ConcatenateAttributeNames(const TfTokenVector& left,const TfTokenVector& right)
 
 /*static*/
 const TfTokenVector&
-G4Subtraction::GetSchemaAttributeNames(bool includeInherited)
+G4CutTubs::GetSchemaAttributeNames(bool includeInherited)
 {
     static TfTokenVector localNames = {
         G4Tokens->g4type,
+        G4Tokens->pLowNorm,
+        G4Tokens->pHighNorm,
     };
     static TfTokenVector allNames =
         _ConcatenateAttributeNames(
-            G4BooleanSolid::GetSchemaAttributeNames(true),
+            G4Tubs::GetSchemaAttributeNames(true),
             localNames);
 
     if (includeInherited)
@@ -143,37 +179,3 @@ PXR_NAMESPACE_CLOSE_SCOPE
 // 'PXR_NAMESPACE_OPEN_SCOPE', 'PXR_NAMESPACE_CLOSE_SCOPE'.
 // ===================================================================== //
 // --(BEGIN CUSTOM CODE)--
-
-#include "cgal_boolean.h"
-#include "pxr/usd/usdGeom/xformable.h"
-#include "pxr/base/gf/matrix4d.h"
-
-void pxr::G4Subtraction::Update() {
-  g4usdboolean(this->GetPrim(), SUBTRACTION);
-}
-
-#include "pxr/usd/usd/notice.h"
-
-class SubtractionChangeListener : public pxr::TfWeakBase {
-public:
-    SubtractionChangeListener(pxr::G4Subtraction sub) : _sub(sub) {
-        // Register the listener for object changes
-        pxr::TfNotice::Register(pxr::TfCreateWeakPtr<SubtractionChangeListener>(this),
-                                &SubtractionChangeListener::Update);
-    }
-
-    void Update(const pxr::UsdNotice::ObjectsChanged &notice) {
-
-        // get names of dependent solids
-        if (_sub.IsInputAffected(notice))
-            _sub.Update();
-    }
-
-private:
-    pxr::G4Subtraction _sub;
-};
-
-void pxr::G4Subtraction::InstallUpdateListener() {
-    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<SubtractionChangeListener>(new SubtractionChangeListener(*this)),
-                            &SubtractionChangeListener::Update);
-}

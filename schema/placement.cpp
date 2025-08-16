@@ -203,57 +203,56 @@ PXR_NAMESPACE_CLOSE_SCOPE
 
 class PlacementChangeListener : public pxr::TfWeakBase {
 public:
-  PlacementChangeListener(pxr::G4Placement placement) : _placement(placement) {
-    // Register the listener for object changes
-    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<PlacementChangeListener>(this),
-                            &PlacementChangeListener::Update);
-  }
-
-  void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
-
-    if (notice.AffectedObject(_placement.GetTranslationAttr()) ||
-        notice.AffectedObject(_placement.GetRotationAttr()) ) {
-      _placement.Update();
+    PlacementChangeListener(pxr::G4Placement placement) : _placement(placement) {
+        // Register the listener for object changes
+        pxr::TfNotice::Register(pxr::TfCreateWeakPtr<PlacementChangeListener>(this),
+                                &PlacementChangeListener::Update);
     }
-  }
+
+    void Update(const pxr::UsdNotice::ObjectsChanged &notice) {
+
+        if (notice.AffectedObject(_placement.GetTranslationAttr()) ||
+            notice.AffectedObject(_placement.GetRotationAttr())) {
+            _placement.Update();
+        }
+    }
 
 private:
-  pxr::G4Placement _placement;
+    pxr::G4Placement _placement;
 };
 
 void pxr::G4Placement::Update() {
 
-  // Get Placement position and rotation attributes
-  pxr::GfVec3d translation;
-  pxr::GfVec3d rotation;
-  this->GetTranslationAttr().Get(&translation);
-  this->GetRotationAttr().Get(&rotation);
+    // Get Placement position and rotation attributes
+    pxr::GfVec3d translation;
+    pxr::GfVec3d rotation;
+    this->GetTranslationAttr().Get(&translation);
+    this->GetRotationAttr().Get(&rotation);
 
-  // Convert to float
-  pxr::GfVec3f translation_float = GfVec3f(float(translation[0]), float(translation[1]), float(translation[2]));
-  pxr::GfVec3f rotation_float = GfVec3f(-float(rotation[0]),-float(rotation[1]), -float(rotation[2]));
+    // Convert to float
+    pxr::GfVec3f translation_float = GfVec3f(float(translation[0]), float(translation[1]), float(translation[2]));
+    pxr::GfVec3f rotation_float = GfVec3f(-float(rotation[0]), -float(rotation[1]), -float(rotation[2]));
 
-  // Add or update xform operators
-  pxr::UsdGeomXform xformable(*this);
+    // Add or update xform operators
+    pxr::UsdGeomXform xformable(*this);
 
-  bool resetsXformStack = false;
-  if (xformable.GetOrderedXformOps(&resetsXformStack).size() == 0) {
-    xformable.AddTranslateOp().Set(translation);
-    xformable.AddRotateZYXOp().Set(rotation_float);
-  }
-  else {
-    this->GetPrim().GetAttribute(pxr::TfToken("xformOp:rotateZYX")).Set(rotation_float);
-    this->GetPrim().GetAttribute(pxr::TfToken("xformOp:translate")).Set(translation);
-  }
+    bool resetsXformStack = false;
+    if (xformable.GetOrderedXformOps(&resetsXformStack).size() == 0) {
+        xformable.AddTranslateOp().Set(translation);
+        xformable.AddRotateZYXOp().Set(rotation_float);
+    } else {
+        this->GetPrim().GetAttribute(pxr::TfToken("xformOp:rotateZYX")).Set(rotation_float);
+        this->GetPrim().GetAttribute(pxr::TfToken("xformOp:translate")).Set(translation);
+    }
 }
 
 void pxr::G4Placement::InstallUpdateListener() {
-  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<PlacementChangeListener>(new PlacementChangeListener(*this)),
-                          &PlacementChangeListener::Update,
-                          this->GetPrim().GetStage());
+    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<PlacementChangeListener>(new PlacementChangeListener(*this)),
+                            &PlacementChangeListener::Update,
+                            this->GetPrim().GetStage());
 }
 
-bool pxr::G4Placement::IsInputAffected(const pxr::UsdNotice::ObjectsChanged& notice) {
-  return notice.AffectedObject(this->GetTranslationAttr()) ||
-         notice.AffectedObject(this->GetRotationAttr());
+bool pxr::G4Placement::IsInputAffected(const pxr::UsdNotice::ObjectsChanged &notice) {
+    return notice.AffectedObject(this->GetTranslationAttr()) ||
+           notice.AffectedObject(this->GetRotationAttr());
 }

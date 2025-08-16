@@ -23,6 +23,7 @@ pxr_plugin(${PXR_PACKAGE}
 		vSolid
 		box
 		tubs
+		cutTubs
 		cons
 		orb
 		booleanSolid
@@ -51,6 +52,7 @@ pxr_plugin(${PXR_PACKAGE}
 		wrapVSolid.cpp
 		wrapBox.cpp
 		wrapTubs.cpp
+		wrapCutTubs.cpp
 		wrapCons.cpp
 		wrapOrb.cpp
 		wrapBooleanSolid.cpp

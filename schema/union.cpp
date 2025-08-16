@@ -150,26 +150,26 @@ PXR_NAMESPACE_CLOSE_SCOPE
 
 class UnionChangeListener : public pxr::TfWeakBase {
 public:
-  UnionChangeListener(pxr::G4Union un1on) : _union(un1on) {
-    // Register the listener for object changes
-    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<UnionChangeListener>(this),
-                            &UnionChangeListener::Update);
-  }
+    UnionChangeListener(pxr::G4Union un1on) : _union(un1on) {
+        // Register the listener for object changes
+        pxr::TfNotice::Register(pxr::TfCreateWeakPtr<UnionChangeListener>(this),
+                                &UnionChangeListener::Update);
+    }
 
-  void Update(const pxr::UsdNotice::ObjectsChanged& notice) {
-    if(_union.IsInputAffected(notice))
-        _union.Update();
-  }
+    void Update(const pxr::UsdNotice::ObjectsChanged &notice) {
+        if (_union.IsInputAffected(notice))
+            _union.Update();
+    }
 
 private:
-  pxr::G4Union _union;
+    pxr::G4Union _union;
 };
 
 void pxr::G4Union::Update() {
-  g4usdboolean(this->GetPrim(), UNION);
+    g4usdboolean(this->GetPrim(), UNION);
 }
 
 void pxr::G4Union::InstallUpdateListener() {
-  pxr::TfNotice::Register(pxr::TfCreateWeakPtr<UnionChangeListener>(new UnionChangeListener(*this)),
-                          &UnionChangeListener::Update);
+    pxr::TfNotice::Register(pxr::TfCreateWeakPtr<UnionChangeListener>(new UnionChangeListener(*this)),
+                            &UnionChangeListener::Update);
 }
